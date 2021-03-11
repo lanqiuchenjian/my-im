@@ -21,7 +21,7 @@
  */
 package com.myim.server.api.controller;
 
-import com.myim.server.push.DefaultMessagePusher;
+import com.myim.server.message.push.DefaultMessagePusher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

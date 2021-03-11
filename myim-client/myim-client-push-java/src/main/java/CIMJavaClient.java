@@ -1,9 +1,12 @@
 import com.myim.client.CIMEventBroadcastReceiver;
 import com.myim.client.CIMEventListener;
-import com.myim.client.CIMPushManager;
+import com.myim.client.constant.CIMConstant;
+import com.myim.client.push.CIMPushManager;
 import com.myim.client.model.Message;
 import com.myim.client.model.ReplyBody;
 import com.myim.client.model.SentBody;
+
+import java.util.Scanner;
 
 public class CIMJavaClient implements CIMEventListener {
  	public static void startup() {
@@ -17,14 +20,30 @@ public class CIMJavaClient implements CIMEventListener {
 		 * 第二步 设置全局的事件监听器
 		 */
 		CIMEventBroadcastReceiver.getInstance().setGlobalCIMEventListener(new CIMJavaClient());
-		
+
 		/*
 		 * 第三步 连接到服务器
 		 */
 		CIMPushManager.connect("127.0.0.1", 23456);
+
+		while (true) {
+			Scanner scanner = new Scanner(System.in);
+			while (scanner.hasNext()) {
+				SentBody sentBody = new SentBody();
+
+				sentBody.setKey(CIMConstant.RequestKey.CLIENT_PUSH);
+				sentBody.put("fromAccount", "10000");
+				String next = scanner.next();
+				String[] split = next.split(":");
+				sentBody.put("action", split[0]);
+				System.out.println(next);
+				sentBody.put("content", split[1]);
+
+				CIMPushManager.sendRequest(sentBody);
+			}
+		}
 		 
 	}
- 
 
 	@Override
 	public void onConnectionClosed() {

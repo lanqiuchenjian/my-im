@@ -13,14 +13,24 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
+        <pagehelper-starter.version>1.2.10</pagehelper-starter.version>
         <java.version>1.8</java.version>
         <netty.version>4.1.35.Final</netty.version>
         <mina.version>2.1.3</mina.version>
         <protobuf.version>3.11.1</protobuf.version>
+        <spirng.mybatis.version>1.1.1</spirng.mybatis.version>
     </properties>
+
+
     <dependencies>
         <dependency>
             <artifactId>server-remote</artifactId>
+            <groupId>com.myim</groupId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <artifactId>server-dao</artifactId>
             <groupId>com.myim</groupId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
@@ -38,12 +48,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
-
-        <!--<dependency>-->
-        <!--<groupId>com.farsunset</groupId>-->
-        <!--<artifactId>cim-server-sdk-netty</artifactId>-->
-        <!--<version>3.8.0</version>-->
-        <!--</dependency>-->
 
         <!--- ##################使用mina版本SDK时的配置  start ##################-->
         <dependency>
@@ -112,6 +116,28 @@
             <version>3.8.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <!--========================tess=======================-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.jmockit</groupId>-->
+            <!--<artifactId>jmockit</artifactId>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
     </dependencies>
 
 

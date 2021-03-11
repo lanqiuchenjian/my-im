@@ -23,7 +23,7 @@ package com.myim.client;
 
 import java.util.HashMap;
 
-class CIMCacheManager {
+public class CIMCacheManager {
 
 	private static final HashMap<String, String> CIM_CONFIG_INFO = new HashMap<String, String>();
 

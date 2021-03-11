@@ -1,15 +1,15 @@
 package com.myim.server.config;
 
-import com.myim.server.handler.BindHandler;
-import com.myim.server.handler.SessionClosedHandler;
+import com.myim.server.handler.*;
+import com.myim.server.message.handler.BindHandler;
+import com.myim.server.message.handler.ClientPushHandler;
+import com.myim.server.message.handler.SessionClosedHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import com.myim.server.handler.CIMNioSocketAcceptor;
-import com.myim.server.handler.CIMRequestHandler;
 import com.myim.server.model.CIMSession;
 import com.myim.server.model.SentBody;
 
@@ -55,6 +55,7 @@ public class CIMConfig implements CIMRequestHandler, ApplicationListener<Applica
 
 		appHandlerMap.put("client_bind",applicationContext.getBean(BindHandler.class));
 		appHandlerMap.put("client_closed",applicationContext.getBean(SessionClosedHandler.class));
+		appHandlerMap.put("client_push",applicationContext.getBean(ClientPushHandler.class));
 
 		applicationContext.getBean(CIMNioSocketAcceptor.class).bind();
 	}

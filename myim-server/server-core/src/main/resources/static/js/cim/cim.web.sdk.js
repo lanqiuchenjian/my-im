@@ -1,4 +1,5 @@
 /*CIM服务器IP*/
+// const CIM_HOST = "47.110.41.97";
 const CIM_HOST = "127.0.0.1";
 /*
  *服务端 websocket端口

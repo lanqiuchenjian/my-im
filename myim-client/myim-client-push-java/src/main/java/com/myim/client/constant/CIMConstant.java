@@ -53,6 +53,7 @@ public interface CIMConstant {
 	interface RequestKey {
 
 		String CLIENT_BIND = "client_bind";
+		String CLIENT_PUSH = "client_push";
 
 	}
 

@@ -30,6 +30,7 @@ import com.myim.client.model.Intent;
 import com.myim.client.model.Message;
 import com.myim.client.model.ReplyBody;
 import com.myim.client.model.SentBody;
+import com.myim.client.push.CIMPushManager;
 
 /**
  * 消息入口，所有消息都会经过这里

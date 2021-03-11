@@ -161,6 +161,7 @@ public class CIMNioSocketAcceptor{
 		channelFuture.channel().closeFuture().addListener(future -> this.destroy(appBossGroup,appWorkerGroup));
 	}
 
+	//TODO:chenjian web是否有app心跳检验
 	private void bindWebPort(){
 		webBossGroup = new NioEventLoopGroup();
 		webWorkerGroup = new NioEventLoopGroup();
