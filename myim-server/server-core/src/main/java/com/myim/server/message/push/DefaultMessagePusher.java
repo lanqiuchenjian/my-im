@@ -21,8 +21,8 @@
  */
 package com.myim.server.message.push;
 
-import com.myim.server.message.service.ApnsService;
-import com.myim.server.message.service.CIMSessionService;
+import com.myim.server.message.service.push.ApnsService;
+import com.myim.server.message.service.session.CIMSessionService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import com.myim.server.model.CIMSession;
@@ -66,10 +66,10 @@ public class DefaultMessagePusher implements CIMMessagePusher {
 		/*
 		 * IOS设备，如果开启了apns，则使用apns推送
 		 */
-		if (session.isIOSChannel() && session.isApnsEnable()) {
-			apnsService.push(message, session.getDeviceId());
-			return;
-		}
+//		if (session.isIOSChannel() && session.isApnsEnable()) {
+//			apnsService.push(message, session.getDeviceId());
+//			return;
+//		}
 		
 		/*
 		 * 服务器集群时，判断当前session是否连接于本台服务器

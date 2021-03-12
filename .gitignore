@@ -24,7 +24,6 @@ overlays/
 #.project
 Servers/
 
-# Ctrip #
 __ConfigTemp/
 datasource.xml
 

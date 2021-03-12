@@ -21,7 +21,7 @@
  */
 package com.myim.server.admin.controller;
 
-import com.myim.server.message.service.CIMSessionService;
+import com.myim.server.message.service.session.CIMSessionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -19,7 +19,7 @@
  *                                                                                     *
  ***************************************************************************************
  */
-package com.myim.server.message.service;
+package com.myim.server.message.service.push;
 
 
 import com.myim.server.model.Message;

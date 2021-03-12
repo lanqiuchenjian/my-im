@@ -19,13 +19,13 @@
  *                                                                                     *
  ***************************************************************************************
  */
-package com.myim.server.message.service.impl;
+package com.myim.server.message.service.push.impl;
 
 import cn.teaey.apns4j.Apns4j;
 import cn.teaey.apns4j.network.ApnsChannel;
 import cn.teaey.apns4j.network.ApnsChannelFactory;
 import cn.teaey.apns4j.network.ApnsGateway;
-import com.myim.server.message.service.ApnsService;
+import com.myim.server.message.service.push.ApnsService;
 import com.myim.server.util.ApnsPayloadCompat;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;

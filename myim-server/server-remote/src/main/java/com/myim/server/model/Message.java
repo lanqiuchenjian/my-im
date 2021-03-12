@@ -33,6 +33,9 @@ public class Message implements Serializable, Transportable {
 
 	private static final long serialVersionUID = 1L;
 
+	private String key;
+
+	private String repeat;
 	/**
 	 * 消息类型，用户自定义消息类别
 	 */
@@ -76,7 +79,22 @@ public class Message implements Serializable, Transportable {
 		timestamp = System.currentTimeMillis();
 	}
 
-	
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
+	public String getRepeat() {
+		return repeat;
+	}
+
+	public void setRepeat(String repeat) {
+		this.repeat = repeat;
+	}
+
 	public long getId() {
 		return id;
 	}
@@ -155,6 +173,8 @@ public class Message implements Serializable, Transportable {
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("#Message#").append("\n");
+		buffer.append("key:").append(key).append("\n");
+		buffer.append("repeat:").append(repeat).append("\n");
 		buffer.append("id:").append(id).append("\n");
 		buffer.append("action:").append(action).append("\n");
 		buffer.append("title:").append(title).append("\n");
@@ -174,6 +194,7 @@ public class Message implements Serializable, Transportable {
 	@Override
 	public byte[] getBody() {
 		MessageProto.Model.Builder builder = MessageProto.Model.newBuilder();
+		builder.setKey(key);
 		builder.setId(id);
 		builder.setAction(action);
 		builder.setSender(sender);
@@ -183,6 +204,9 @@ public class Message implements Serializable, Transportable {
 		/**
 		 * 下面字段可能为空
 		 */
+		if (repeat != null) {
+			builder.setRepeat(repeat);
+		}
 		if (content != null) {
 			builder.setContent(content);
 		}

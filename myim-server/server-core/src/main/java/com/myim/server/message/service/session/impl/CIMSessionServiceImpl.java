@@ -19,11 +19,11 @@
  *                                                                                     *
  ***************************************************************************************
  */
-package com.myim.server.message.service.impl;
+package com.myim.server.message.service.session.impl;
 
 
 import com.myim.server.message.repository.SessionRepository;
-import com.myim.server.message.service.CIMSessionService;
+import com.myim.server.message.service.session.CIMSessionService;
 import org.springframework.stereotype.Service;
 import com.myim.server.handler.CIMNioSocketAcceptor;
 import com.myim.server.model.CIMSession;

@@ -2,14 +2,16 @@ syntax = "proto3";
 package com.myim.client.model.proto;
 option java_outer_classname="MessageProto";
 message Model {
-   int64 id = 1;
-   string action = 2;
-   string content = 3;
-   string sender = 4;
-   string receiver = 5;
-   string extra = 6;
-   string title = 7;
-   string format = 8;
-   int64 timestamp = 9;
+   string key = 1;
+   string repeat = 2;
+   int64 id = 3;
+   string action = 4;
+   string content = 5;
+   string sender = 6;
+   string receiver = 7;
+   string extra = 8;
+   string title = 9;
+   string format = 10;
+   int64 timestamp = 11;
 }
 	 

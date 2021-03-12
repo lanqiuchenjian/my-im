@@ -21,12 +21,19 @@
  */
 package com.myim.server.api.service;
 
+import com.myim.server.api.dto.req.UserLoginReqDto;
 import com.myim.server.api.dto.req.UserRegisterReqDto;
+import com.myim.server.api.dto.resp.UserLoginRespDto;
 import com.myim.server.api.dto.resp.UserRegisterRespDto;
-import com.myim.server.model.Message;
+import com.myim.server.message.bo.req.ApplyFriendReqBo;
+import com.myim.server.message.bo.resp.ApplyFriendRespBo;
 
 public interface UserService {
+	/*************************http*************************************/
 	UserRegisterRespDto register(UserRegisterReqDto registerReqDto);
 
-	void login(Message message);
+	UserLoginRespDto login(UserLoginReqDto userLoginReqDto);
+
+	/*************************tcp*************************************/
+	ApplyFriendRespBo applyFriend(ApplyFriendReqBo applyFriendBo);
 }

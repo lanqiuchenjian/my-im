@@ -23,7 +23,7 @@ package com.myim.server.message.handler;
 
 import com.myim.server.handler.CIMRequestHandler;
 import com.myim.server.message.push.CIMMessagePusher;
-import com.myim.server.message.service.CIMSessionService;
+import com.myim.server.message.service.session.CIMSessionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

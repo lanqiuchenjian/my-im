@@ -5,5 +5,7 @@ import lombok.Data;
 
 @Data
 public class UserLoginReqDto extends BaseRequest {
+    private String loginName;
 
+    private String loginPassword;
 }

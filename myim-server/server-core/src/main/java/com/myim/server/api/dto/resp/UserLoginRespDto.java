@@ -1,4 +1,6 @@
 package com.myim.server.api.dto.resp;
 
-public class UserLoginRespDto {
+import com.myim.server.api.dto.resp.base.BaseResponse;
+
+public class UserLoginRespDto extends BaseResponse {
 }

@@ -21,15 +21,15 @@
  */
 package com.myim.server.api.controller;
 
+import com.myim.server.api.dto.req.UserLoginReqDto;
 import com.myim.server.api.dto.req.UserRegisterReqDto;
+import com.myim.server.api.dto.resp.UserLoginRespDto;
 import com.myim.server.api.dto.resp.UserRegisterRespDto;
 import com.myim.server.api.service.UserService;
 import com.myim.server.model.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -45,8 +45,8 @@ public class UserController {
 	}
 
 	@PostMapping(value = "/login")
-	public ResponseEntity<Long> login(Message message)  {
-
-		return ResponseEntity.ok(message.getId());
+	public ResponseEntity<UserLoginRespDto> login(@RequestBody(required = false) UserLoginReqDto userLoginReqDto)  {
+		UserLoginRespDto userLoginRespDto = userService.login(userLoginReqDto);
+		return ResponseEntity.ok(userLoginRespDto);
 	}
 }
