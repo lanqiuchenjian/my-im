@@ -1,0 +1,47 @@
+# Maven #
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+*.log
+
+# IDEA #
+.idea/
+.iml
+*.iml
+out/
+overlays/
+
+# Eclipse #
+.settings/
+.metadata/
+.classpath
+#.project
+Servers/
+
+# Ctrip #
+__ConfigTemp/
+datasource.xml
+
+# others #
+.log
+
+# Package Files #
+*.jar
+!/Activiti-Designer-master/org.activiti.designer.libs/*.jar
+*.war
+*.ear
+/greenseer.authcenter/target/
+/.idea
+/doc/*.pdb
+/visionflow-common/.project
+/visionflow-console/.project
+/visionflow-core/.project
+/visionflow-dao/.project
+/visionflow-service/.project
+/.project
