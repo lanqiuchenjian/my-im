@@ -61,7 +61,7 @@ public class ControllerTest extends BaseTest{
         userLoginReqDto.setLoginName("xx");
         userLoginReqDto.setLoginPassword("pp");
         String s = new Gson().toJson(userLoginReqDto);
-
+        s = s.replaceAll("loginName", "loginXX");
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/user/login")
                 .content(s).characterEncoding("UTF-8").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());

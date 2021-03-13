@@ -21,6 +21,7 @@
  */
 package com.myim.server.api.controller;
 
+import com.google.gson.Gson;
 import com.myim.server.api.dto.req.UserLoginReqDto;
 import com.myim.server.api.dto.req.UserRegisterReqDto;
 import com.myim.server.api.dto.resp.UserLoginRespDto;
@@ -31,6 +32,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/user")
@@ -39,14 +45,19 @@ public class UserController {
 	private UserService userService;
 
 	@PostMapping(value = "/register")
-	public ResponseEntity<UserRegisterRespDto> register(UserRegisterReqDto userRegisterReqDto)  {
+	public ResponseEntity<UserRegisterRespDto> register(@RequestBody UserRegisterReqDto userRegisterReqDto)  {
 		UserRegisterRespDto userRegisterRespDto = userService.register(userRegisterReqDto);
 		return ResponseEntity.ok(userRegisterRespDto);
 	}
 
 	@PostMapping(value = "/login")
-	public ResponseEntity<UserLoginRespDto> login(@RequestBody(required = false) UserLoginReqDto userLoginReqDto)  {
+	public ResponseEntity<UserLoginRespDto> login(@RequestBody UserLoginReqDto userLoginReqDto)  {
 		UserLoginRespDto userLoginRespDto = userService.login(userLoginReqDto);
 		return ResponseEntity.ok(userLoginRespDto);
+	}
+
+	@PostMapping(value = "/test")
+	public ResponseEntity<String> test(@RequestBody Map<String, List<Map<String, String>>> ppp)  {
+		return ResponseEntity.ok("success");
 	}
 }

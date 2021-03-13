@@ -6,21 +6,23 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class BaseResponse {
+public class ListBaseResponse<T> {
     private String status;
 
     private String code;
 
     private String msg;
 
-    public static <T extends BaseResponse> T success(T t) {
+    private List<T> data;
+
+    public static <T extends ListBaseResponse> T success(T t) {
         t.setStatus(CodeMsgEnum.SUCCESS.getStatus());
         t.setCode(CodeMsgEnum.SUCCESS.getCode());
         t.setMsg(CodeMsgEnum.SUCCESS.getMsg());
         return t;
     }
 
-    public static <T extends BaseResponse> T fail(T t, CodeMsgEnum codeMsgEnum) {
+    public static <T extends ListBaseResponse> T fail(T t, CodeMsgEnum codeMsgEnum) {
         t.setStatus(codeMsgEnum.getStatus());
         t.setCode(codeMsgEnum.getCode());
         t.setMsg(codeMsgEnum.getMsg());

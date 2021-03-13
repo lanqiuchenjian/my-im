@@ -86,6 +86,10 @@ public class SentBody implements Serializable {
 		return data.keySet();
 	}
 
+	public Map<String, String> getData() {
+		return data;
+	}
+
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();

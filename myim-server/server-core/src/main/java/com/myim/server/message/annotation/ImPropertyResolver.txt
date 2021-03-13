@@ -9,8 +9,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 public class ImPropertyResolver {
-
-    public Object[] resolver(JsonObject jsonObject, Parameter[] parameters) {
+    public static Object[] resolver(JsonObject jsonObject, Parameter[] parameters) {
         Object[] data = null;
         if (null != parameters) {
             int length = parameters.length;
@@ -64,7 +63,7 @@ public class ImPropertyResolver {
         return data;
     }
 
-    private Object getParameterValue(String name, JsonObject bodyObject, Type type) {
+    private static Object getParameterValue(String name, JsonObject bodyObject, Type type) {
         Object o = null;
         if (null != bodyObject) {
             JsonElement je = bodyObject.get(name);

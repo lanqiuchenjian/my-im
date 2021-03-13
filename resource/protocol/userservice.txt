@@ -1,0 +1,19 @@
+报文格式：
+type:ServiceName:methodName&&key:value&&key:value
+
+type:
+    user:用户信息相关增删改查
+    single:单聊
+    group:群聊
+    broadcast:全部推送
+ServiceName:methodName:
+    定位处理逻辑的服务和方法
+key:value:
+    入参，Map键值对形式，后期改为json，参考springmvc @RequsetBody进行映射
+
+1.添加好友
+user:UserMsgService:applySingleFriend&&fromImUserId:1&&toImUserId:4
+2.查看好友信息
+user:UserMsgService:friendInfo&&fromImUserId:1&&toImUserId:2&&categoryName:我的好友
+3.查看分组下所有好友信息
+user:UserMsgService:friendListInfo&&imUserId:1&&imUserCategoryId:1

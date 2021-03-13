@@ -73,17 +73,39 @@
             return;
         }
 
-        $.post("/api/user/register", {loginName:user,loginPassword:"123456"},
-            function(data){
+        var json = {"loginName":user,"loginPassword":"123456"};
+        // $.post("/api/user/register", JSON.stringify(json),
+        //     function(data){
+        //         if (data.status == "success") {
+        //             showProcess('正在接入请稍后......');
+        //             alert("用户初始密码123456")
+        //             /**登录成功后创建连接****/
+		//             CIMPushManager.connect();
+        //         }else {
+        //             alert("系统错误")
+        //         }
+        //     });
+
+        $.ajax({
+            type: "POST",
+            url: "/api/user/register",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(json),
+            dataType: "json",
+            success: function (data) {
                 if (data.status == "success") {
                     showProcess('正在接入请稍后......');
                     alert("用户初始密码123456")
                     /**登录成功后创建连接****/
-		            CIMPushManager.connect();
+                    CIMPushManager.connect();
                 }else {
                     alert("系统错误")
                 }
-            });
+            },
+            error: function (message) {
+                alert("提交数据失败！");
+            }
+        });
     }
 
 

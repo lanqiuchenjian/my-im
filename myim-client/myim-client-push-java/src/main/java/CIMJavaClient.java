@@ -6,6 +6,7 @@ import com.myim.client.model.Message;
 import com.myim.client.model.ReplyBody;
 import com.myim.client.model.SentBody;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class CIMJavaClient implements CIMEventListener {
@@ -34,10 +35,15 @@ public class CIMJavaClient implements CIMEventListener {
 				sentBody.setKey(CIMConstant.RequestKey.CLIENT_PUSH);
 				sentBody.put("fromAccount", "10000");
 				String next = scanner.next();
-				String[] split = next.split(":");
+				String[] split = next.split("&&");
 				sentBody.put("action", split[0]);
-				System.out.println(next);
-				sentBody.put("content", split[1]);
+//				System.out.println(next);
+//				sentBody.put("content", split[1]);
+
+				for (int i = 1; i < split.length; i++) {
+					String[] kv = split[i].split(":");
+					sentBody.put(kv[0], kv[1]);
+				}
 
 				CIMPushManager.sendRequest(sentBody);
 			}

@@ -26,7 +26,13 @@ import com.myim.server.api.dto.req.UserRegisterReqDto;
 import com.myim.server.api.dto.resp.UserLoginRespDto;
 import com.myim.server.api.dto.resp.UserRegisterRespDto;
 import com.myim.server.message.bo.req.ApplyFriendReqBo;
+import com.myim.server.message.bo.req.FriendInfoReqBo;
+import com.myim.server.message.bo.req.FriendListInfoReqBo;
 import com.myim.server.message.bo.resp.ApplyFriendRespBo;
+import com.myim.server.message.bo.resp.FriendInfoRespBo;
+import com.myim.server.message.bo.resp.FriendListInfoRespBo;
+
+import java.util.List;
 
 public interface UserService {
 	/*************************http*************************************/
@@ -36,4 +42,8 @@ public interface UserService {
 
 	/*************************tcp*************************************/
 	ApplyFriendRespBo applyFriend(ApplyFriendReqBo applyFriendBo);
+
+	FriendInfoRespBo friendInfo(FriendInfoReqBo friendInfoReqBo);
+
+	FriendListInfoRespBo friendListInfo(FriendListInfoReqBo friendListInfoReqBo);
 }
