@@ -194,7 +194,6 @@ public class Message implements Serializable, Transportable {
 	@Override
 	public byte[] getBody() {
 		MessageProto.Model.Builder builder = MessageProto.Model.newBuilder();
-		builder.setKey(key);
 		builder.setId(id);
 		builder.setAction(action);
 		builder.setSender(sender);
@@ -204,6 +203,9 @@ public class Message implements Serializable, Transportable {
 		/**
 		 * 下面字段可能为空
 		 */
+		if (key != null) {
+			builder.setKey(key);
+		}
 		if (repeat != null) {
 			builder.setRepeat(repeat);
 		}

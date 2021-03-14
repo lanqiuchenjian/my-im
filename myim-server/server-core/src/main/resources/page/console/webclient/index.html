@@ -95,7 +95,7 @@
             success: function (data) {
                 if (data.status == "success") {
                     showProcess('正在接入请稍后......');
-                    alert("用户初始密码123456")
+                    // alert("用户初始密码123456")
                     /**登录成功后创建连接****/
                     CIMPushManager.connect();
                 }else {
@@ -152,7 +152,7 @@
         }
         console.log("+++++" + text);
         let browser = getBrowser();
-        let body = new proto.com.farsunset.cim.sdk.web.model.SentBody();
+        let body = new proto.com.myim.web.model.SentBody();
         body.setKey("client_push");
         body.setTimestamp(new Date().getTime());
         body.getDataMap().set("fromAccount", $('#account').val());

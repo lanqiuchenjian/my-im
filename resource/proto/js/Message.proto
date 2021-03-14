@@ -1,0 +1,16 @@
+syntax = "proto3";
+package com.myim.web.model;
+message Message {
+   string key = 1;
+   string repeat = 2;
+   int64 id = 3;
+   string action = 4;
+   string content = 5;
+   string sender = 6;
+   string receiver = 7;
+   string extra = 8;
+   string title = 9;
+   string format = 10;
+   int64 timestamp = 11;
+}
+	 

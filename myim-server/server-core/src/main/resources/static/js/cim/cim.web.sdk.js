@@ -1,6 +1,6 @@
 /*CIM服务器IP*/
-// const CIM_HOST = "47.110.41.97";
-const CIM_HOST = "127.0.0.1";
+const CIM_HOST = "47.110.41.97";
+// const CIM_HOST = "127.0.0.1";
 /*
  *服务端 websocket端口
  */
@@ -38,23 +38,23 @@ CIMPushManager.bindAccount = function (account) {
 
     window.localStorage.account = account;
 
-    let deviceId = window.localStorage.deviceIddeviceId;
-    if (deviceId == '' || deviceId == undefined) {
-        deviceId = generateUUID();
-        window.localStorage.deviceId = deviceId;
-    }
+    // let deviceId = window.localStorage.deviceIddeviceId;
+    // if (deviceId == '' || deviceId == undefined) {
+    //     deviceId = generateUUID();
+    //     window.localStorage.deviceId = deviceId;
+    // }
 
-    let browser = getBrowser();
-    let body = new proto.com.farsunset.cim.sdk.web.model.SentBody();
+    // let browser = getBrowser();
+    let body = new proto.com.myim.web.model.SentBody();
     body.setKey("client_bind");
     body.setTimestamp(new Date().getTime());
     body.getDataMap().set("account", account);
     body.getDataMap().set("channel", APP_CHANNEL);
     body.getDataMap().set("appVersion", APP_VERSION);
-    body.getDataMap().set("osVersion", browser.version);
+    // body.getDataMap().set("osVersion", browser.version);
     body.getDataMap().set("packageName", APP_PACKAGE);
-    body.getDataMap().set("deviceId", deviceId);
-    body.getDataMap().set("device", browser.name);
+    // body.getDataMap().set("deviceId", deviceId);
+    // body.getDataMap().set("device", browser.name);
     CIMPushManager.sendRequest(body);
 };
 
@@ -85,13 +85,13 @@ CIMPushManager.innerOnMessageReceived = function (e) {
     let body = data.subarray(DATA_HEADER_LENGTH, data.length);
 
     if (type == MESSAGE) {
-        let message = proto.com.farsunset.cim.sdk.web.model.Message.deserializeBinary(body);
+        let message = proto.com.myim.web.model.Message.deserializeBinary(body);
         onInterceptMessageReceived(message.toObject(false));
         return;
     }
 
     if (type == REPLY_BODY) {
-        let message = proto.com.farsunset.cim.sdk.web.model.ReplyBody.deserializeBinary(body);
+        let message = proto.com.myim.web.model.ReplyBody.deserializeBinary(body);
         /**
          * 将proto对象转换成json对象，去除无用信息
          */
