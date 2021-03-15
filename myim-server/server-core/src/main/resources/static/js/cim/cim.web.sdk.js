@@ -1,6 +1,6 @@
 /*CIM服务器IP*/
-const CIM_HOST = "47.110.41.97";
-// const CIM_HOST = "127.0.0.1";
+// const CIM_HOST = "47.110.41.97";
+const CIM_HOST = "127.0.0.1";
 /*
  *服务端 websocket端口
  */
@@ -84,13 +84,13 @@ CIMPushManager.innerOnMessageReceived = function (e) {
     let type = data[0];
     let body = data.subarray(DATA_HEADER_LENGTH, data.length);
 
-    if (type == MESSAGE) {
+    if (type === MESSAGE) {
         let message = proto.com.myim.web.model.Message.deserializeBinary(body);
         onInterceptMessageReceived(message.toObject(false));
         return;
     }
 
-    if (type == REPLY_BODY) {
+    if (type === REPLY_BODY) {
         let message = proto.com.myim.web.model.ReplyBody.deserializeBinary(body);
         /**
          * 将proto对象转换成json对象，去除无用信息

@@ -1,14 +1,12 @@
 package com.myim.server.message.service.user;
 
-import com.myim.server.message.bo.req.ApplyFriendReqBo;
-import com.myim.server.message.bo.req.FriendInfoReqBo;
-import com.myim.server.message.bo.req.FriendListInfoReqBo;
-import com.myim.server.message.bo.resp.ApplyFriendRespBo;
-import com.myim.server.message.bo.resp.FriendInfoRespBo;
-import com.myim.server.message.bo.resp.FriendListInfoRespBo;
-import com.myim.server.model.ReplyBody;
-
-import java.util.List;
+import com.myim.server.message.bo.req.user.ApplyFriendReqBo;
+import com.myim.server.message.bo.req.user.FriendInfoReqBo;
+import com.myim.server.message.bo.req.user.FriendListInfoReqBo;
+import com.myim.server.message.bo.req.user.SearchFriendListInfoReqBo;
+import com.myim.server.message.bo.resp.user.ApplyFriendRespBo;
+import com.myim.server.message.bo.resp.user.FriendInfoRespBo;
+import com.myim.server.message.bo.resp.user.FriendListInfoRespBo;
 
 public interface UserMsgService {
     ApplyFriendRespBo applySingleFriend(ApplyFriendReqBo applyFriendBo);
@@ -16,4 +14,6 @@ public interface UserMsgService {
     FriendInfoRespBo friendInfo(FriendInfoReqBo friendInfoReqBo);
 
     FriendListInfoRespBo friendListInfo(FriendListInfoReqBo friendListInfoReqBo);
+
+    FriendListInfoRespBo searchFriendListInfo(SearchFriendListInfoReqBo searchFriendListInfoReqBo);
 }

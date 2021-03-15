@@ -1,11 +1,10 @@
-package com.myim.server.message.bo.req;
+package com.myim.server.message.bo.req.user;
 
 import com.myim.server.message.bo.BaseRequestBo;
 import lombok.Data;
 
 @Data
-public class FriendInfoReqBo extends BaseRequestBo {
+public class ApplyFriendReqBo extends BaseRequestBo {
     private Long fromImUserId;
     private Long toImUserId;
-    private String categoryName;
 }

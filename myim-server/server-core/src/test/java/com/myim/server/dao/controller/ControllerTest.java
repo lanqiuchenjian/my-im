@@ -5,7 +5,7 @@ import com.myim.server.api.controller.UserController;
 import com.myim.server.api.dto.req.UserLoginReqDto;
 import com.myim.server.api.service.UserService;
 import com.myim.server.enumm.CodeMsgEnum;
-import com.myim.server.dao.datasource.BaseTest;
+import com.myim.server.dao.BaseTest;
 import com.myim.server.exception.user.UserNotExistException;
 import org.junit.Before;
 import org.junit.Test;

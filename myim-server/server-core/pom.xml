@@ -48,7 +48,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
-
+        
         <!--- ##################使用mina版本SDK时的配置  start ##################-->
         <dependency>
             <groupId>org.apache.mina</groupId>

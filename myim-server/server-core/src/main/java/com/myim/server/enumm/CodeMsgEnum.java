@@ -8,9 +8,10 @@ public enum CodeMsgEnum {
 
     /********************失败4开头***************************/
     SYSTEM_ERROR("fail", "400000", "系统异常，请稍后重试"),
-    USER_OR_PASSWORD_ERROR("fail", "400001", "用户名或者密码错误");
+    USER_OR_PASSWORD_ERROR("fail", "400001", "用户名或者密码错误"),
 
-
+    //消息相关
+    MESSAGE_TYPE_ERROR("fail", "480000", "推送报文类型错误");
 
     private String status;
     private String code;

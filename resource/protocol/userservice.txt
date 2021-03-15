@@ -11,9 +11,17 @@ ServiceName:methodName:
 key:value:
     入参，Map键值对形式，后期改为json，参考springmvc @RequsetBody进行映射
 
+用户：
 1.添加好友
-user:UserMsgService:applySingleFriend&&fromImUserId:1&&toImUserId:4
+user:UserMsgService:applySingleFriend&&fromImUserId=1&&toImUserId=4
 2.查看好友信息
-user:UserMsgService:friendInfo&&fromImUserId:1&&toImUserId:2&&categoryName:我的好友
+user:UserMsgService:friendInfo&&fromImUserId=1&&toImUserId=2&&categoryName=我的好友
 3.查看分组下所有好友信息
-user:UserMsgService:friendListInfo&&imUserId:1&&imUserCategoryId:1
+user:UserMsgService:friendListInfo&&imUserId=1&&imUserCategoryId=1
+4.搜索添加好友信息
+user:UserMsgService:searchFriendListInfo&&loginNamePre=cj&&offset=0&&size=3
+
+
+消息：
+5.单聊发送信息
+single:SingleChatServiceImpl:sendSingleMessage&&fromLoginName=10000&&toLoginName=20000&&content={"ni":"hao"}&&key=u1000

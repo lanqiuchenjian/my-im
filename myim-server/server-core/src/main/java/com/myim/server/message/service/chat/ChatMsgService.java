@@ -1,4 +1,5 @@
 package com.myim.server.message.service.chat;
 
-public interface HistoryService {
+public interface ChatMsgService {
+
 }

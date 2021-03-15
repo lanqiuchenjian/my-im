@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class CIMJavaClient implements CIMEventListener {
- 	public static void startup() {
+ 	public static void startup() throws InterruptedException {
 		/*
 		 * 第一步 设置运行时参数
 		 */
@@ -27,27 +27,49 @@ public class CIMJavaClient implements CIMEventListener {
 		 */
 		CIMPushManager.connect("127.0.0.1", 23456);
 
+//		user:SingleChatServiceImpl:sendSingleMessage&&fromLoginName=10000&&toLoginName=20000&&content={"ni":"hao"}&&key=u1000
 		while (true) {
-			Scanner scanner = new Scanner(System.in);
-			while (scanner.hasNext()) {
+
+				Thread.sleep(2000);
 				SentBody sentBody = new SentBody();
 
 				sentBody.setKey(CIMConstant.RequestKey.CLIENT_PUSH);
 				sentBody.put("fromAccount", "10000");
-				String next = scanner.next();
+				String next = "user:SingleChatServiceImpl:sendSingleMessage&&fromLoginName=10000&&toLoginName=20000&&content={\"ni\":\"hao\"}&&key=u1000";
 				String[] split = next.split("&&");
 				sentBody.put("action", split[0]);
 //				System.out.println(next);
 //				sentBody.put("content", split[1]);
 
 				for (int i = 1; i < split.length; i++) {
-					String[] kv = split[i].split(":");
+					String[] kv = split[i].split("=");
 					sentBody.put(kv[0], kv[1]);
 				}
 
 				CIMPushManager.sendRequest(sentBody);
-			}
+
 		}
+//		while (true) {
+//			Scanner scanner = new Scanner(System.in);
+//			while (scanner.hasNext()) {
+//				SentBody sentBody = new SentBody();
+//
+//				sentBody.setKey(CIMConstant.RequestKey.CLIENT_PUSH);
+//				sentBody.put("fromAccount", "10000");
+//				String next = scanner.next();
+//				String[] split = next.split("&&");
+//				sentBody.put("action", split[0]);
+////				System.out.println(next);
+////				sentBody.put("content", split[1]);
+//
+//				for (int i = 1; i < split.length; i++) {
+//					String[] kv = split[i].split("=");
+//					sentBody.put(kv[0], kv[1]);
+//				}
+//
+//				CIMPushManager.sendRequest(sentBody);
+//			}
+//		}
 		 
 	}
 
@@ -116,7 +138,7 @@ public class CIMJavaClient implements CIMEventListener {
 		return 1;
 	}
 
-	public static void main(String[] a){
+	public static void main(String[] a) throws InterruptedException {
 		startup();
 	}
 

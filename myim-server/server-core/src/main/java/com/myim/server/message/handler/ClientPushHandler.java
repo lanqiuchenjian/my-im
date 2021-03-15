@@ -1,27 +1,7 @@
-/*
- * Copyright 2013-2019 Xia Jun(3979434@qq.com).
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- ***************************************************************************************
- *                                                                                     *
- *                        Website : http://www.farsunset.com                           *
- *                                                                                     *
- ***************************************************************************************
- */
 package com.myim.server.message.handler;
 
 import com.google.gson.Gson;
+import com.myim.server.constant.Constant;
 import com.myim.server.enumm.CodeMsgEnum;
 import com.myim.server.exception.BaseException;
 import com.myim.server.exception.system.PushMessageException;
@@ -43,9 +23,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 
 /*
@@ -76,13 +54,18 @@ public class ClientPushHandler implements CIMRequestHandler {
             String action = body.get("action");
             String type = action.split(":")[0];
 
-            if (type.equalsIgnoreCase("broadcast"))
+            if (type.equalsIgnoreCase(Constant.MES_BROADCAST)) {
+                logger.info(Constant.MES_BROADCAST + ":", body.getData());
                 broadcast(body);
-
-            if (type.equalsIgnoreCase("user"))
+            } else if (type.equalsIgnoreCase(Constant.MES_USER)) {
+                logger.info(Constant.MES_USER + ":", body.getData());
                 object = user(body, action);
-
-            broadcast(body);
+            } else if (type.equalsIgnoreCase(Constant.MES_SINGLE)) {
+                logger.info(Constant.MES_SINGLE + ":", body.getData());
+                object = user(body, action);
+            }else {
+                throw new PushMessageException(CodeMsgEnum.MESSAGE_TYPE_ERROR);
+            }
         } catch (Exception exception) {
             if (exception instanceof BaseException) {
                 BaseException e = (BaseException) exception;
@@ -120,11 +103,13 @@ public class ClientPushHandler implements CIMRequestHandler {
 
     private Object setField(SentBody body, Class pCls, Object obj) throws IllegalAccessException {
         Field[] declaredFields = pCls.getDeclaredFields();
-        for (int j = 0; j < declaredFields.length; j++) {
-            declaredFields[j].setAccessible(true);
-            String value = body.getData().get(declaredFields[j].getName());
-            Object to = getToBean(declaredFields[j].getType(), value);
-            declaredFields[j].set(obj, to);
+        for (Field declaredField : declaredFields) {
+            declaredField.setAccessible(true);
+            String value = body.getData().get(declaredField.getName());
+            if (value != null) {
+                Object to = getToBean(declaredField.getType(), value);
+                declaredField.set(obj, to);
+            }
         }
         Class<?> superclass = pCls.getSuperclass();
         if (superclass != null) {
@@ -173,9 +158,5 @@ public class ClientPushHandler implements CIMRequestHandler {
 
             defaultMessagePusher.push(m);
         });
-    }
-
-    private boolean fromOtherDevice(CIMSession oldSession, CIMSession newSession) {
-        return !Objects.equals(oldSession.getDeviceId(), newSession.getDeviceId());
     }
 }

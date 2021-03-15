@@ -1,4 +1,4 @@
-package com.myim.server.message.bo.resp;
+package com.myim.server.message.bo.resp.user;
 
 import com.myim.server.api.dto.resp.base.BaseResponse;
 import lombok.Data;

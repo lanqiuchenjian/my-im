@@ -1,4 +1,4 @@
-package com.myim.server.dao.datasource;
+package com.myim.server.dao;
 
 import com.myim.server.ServerLauncher;
 import org.junit.runner.RunWith;

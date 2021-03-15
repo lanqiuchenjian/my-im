@@ -25,14 +25,13 @@ import com.myim.server.api.dto.req.UserLoginReqDto;
 import com.myim.server.api.dto.req.UserRegisterReqDto;
 import com.myim.server.api.dto.resp.UserLoginRespDto;
 import com.myim.server.api.dto.resp.UserRegisterRespDto;
-import com.myim.server.message.bo.req.ApplyFriendReqBo;
-import com.myim.server.message.bo.req.FriendInfoReqBo;
-import com.myim.server.message.bo.req.FriendListInfoReqBo;
-import com.myim.server.message.bo.resp.ApplyFriendRespBo;
-import com.myim.server.message.bo.resp.FriendInfoRespBo;
-import com.myim.server.message.bo.resp.FriendListInfoRespBo;
-
-import java.util.List;
+import com.myim.server.message.bo.req.user.ApplyFriendReqBo;
+import com.myim.server.message.bo.req.user.FriendInfoReqBo;
+import com.myim.server.message.bo.req.user.FriendListInfoReqBo;
+import com.myim.server.message.bo.req.user.SearchFriendListInfoReqBo;
+import com.myim.server.message.bo.resp.user.ApplyFriendRespBo;
+import com.myim.server.message.bo.resp.user.FriendInfoRespBo;
+import com.myim.server.message.bo.resp.user.FriendListInfoRespBo;
 
 public interface UserService {
 	/*************************http*************************************/
@@ -46,4 +45,6 @@ public interface UserService {
 	FriendInfoRespBo friendInfo(FriendInfoReqBo friendInfoReqBo);
 
 	FriendListInfoRespBo friendListInfo(FriendListInfoReqBo friendListInfoReqBo);
+
+	FriendListInfoRespBo searchFriendListInfo(SearchFriendListInfoReqBo searchFriendListInfoReqBo);
 }

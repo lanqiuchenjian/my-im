@@ -18,7 +18,7 @@
 
 
 <script>
-
+    var userId = ''
     /***********************************推送配置开始**************************/
 
     /**  当socket连接成功回调 **/
@@ -37,8 +37,25 @@
             $('#MessageDialog').fadeIn();
             $('#MessageDialog').addClass("in");
             $("#current_account").text($('#account').val());
-
+            getUserList();
         }
+
+        if (reply.key == 'client_push' && reply.code == 200) {
+            for (var i in reply.data.content) {
+                $("#userList").append("<div class='alert alert-info' >" + reply.data.content[i].loginName + "</div>");
+            }
+        }
+    }
+
+    function getUserList() {
+        let body = new proto.com.myim.web.model.SentBody();
+        body.setKey("client_push");
+        body.setTimestamp(new Date().getTime());
+        body.getDataMap().set("fromAccount", $('#account').val());
+        body.getDataMap().set("action", "user:UserMsgService:friendListInfo");
+        body.getDataMap().set("imUserId", "1");
+        body.getDataMap().set("imUserCategoryId", "1");
+        CIMPushManager.sendRequest(body);
     }
 
     /** 当收到消息时候回调  **/
@@ -58,8 +75,6 @@
         $("#messageList").append("<h6 style='text-align: left;'>" + "对方:" + message.sender + " 时间:" + new Date(message.timestamp).toLocaleString() + "</h6>");
         $("#messageList").append("<div class='alert alert-info' >" + message.content + "</div>");
     }
-
-
     /***********************************推送配置结束**************************/
 
 
@@ -94,6 +109,7 @@
             dataType: "json",
             success: function (data) {
                 if (data.status == "success") {
+                    userId = data.registerImUserId;
                     showProcess('正在接入请稍后......');
                     // alert("用户初始密码123456")
                     /**登录成功后创建连接****/
@@ -206,11 +222,12 @@
 <div class="modal fade" data-backdrop="static" id="MessageDialog" tabindex="-1" role="dialog">
     <div class="modal-dialog" style="width: 600px;margin: 30px auto;">
         <div class="modal-content">
+            <textarea class="modal-body" id="userList" style="min-height: 200px;"></textarea>
             <div class="modal-header" style="text-align: center;">
                 <span style="float: left;">请在管理页面推送一条消息</span>
                 <span style="float: right;color: #4caf50;">当前帐号：<span id="current_account"></span></span>
             </div>
-            <div class="modal-body" id="messageList" style="min-height: 600px;"></div>
+            <textarea class="modal-body" id="messageList" style="min-height: 400px;"></textarea>
             <div class="modal-body" style="min-height: 200px;">
                 <textarea id="inputList" cols="50" rows="10" placeholder="input..."></textarea>
                 <button onclick="sendMyMessage()">send</button>

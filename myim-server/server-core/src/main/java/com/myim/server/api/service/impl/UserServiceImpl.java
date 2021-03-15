@@ -15,19 +15,22 @@ import com.myim.server.dao.gen.mapper.ImUserSingleCategoryMapper;
 import com.myim.server.dao.gen.mapper.ImUserSingleRelationMapper;
 import com.myim.server.enumm.CodeMsgEnum;
 import com.myim.server.exception.user.UserNotExistException;
-import com.myim.server.message.bo.req.ApplyFriendReqBo;
-import com.myim.server.message.bo.req.FriendInfoReqBo;
-import com.myim.server.message.bo.req.FriendListInfoReqBo;
-import com.myim.server.message.bo.resp.ApplyFriendRespBo;
-import com.myim.server.message.bo.resp.FriendInfoRespBo;
-import com.myim.server.message.bo.resp.FriendListInfoRespBo;
+import com.myim.server.message.bo.req.user.ApplyFriendReqBo;
+import com.myim.server.message.bo.req.user.FriendInfoReqBo;
+import com.myim.server.message.bo.req.user.FriendListInfoReqBo;
+import com.myim.server.message.bo.req.user.SearchFriendListInfoReqBo;
+import com.myim.server.message.bo.resp.user.ApplyFriendRespBo;
+import com.myim.server.message.bo.resp.user.FriendInfoRespBo;
+import com.myim.server.message.bo.resp.user.FriendListInfoRespBo;
+import com.myim.server.redis.RedisDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -39,6 +42,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ImUserSingleRelationMapper imUserSingleRelationMapper;
+
+    @Autowired
+    private RedisDao redisDao;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -53,7 +59,11 @@ public class UserServiceImpl implements UserService {
         imUserSingleCategory.setCount(0L);
         imUserSingleCategoryMapper.insertSelective(imUserSingleCategory);
 
+        //新增用户存入redis中
+        redisDao.zddKey(Constant.USERNAME_ID, imUser.getLoginName() + ":" + String.valueOf(imUser.getId()));
+
         UserRegisterRespDto userRegisterRespDto = new UserRegisterRespDto();
+        userRegisterRespDto.setRegisterImUserId(imUser.getId());
         return BaseResponse.success(userRegisterRespDto);
     }
 
@@ -120,6 +130,31 @@ public class UserServiceImpl implements UserService {
             BeanCommon.copyFromTo(imUser, friendInfoRespBo, false);
             list.add(friendInfoRespBo);
         });
+        friendListInfoRespBo.setData(list);
+        return ListBaseResponse.success(friendListInfoRespBo);
+    }
+
+    @Override
+    public FriendListInfoRespBo searchFriendListInfo(SearchFriendListInfoReqBo searchFriendListInfoReqBo) {
+        FriendListInfoRespBo friendListInfoRespBo = new FriendListInfoRespBo();
+        List<FriendInfoRespBo> list = new ArrayList<>();
+
+        Set<String> userSet = redisDao.getObscureKey(Constant.USERNAME_ID, searchFriendListInfoReqBo.getLoginNamePre(),
+                searchFriendListInfoReqBo.getOffset(), searchFriendListInfoReqBo.getSize());
+
+        List<Long> ids = userSet.stream()
+                .map(u -> Long.valueOf(u.split(":")[1])).collect(Collectors.toList());
+
+        ImUserExample imUserExample = new ImUserExample();
+        imUserExample.createCriteria().andIdIn(ids);
+        List<ImUser> imUsers = imUserMapper.selectByExample(imUserExample);
+
+        imUsers.forEach(imUser -> {
+            FriendInfoRespBo friendInfoRespBo = new FriendInfoRespBo();
+            BeanCommon.copyFromTo(imUser, friendInfoRespBo, false);
+            list.add(friendInfoRespBo);
+        });
+
         friendListInfoRespBo.setData(list);
         return ListBaseResponse.success(friendListInfoRespBo);
     }
