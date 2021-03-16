@@ -11,4 +11,6 @@ public class Constant {
     public static String MES_BROADCAST = "broadcast";
     public static String MES_USER = "user";
     public static String MES_SINGLE = "single";
+
+    //消息服务
 }

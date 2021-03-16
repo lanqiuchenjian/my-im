@@ -32,15 +32,14 @@
     function onReplyReceived(reply) {
         console.log(reply);
         if (reply.key == 'client_bind' && reply.code == 200) {
-//            hideProcess();
-//
-//            $('#LoginDialog').fadeOut();
-//
-//            $('#MessageDialog').fadeIn();
-//            $('#MessageDialog').addClass("in");
-//            $("#current_account").text($('#account').val());
-//            getUserList(userId, singleCategoryId);
-            window.location.replace("/webLogin");
+            hideProcess();
+
+            $('#LoginDialog').fadeOut();
+
+            $('#MessageDialog').fadeIn();
+            $('#MessageDialog').addClass("in");
+            $("#current_account").text($('#account').val());
+            getUserList(userId, singleCategoryId);
         }
 
         if (reply.key == 'client_push' && reply.code == 200) {
@@ -126,44 +125,30 @@
     function doLogin() {
 
         var user = $.trim($('#account').val());
+        var password = $.trim($('#password').val());
         if (user == '') {
             alert("请输入登录用户名")
             return;
         }
 
-        var json = {"loginName": user, "loginPassword": "123456"};
-        //post模式
-        // $.post("/api/user/register", JSON.stringify(json),
-        //     function(data){
-        //         if (data.status == "success") {
-        //             showProcess('正在接入请稍后......');
-        //             alert("用户初始密码123456")
-        //             /**登录成功后创建连接****/
-        //             CIMPushManager.connect();
-        //         }else {
-        //             alert("系统错误")
-        //         }
-        //     });
+        var json = {"loginName": user, "loginPassword": password};
 
         $.ajax({
             type: "POST",
-            url: "/api/user/register",
+            url: "/api/user/login",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(json),
             dataType: "json",
             success: function (data) {
                 if (data.status == "success") {
-                    window.location.replace("/webLogin");
-
-                    //结束逻辑
                     userId = data.registerImUserId + "";
-                    singleCategoryId = data.singleCategoryId + "";
+                    singleCategoryId = data.singleCategoryIdList[0] + "";
                     showProcess('正在接入请稍后......');
                     // alert("用户初始密码123456")
                     /**登录成功后创建连接****/
-//                    CIMPushManager.connect();
+                    CIMPushManager.connect();
                 } else {
-                    alert("系统错误")
+                    alert("系统错误" + data.msg)
                 }
             },
             error: function (message) {
@@ -296,7 +281,7 @@
             <div class="modal-body" style="padding:0px;">
                 <div style="height:200px;text-align: center; background: #5FA0D3; color: #ffffff; border: 0px; border-top-left-radius: 4px; border-top-right-radius: 4px;">
                     <img src="/image/icon.png" style="height: 72px;width: 72px;margin-top:40px;"/>
-                    <div style="margin-top: 20px; color: #ffffff;font-size: 16px;">请输入一个帐号用于登录，随后接收推送消息</div>
+                    <div style="margin-top: 20px; color: #ffffff;font-size: 16px;">请登录</div>
                 </div>
 
                 <div class="input-group"
@@ -304,6 +289,8 @@
                     <span class="input-group-addon"><span class="glyphicon glyphicon-user"
                                                           aria-hidden="true"></span></span>
                     <input class="form-control" id="account" maxlength="32" placeholder="帐号（数字或者英文字母）"
+                           style="display: inline; width: 100%; height: 50px;"/>
+                    <input class="form-control" id="password" maxlength="32" placeholder="密码（数字或者英文字母）"
                            style="display: inline; width: 100%; height: 50px;"/>
                 </div>
 

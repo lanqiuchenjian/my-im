@@ -5,6 +5,8 @@ import lombok.Data;
 
 @Data
 public class FriendInfoRespBo extends BaseResponse{
+    private Long fromImUserId;
+
     private Long imUserId;
 
     private String userName;

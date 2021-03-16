@@ -13,6 +13,8 @@ public class ListBaseResponse<T> {
 
     private String msg;
 
+    private String serviceType;
+
     private List<T> data;
 
     public static <T extends ListBaseResponse> T success(T t) {

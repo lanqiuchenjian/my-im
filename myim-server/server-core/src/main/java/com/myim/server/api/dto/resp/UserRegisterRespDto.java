@@ -6,4 +6,5 @@ import lombok.Data;
 @Data
 public class UserRegisterRespDto extends BaseResponse{
     private Long registerImUserId;
+    private Long singleCategoryId;
 }

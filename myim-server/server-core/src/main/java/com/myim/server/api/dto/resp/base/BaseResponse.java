@@ -13,6 +13,8 @@ public class BaseResponse {
 
     private String msg;
 
+    private String serviceType;
+
     public static <T extends BaseResponse> T success(T t) {
         t.setStatus(CodeMsgEnum.SUCCESS.getStatus());
         t.setCode(CodeMsgEnum.SUCCESS.getCode());

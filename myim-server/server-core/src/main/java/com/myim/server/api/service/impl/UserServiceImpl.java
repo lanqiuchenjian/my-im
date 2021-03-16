@@ -64,6 +64,7 @@ public class UserServiceImpl implements UserService {
 
         UserRegisterRespDto userRegisterRespDto = new UserRegisterRespDto();
         userRegisterRespDto.setRegisterImUserId(imUser.getId());
+        userRegisterRespDto.setSingleCategoryId(imUserSingleCategory.getId());
         return BaseResponse.success(userRegisterRespDto);
     }
 
@@ -86,7 +87,15 @@ public class UserServiceImpl implements UserService {
             throw new UserNotExistException(CodeMsgEnum.USER_OR_PASSWORD_ERROR);
         }
 
+        ImUserSingleCategoryExample imUserSingleCategoryExample = new ImUserSingleCategoryExample();
+        imUserSingleCategoryExample.createCriteria().andImUserIdEqualTo(imUsers.get(0).getId());
+
+        List<ImUserSingleCategory> imUserSingleCategories = imUserSingleCategoryMapper.selectByExample(imUserSingleCategoryExample);
+        List<Long> ids = imUserSingleCategories.stream().map(ImUserSingleCategory::getId).collect(Collectors.toList());
+
         UserLoginRespDto userLoginRespDto = new UserLoginRespDto();
+        userLoginRespDto.setRegisterImUserId(imUsers.get(0).getId());
+        userLoginRespDto.setSingleCategoryIdList(ids);
         return BaseResponse.success(userLoginRespDto);
     }
 
@@ -101,7 +110,9 @@ public class UserServiceImpl implements UserService {
         doApply(fromImUserId, toImUserId);
         doApply(toImUserId, fromImUserId);
 
-        return BaseResponse.success(new ApplyFriendRespBo());
+        ApplyFriendRespBo applyFriendRespBo = new ApplyFriendRespBo();
+        applyFriendRespBo.setServiceType("applySingleFriend");
+        return BaseResponse.success(applyFriendRespBo);
     }
 
     @Override
@@ -137,6 +148,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public FriendListInfoRespBo searchFriendListInfo(SearchFriendListInfoReqBo searchFriendListInfoReqBo) {
         FriendListInfoRespBo friendListInfoRespBo = new FriendListInfoRespBo();
+        friendListInfoRespBo.setServiceType("searchFriendListInfo");
         List<FriendInfoRespBo> list = new ArrayList<>();
 
         Set<String> userSet = redisDao.getObscureKey(Constant.USERNAME_ID, searchFriendListInfoReqBo.getLoginNamePre(),
@@ -145,6 +157,9 @@ public class UserServiceImpl implements UserService {
         List<Long> ids = userSet.stream()
                 .map(u -> Long.valueOf(u.split(":")[1])).collect(Collectors.toList());
 
+        if (ids.size() == 0)
+            return ListBaseResponse.success(friendListInfoRespBo);
+
         ImUserExample imUserExample = new ImUserExample();
         imUserExample.createCriteria().andIdIn(ids);
         List<ImUser> imUsers = imUserMapper.selectByExample(imUserExample);
@@ -152,6 +167,7 @@ public class UserServiceImpl implements UserService {
         imUsers.forEach(imUser -> {
             FriendInfoRespBo friendInfoRespBo = new FriendInfoRespBo();
             BeanCommon.copyFromTo(imUser, friendInfoRespBo, false);
+            friendInfoRespBo.setImUserId(imUser.getId());
             list.add(friendInfoRespBo);
         });
 

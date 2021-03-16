@@ -41,5 +41,10 @@ public class NavigationController {
 		model.setViewName("console/webclient/index");
 		return model;
 	}
-	 
+
+	@GetMapping(value = "/webLogin")
+	public ModelAndView webLogin(ModelAndView model) {
+		model.setViewName("console/webclient/login");
+		return model;
+	}
 }
