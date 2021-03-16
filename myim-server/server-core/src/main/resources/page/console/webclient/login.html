@@ -20,6 +20,8 @@
 <script>
     var userId = ''
     var singleCategoryId= ''
+    var friendList;
+    var searchPre;
 
     /***********************************推送配置开始**************************/
 
@@ -51,11 +53,23 @@
                 if (parse.serviceType === "searchFriendListInfo") {
                     for (var i in jsonReply) {
                         var loginName = jsonReply[i].loginName;
-                        $("#searchList").append("<div class='alert alert-info' onclick='addFriendWin(" + JSON.stringify(jsonReply[i]) + ")' >" + loginName + "</div>");
+                        var flag = true
+                        for (var j in friendList) {
+                            if (friendList[j].loginName === loginName) {
+                                $("#searchList").append("<div class='alert alert-info' style='color:#F00' title='已经成为好友'>" + loginName + "</div>");
+                                flag = false
+                                break;
+                            }
+                        }
+
+                        if (flag)
+                            $("#searchList").append("<div class='alert alert-info' title='点击添加好友' onclick='addFriendWin(" + JSON.stringify(jsonReply[i]) + ")' >" + loginName + "</div>");
                     }
                 }else if(parse.serviceType === "applySingleFriend") {
                     getUserList(userId, singleCategoryId)
                 } else {
+                    friendList = jsonReply;
+                    doSearch()
                     for (var i in jsonReply) {
                         var loginName = jsonReply[i].loginName;
                         $("#userList").append("<div class='alert alert-info' onclick='newChatWin(\"" + loginName + "\")' onmouseover='friendInfo(\"" + loginName + "\")'>" + loginName + "</div>");
@@ -126,7 +140,7 @@
 
         var user = $.trim($('#account').val());
         var password = $.trim($('#password').val());
-        if (user == '') {
+        if (user === '') {
             alert("请输入登录用户名")
             return;
         }
@@ -140,7 +154,7 @@
             data: JSON.stringify(json),
             dataType: "json",
             success: function (data) {
-                if (data.status == "success") {
+                if (data.status === "success") {
                     userId = data.registerImUserId + "";
                     singleCategoryId = data.singleCategoryIdList[0] + "";
                     showProcess('正在接入请稍后......');
@@ -226,6 +240,7 @@
         offset = "0";
         size = "5";
         last = event.timeStamp;
+
         //利用event的timeStamp来标记时间，这样每次的keyup事件都会修改last的值，注意last必需为全局变量
         setTimeout(function () {    //设时延迟0.5s执行
             if (last - event.timeStamp === 0)
@@ -323,8 +338,15 @@
                 <div class="modal-body" id="searchList"
                      style="height: 514px;width:185px;float:left;border:2px solid #000;overflow-y:auto"></div>
             </div>
-            <div class="modal-body" id="userList"
-                 style="height: 600px;width:200px;float:left;border:2px solid #000;overflow-y:auto"></div>
+
+            <div class="modal-body" style="height: 600px;width:200px;float:left;border:2px solid #000;">
+                <div style="height: 48px;width:185px;float:left;border:2px solid #000;">我的好友</div>
+                <div class="modal-body" id="userList"
+                     style="height: 514px;width:185px;float:left;border:2px solid #000;overflow-y:auto"></div>
+            </div>
+            
+            <!--<div class="modal-body" id="userList"-->
+                 <!--style="height: 600px;width:200px;float:left;border:2px solid #000;overflow-y:auto"></div>-->
             <div class="modal-body" id="messageList"
                  style="height: 400px;width:600px;float:left;border:2px solid #000;overflow-y:auto"></div>
             <div class="" style="height: 200px;width:600px;float:left;">

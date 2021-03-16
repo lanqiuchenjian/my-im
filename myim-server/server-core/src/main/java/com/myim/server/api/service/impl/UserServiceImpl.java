@@ -14,6 +14,7 @@ import com.myim.server.dao.gen.mapper.ImUserMapper;
 import com.myim.server.dao.gen.mapper.ImUserSingleCategoryMapper;
 import com.myim.server.dao.gen.mapper.ImUserSingleRelationMapper;
 import com.myim.server.enumm.CodeMsgEnum;
+import com.myim.server.exception.user.UserExistedException;
 import com.myim.server.exception.user.UserNotExistException;
 import com.myim.server.message.bo.req.user.ApplyFriendReqBo;
 import com.myim.server.message.bo.req.user.FriendInfoReqBo;
@@ -24,6 +25,7 @@ import com.myim.server.message.bo.resp.user.FriendInfoRespBo;
 import com.myim.server.message.bo.resp.user.FriendListInfoRespBo;
 import com.myim.server.redis.RedisDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,7 +53,12 @@ public class UserServiceImpl implements UserService {
     public UserRegisterRespDto register(UserRegisterReqDto userRegisterReqDto) {
         ImUser imUser = new ImUser();
         BeanCommon.copyFromTo(userRegisterReqDto, imUser, false);
-        imUserMapper.insertSelective(imUser);
+
+        try{
+            imUserMapper.insertSelective(imUser);
+        }catch (DuplicateKeyException e){
+            throw new UserExistedException(CodeMsgEnum.USER_EXISTED_ERROR, e);
+        }
         //用户注册时候，默认新增我的好友分组
         ImUserSingleCategory imUserSingleCategory = new ImUserSingleCategory();
         imUserSingleCategory.setImUserId(imUser.getId());
