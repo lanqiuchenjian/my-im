@@ -1,0 +1,4 @@
+./protoc.exe
+--proto_path=D:\Users\jchen26\Desktop\test_project\myim-parent\myim-client\myim-client-push-java\src\main\java\com\myim\client\model\proto
+--java_out=D:\Users\jchen26\Desktop\test_project\myim-parent\myim-server\server-remote\src\main\java\com\myim\server\model\proto
+D:\Users\jchen26\Desktop\test_project\myim-parent\myim-client\myim-client-push-java\src\main\java\com\myim\client\model\proto\Message.proto
