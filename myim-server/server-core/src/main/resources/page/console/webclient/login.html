@@ -33,7 +33,7 @@
     /** 当收到请求回复时候回调  **/
     function onReplyReceived(reply) {
         console.log(reply);
-        if (reply.data.type === CLIENT_BIND && reply.code == 200) {
+        if (reply.data.type === CLIENT_BIND && reply.code === 200) {
             hideProcess();
 
             $('#LoginDialog').fadeOut();
@@ -44,7 +44,7 @@
             getUserList(userId, singleCategoryId);
         }
 
-        if (reply.data.type === CLIENT_PUSH && reply.code == 200) {
+        if (reply.data.type === CLIENT_PUSH && reply.code === 200) {
             var content = reply.data.content;
 
             if (content != "null") {

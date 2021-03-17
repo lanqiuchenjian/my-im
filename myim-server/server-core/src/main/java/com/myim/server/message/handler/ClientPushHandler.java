@@ -43,7 +43,22 @@ public class ClientPushHandler implements CIMRequestHandler {
 
     @Override
     public void process(CIMSession newSession, SentBody body) {
+        String action = body.get("action");
 
+        if (action.equals("reply")) {
+            //处理等待事件
+            doReply(body);
+        } else {
+            doRequest(newSession, body, action);
+        }
+    }
+
+    private void doReply(SentBody body) {
+        String key = body.getKey();
+
+    }
+
+    private void doRequest(CIMSession newSession, SentBody body, String action) {
         ReplyBody reply = new ReplyBody();
         reply.setKey(body.getKey());
         reply.put("type", body.get("type"));
@@ -52,7 +67,6 @@ public class ClientPushHandler implements CIMRequestHandler {
 
         Object object = null;
         try {
-            String action = body.get("action");
             String type = action.split(":")[0];
 
             if (type.equalsIgnoreCase(Constant.MES_BROADCAST)) {

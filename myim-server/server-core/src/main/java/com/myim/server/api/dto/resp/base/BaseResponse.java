@@ -3,8 +3,6 @@ package com.myim.server.api.dto.resp.base;
 import com.myim.server.enumm.CodeMsgEnum;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 public class BaseResponse {
     private String status;

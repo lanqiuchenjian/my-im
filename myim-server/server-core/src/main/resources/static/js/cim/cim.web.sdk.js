@@ -84,6 +84,16 @@ CIMPushManager.innerOnConnectFinished = function () {
 };
 
 
+function replyServer(msg) {
+    //返回服务端响应
+    let body = new proto.com.myim.web.model.SentBody();
+    body.setKey(body.getKey());
+    body.setTimestamp(new Date().getTime());
+    body.getDataMap().set("type", CLIENT_PUSH);
+    body.getDataMap().set("action", "reply");
+    CIMPushManager.sendRequest(body);
+}
+
 CIMPushManager.innerOnMessageReceived = function (e) {
     let data = new Uint8Array(e.data);
     let type = data[0];
@@ -91,7 +101,11 @@ CIMPushManager.innerOnMessageReceived = function (e) {
 
     if (type === MESSAGE) {
         let message = proto.com.myim.web.model.Message.deserializeBinary(body);
-        onInterceptMessageReceived(message.toObject(false));
+        var msg = message.toObject(false);
+
+        replyServer(msg);
+
+        onInterceptMessageReceived(msg);
         return;
     }
 
