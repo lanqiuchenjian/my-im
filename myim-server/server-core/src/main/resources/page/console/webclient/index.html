@@ -31,19 +31,11 @@
     /** 当收到请求回复时候回调  **/
     function onReplyReceived(reply) {
         console.log(reply);
-        if (reply.key == 'client_bind' && reply.code == 200) {
-//            hideProcess();
-//
-//            $('#LoginDialog').fadeOut();
-//
-//            $('#MessageDialog').fadeIn();
-//            $('#MessageDialog').addClass("in");
-//            $("#current_account").text($('#account').val());
-//            getUserList(userId, singleCategoryId);
+        if (reply.data.type === CLIENT_BIND && reply.code === 200) {
             window.location.replace("/webLogin");
         }
 
-        if (reply.key == 'client_push' && reply.code == 200) {
+        if (reply.data.type == 'client_push' && reply.code == 200) {
             var content = reply.data.content;
 
             if (content != "null") {
@@ -59,46 +51,13 @@
                 } else {
                     for (var i in jsonReply) {
                         var loginName = jsonReply[i].loginName;
-                        $("#userList").append("<div class='alert alert-info' onclick='newChatWin(\"" + loginName + "\")' onmouseover='friendInfo(\"" + loginName + "\")'>" + loginName + "</div>");
+                        $("#userList").append("<div class='alert alert-info' onclick='newChatWin(\"" + loginName + "\"," + JSON.stringify(this) + ")' onmouseover='friendInfo(\"" + loginName + "\")'>" + loginName + "</div>");
                     }
                 }
             }
         }
     }
 
-    function addFriendWin(imUserString) {
-        //user:UserMsgService:applySingleFriend&&fromImUserId=1&&toImUserId=4
-        $('#userList').html("")
-        var imUser = eval(imUserString);
-        var toImUserId = imUser.imUserId;
-
-        let body = new proto.com.myim.web.model.SentBody();
-        body.setKey("client_push");
-        body.setTimestamp(new Date().getTime());
-        body.getDataMap().set("action", "user:UserMsgService:applySingleFriend");
-        body.getDataMap().set("fromImUserId", userId);
-        body.getDataMap().set("toImUserId", toImUserId+"");
-        CIMPushManager.sendRequest(body);
-    }
-
-    function newChatWin(name) {
-        console.log("好友名字,新的聊天窗口:" + name);
-    }
-
-    function friendInfo(name) {
-        console.log("好友名字，详细信息:" + name);
-    }
-
-    function getUserList(userId, singleCategoryId) {
-        let body = new proto.com.myim.web.model.SentBody();
-        body.setKey("client_push");
-        body.setTimestamp(new Date().getTime());
-        body.getDataMap().set("fromAccount", $('#account').val());
-        body.getDataMap().set("action", "user:UserMsgService:friendListInfo");
-        body.getDataMap().set("imUserId", userId);
-        body.getDataMap().set("imUserCategoryId", singleCategoryId);
-        CIMPushManager.sendRequest(body);
-    }
 
     /** 当收到消息时候回调  **/
 
@@ -132,18 +91,6 @@
         }
 
         var json = {"loginName": user, "loginPassword": "123456"};
-        //post模式
-        // $.post("/api/user/register", JSON.stringify(json),
-        //     function(data){
-        //         if (data.status == "success") {
-        //             showProcess('正在接入请稍后......');
-        //             alert("用户初始密码123456")
-        //             /**登录成功后创建连接****/
-        //             CIMPushManager.connect();
-        //         }else {
-        //             alert("系统错误")
-        //         }
-        //     });
 
         $.ajax({
             type: "POST",
@@ -204,85 +151,6 @@
                 notify.close();
             }, 3000);
         }
-    }
-
-    function sendMyMessage() {
-        var text = $("#inputList").eq(0).val();
-
-        let deviceId = window.localStorage.deviceIddeviceId;
-        if (deviceId == '' || deviceId == undefined) {
-            deviceId = generateUUID();
-            window.localStorage.deviceId = deviceId;
-        }
-        console.log("+++++" + text);
-        let browser = getBrowser();
-        let body = new proto.com.myim.web.model.SentBody();
-        body.setKey("client_push");
-        body.setTimestamp(new Date().getTime());
-        body.getDataMap().set("fromAccount", $('#account').val());
-        body.getDataMap().set("channel", APP_CHANNEL);
-        body.getDataMap().set("appVersion", APP_VERSION);
-        body.getDataMap().set("osVersion", browser.version);
-        body.getDataMap().set("packageName", APP_PACKAGE);
-        body.getDataMap().set("deviceId", deviceId);
-        body.getDataMap().set("device", browser.name);
-        body.getDataMap().set("action", "broadcast");
-        body.getDataMap().set("content", text);
-        CIMPushManager.sendRequest(body);
-        $("#messageList").append("<h6 style='text-align: right;'>" + "自己:" + $('#account').val() + " 时间:" + new Date().toLocaleString() + "</h6>");
-        $("#messageList").append("<div style='text-align: right;' class='alert alert-info' >" + text + "</div>");
-    }
-
-    /***********************************业务配置结束**************************/
-    var offset;
-    var size;
-    var last;
-    function searchName(event) {
-        offset = "0";
-        size = "5";
-        last = event.timeStamp;
-        //利用event的timeStamp来标记时间，这样每次的keyup事件都会修改last的值，注意last必需为全局变量
-        setTimeout(function () {    //设时延迟0.5s执行
-            if (last - event.timeStamp === 0)
-            //如果时间差为0（也就是你停止输入0.5s之内都没有其它的keyup事件发生）则做你想要做的事
-            {
-                //user:UserMsgService:searchFriendListInfo&&loginNamePre=cj&&offset=0&&size=5
-                //做你要做的事情
-                console.log($('#searchName').val())
-                doSearch();
-            }
-        }, 500);
-    }
-
-    function plus() {
-        var o = parseInt(offset);
-        var s = parseInt(size);
-        offset = o + s + "";
-        doSearch()
-    }
-
-    function minus() {
-        var o = parseInt(offset);
-        var s = parseInt(size);
-        if ((o - s) <= 0)
-            offset = 0 + "";
-        else
-            offset = o - s + "";
-
-        doSearch()
-    }
-
-    function doSearch() {
-        $('#searchList').html("")
-        let body = new proto.com.myim.web.model.SentBody();
-        body.setKey("client_push");
-        body.setTimestamp(new Date().getTime());
-        body.getDataMap().set("fromAccount", $('#account').val());
-        body.getDataMap().set("action", "user:UserMsgService:searchFriendListInfo");
-        body.getDataMap().set("loginNamePre", $('#searchName').val());
-        body.getDataMap().set("offset", offset);
-        body.getDataMap().set("size", size);
-        CIMPushManager.sendRequest(body);
     }
 </script>
 

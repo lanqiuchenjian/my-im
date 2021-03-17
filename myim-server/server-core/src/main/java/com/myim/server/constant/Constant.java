@@ -13,4 +13,10 @@ public class Constant {
     public static String MES_SINGLE = "single";
 
     //消息服务
+
+
+    //交互类型
+    public static String CLIENT_BIND = "client_bind";
+    public static String CLIENT_PUSH = "client_push";
+    public static String CLIENT_CLOSED = "client_closed";
 }

@@ -11,6 +11,10 @@ const APP_VERSION = "1.0.0";
 const APP_CHANNEL = "browser";
 const APP_PACKAGE = "com.farsunset.cim";
 
+const CLIENT_BIND = "client_bind"
+const CLIENT_PUSH = "client_push"
+const CLIENT_CLOSED = "client_closed"
+
 /*
  *特殊的消息类型，代表被服务端强制下线
  */
@@ -46,13 +50,14 @@ CIMPushManager.bindAccount = function (account) {
 
     // let browser = getBrowser();
     let body = new proto.com.myim.web.model.SentBody();
-    body.setKey("client_bind");
+    body.setKey(guid());
     body.setTimestamp(new Date().getTime());
     body.getDataMap().set("account", account);
     body.getDataMap().set("channel", APP_CHANNEL);
     body.getDataMap().set("appVersion", APP_VERSION);
     // body.getDataMap().set("osVersion", browser.version);
     body.getDataMap().set("packageName", APP_PACKAGE);
+    body.getDataMap().set("type", CLIENT_BIND);
     // body.getDataMap().set("deviceId", deviceId);
     // body.getDataMap().set("device", browser.name);
     CIMPushManager.sendRequest(body);
@@ -97,7 +102,7 @@ CIMPushManager.innerOnMessageReceived = function (e) {
          */
         let reply = {};
         reply.code = message.getCode();
-        reply.key = message.getKey();
+        reply.data.type = message.getKey();
         reply.message = message.getMessage();
         reply.timestamp = message.getTimestamp();
         reply.data = {};

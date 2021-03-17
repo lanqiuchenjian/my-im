@@ -21,7 +21,7 @@
     var userId = ''
     var singleCategoryId= ''
     var friendList;
-    var searchPre;
+    var singleChatName;
 
     /***********************************推送配置开始**************************/
 
@@ -33,7 +33,7 @@
     /** 当收到请求回复时候回调  **/
     function onReplyReceived(reply) {
         console.log(reply);
-        if (reply.key == 'client_bind' && reply.code == 200) {
+        if (reply.data.type === CLIENT_BIND && reply.code == 200) {
             hideProcess();
 
             $('#LoginDialog').fadeOut();
@@ -44,7 +44,7 @@
             getUserList(userId, singleCategoryId);
         }
 
-        if (reply.key == 'client_push' && reply.code == 200) {
+        if (reply.data.type === CLIENT_PUSH && reply.code == 200) {
             var content = reply.data.content;
 
             if (content != "null") {
@@ -72,7 +72,8 @@
                     doSearch()
                     for (var i in jsonReply) {
                         var loginName = jsonReply[i].loginName;
-                        $("#userList").append("<div class='alert alert-info' onclick='newChatWin(\"" + loginName + "\")' onmouseover='friendInfo(\"" + loginName + "\")'>" + loginName + "</div>");
+//                        $("#userList").append("<div class='alert alert-info' onclick='newChatWin(\"" + loginName + "\"," + this + ")' onmouseover='friendInfo(\"" + loginName + "\")'>" + loginName + "</div>");
+                        $("#userList").append("<div class='alert " + loginName + " alert-info user-list' onclick='newChatWin(\"" + loginName + "\")' onmouseover='friendInfo(\"" + loginName + "\")'>" + loginName + "</div>");
                     }
                 }
             }
@@ -86,16 +87,28 @@
         var toImUserId = imUser.imUserId;
 
         let body = new proto.com.myim.web.model.SentBody();
-        body.setKey("client_push");
+        body.setKey(guid());
         body.setTimestamp(new Date().getTime());
         body.getDataMap().set("action", "user:UserMsgService:applySingleFriend");
         body.getDataMap().set("fromImUserId", userId);
         body.getDataMap().set("toImUserId", toImUserId+"");
+        body.getDataMap().set("type", CLIENT_PUSH);
         CIMPushManager.sendRequest(body);
     }
 
     function newChatWin(name) {
         console.log("好友名字,新的聊天窗口:" + name);
+        $('#messageList').html("")
+        if($("." + name).hasClass("red")){
+            $("." + name).removeClass("red");
+            singleChatName = ''
+        }else{
+            if (singleChatName !== '')
+                $("." + singleChatName).removeClass("red");
+
+            $("." + name).addClass("red");
+            singleChatName = name;
+        }
     }
 
     function friendInfo(name) {
@@ -104,12 +117,13 @@
 
     function getUserList(userId, singleCategoryId) {
         let body = new proto.com.myim.web.model.SentBody();
-        body.setKey("client_push");
+        body.setKey(guid());
         body.setTimestamp(new Date().getTime());
         body.getDataMap().set("fromAccount", $('#account').val());
         body.getDataMap().set("action", "user:UserMsgService:friendListInfo");
         body.getDataMap().set("imUserId", userId);
         body.getDataMap().set("imUserCategoryId", singleCategoryId);
+        body.getDataMap().set("type", CLIENT_PUSH);
         CIMPushManager.sendRequest(body);
     }
 
@@ -216,7 +230,44 @@
         console.log("+++++" + text);
         let browser = getBrowser();
         let body = new proto.com.myim.web.model.SentBody();
-        body.setKey("client_push");
+
+        if (singleChatName === '') {
+            broadcastMsg(body, browser, deviceId, text);
+        }else {
+            singleMsg(body, browser, deviceId, text)
+        }
+    }
+
+    //single:SingleChatServiceImpl:sendSingleMessage&&fromLoginName=10000&&toLoginName=20000&&content={"ni":"hao"}&&key=u1000
+    function singleMsg(body, browser, deviceId, text) {
+        body.setKey(guid());
+        body.setTimestamp(new Date().getTime());
+        body.getDataMap().set("fromLoginName", $('#account').val());
+        body.getDataMap().set("toLoginName", singleChatName);
+        body.getDataMap().set("channel", APP_CHANNEL);
+        body.getDataMap().set("appVersion", APP_VERSION);
+        body.getDataMap().set("osVersion", browser.version);
+        body.getDataMap().set("packageName", APP_PACKAGE);
+        body.getDataMap().set("deviceId", deviceId);
+        body.getDataMap().set("device", browser.name);
+        body.getDataMap().set("action", "single:SingleChatServiceImpl:sendSingleMessage");
+        body.getDataMap().set("content", text);
+        body.getDataMap().set("type", "client_push" );
+        CIMPushManager.sendRequest(body);
+        $("#messageList").append("<h6 style='text-align: right;'>" + "自己:" + $('#account').val() + " 时间:" + new Date().toLocaleString() + "</h6>");
+        $("#messageList").append("<div style='text-align: right;' class='alert alert-info' >" + text + "</div>");
+    }
+
+    function guid() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0,
+                v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+
+    function broadcastMsg(body, browser, deviceId, text) {
+        body.setKey(guid());
         body.setTimestamp(new Date().getTime());
         body.getDataMap().set("fromAccount", $('#account').val());
         body.getDataMap().set("channel", APP_CHANNEL);
@@ -227,11 +278,11 @@
         body.getDataMap().set("device", browser.name);
         body.getDataMap().set("action", "broadcast");
         body.getDataMap().set("content", text);
+        body.getDataMap().set("type", CLIENT_PUSH);
         CIMPushManager.sendRequest(body);
         $("#messageList").append("<h6 style='text-align: right;'>" + "自己:" + $('#account').val() + " 时间:" + new Date().toLocaleString() + "</h6>");
         $("#messageList").append("<div style='text-align: right;' class='alert alert-info' >" + text + "</div>");
     }
-
     /***********************************业务配置结束**************************/
     var offset;
     var size;
@@ -274,14 +325,19 @@
 
     function doSearch() {
         $('#searchList').html("")
+
+        if ($('#searchName').val() === '' || $('#searchName').val() === null)
+            return;
+
         let body = new proto.com.myim.web.model.SentBody();
-        body.setKey("client_push");
+        body.setKey(guid());
         body.setTimestamp(new Date().getTime());
         body.getDataMap().set("fromAccount", $('#account').val());
         body.getDataMap().set("action", "user:UserMsgService:searchFriendListInfo");
         body.getDataMap().set("loginNamePre", $('#searchName').val());
         body.getDataMap().set("offset", offset);
         body.getDataMap().set("size", size);
+        body.getDataMap().set("type", CLIENT_PUSH);
         CIMPushManager.sendRequest(body);
     }
 </script>

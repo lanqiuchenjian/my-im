@@ -42,6 +42,7 @@ public class BindHandler implements CIMRequestHandler {
 
 		ReplyBody reply = new ReplyBody();
 		reply.setKey(body.getKey());
+		reply.put("type", body.get("type"));
 		reply.setCode(HttpStatus.OK.value());
 		reply.setTimestamp(System.currentTimeMillis());
 		

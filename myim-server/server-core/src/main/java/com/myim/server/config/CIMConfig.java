@@ -1,5 +1,7 @@
 package com.myim.server.config;
 
+import com.myim.server.constant.CIMConstant;
+import com.myim.server.constant.Constant;
 import com.myim.server.handler.*;
 import com.myim.server.message.handler.BindHandler;
 import com.myim.server.message.handler.ClientPushHandler;
@@ -40,7 +42,7 @@ public class CIMConfig implements CIMRequestHandler, ApplicationListener<Applica
 	@Override
 	public void process(CIMSession session, SentBody body) {
 		
-        CIMRequestHandler handler = appHandlerMap.get(body.getKey());
+        CIMRequestHandler handler = appHandlerMap.get(body.get("type"));
 		
 		if(handler == null) {return ;}
 		
@@ -53,9 +55,9 @@ public class CIMConfig implements CIMRequestHandler, ApplicationListener<Applica
 	@Override
 	public void onApplicationEvent(ApplicationStartedEvent applicationStartedEvent) {
 
-		appHandlerMap.put("client_bind",applicationContext.getBean(BindHandler.class));
-		appHandlerMap.put("client_closed",applicationContext.getBean(SessionClosedHandler.class));
-		appHandlerMap.put("client_push",applicationContext.getBean(ClientPushHandler.class));
+		appHandlerMap.put(Constant.CLIENT_BIND, applicationContext.getBean(BindHandler.class));
+		appHandlerMap.put(Constant.CLIENT_CLOSED, applicationContext.getBean(SessionClosedHandler.class));
+		appHandlerMap.put(Constant.CLIENT_PUSH, applicationContext.getBean(ClientPushHandler.class));
 
 		applicationContext.getBean(CIMNioSocketAcceptor.class).bind();
 	}

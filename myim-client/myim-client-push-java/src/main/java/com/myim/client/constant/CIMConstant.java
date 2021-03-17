@@ -54,7 +54,7 @@ public interface CIMConstant {
 
 		String CLIENT_BIND = "client_bind";
 		String CLIENT_PUSH = "client_push";
-
+		String CLIENT_CLOSED = "client_closed";
 	}
 
 	interface MessageAction {

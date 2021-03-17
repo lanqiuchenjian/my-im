@@ -13,4 +13,8 @@ public class SingleMessageReqBo extends BaseRequestBo {
     private String toLoginName;
     //发送的内容JSON表示
     private String content;
+    private String action;
+
+    //发送的处理类型
+    private String type;
 }

@@ -239,7 +239,7 @@ public class CIMNioSocketAcceptor{
 
 			CIMSession session = new CIMSession(ctx.channel());
 			SentBody body = new SentBody();
-			body.setKey(CIMConstant.CLIENT_CONNECT_CLOSED);
+			body.put("type", CIMConstant.CLIENT_CONNECT_CLOSED);
 			outerRequestHandler.process(session, body);
 
 		}
