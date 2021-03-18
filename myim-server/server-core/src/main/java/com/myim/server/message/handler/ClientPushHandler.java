@@ -1,6 +1,7 @@
 package com.myim.server.message.handler;
 
 import com.google.gson.Gson;
+import com.myim.server.common.DefaultFuture;
 import com.myim.server.constant.Constant;
 import com.myim.server.enumm.CodeMsgEnum;
 import com.myim.server.exception.BaseException;
@@ -47,15 +48,14 @@ public class ClientPushHandler implements CIMRequestHandler {
 
         if (action.equals("reply")) {
             //处理等待事件
-            doReply(body);
+            doReply(newSession, body);
         } else {
             doRequest(newSession, body, action);
         }
     }
 
-    private void doReply(SentBody body) {
-        String key = body.getKey();
-
+    private void doReply(CIMSession cimSession, SentBody body) {
+        DefaultFuture.received(cimSession, body);
     }
 
     private void doRequest(CIMSession newSession, SentBody body, String action) {

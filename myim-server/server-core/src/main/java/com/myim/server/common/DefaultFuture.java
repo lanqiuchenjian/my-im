@@ -1,198 +1,209 @@
 package com.myim.server.common;
 
+import com.myim.server.model.CIMSession;
+import com.myim.server.model.Message;
+import com.myim.server.model.SentBody;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * DefaultFuture.
  */
 public class DefaultFuture extends CompletableFuture<Object> {
+    private static final Map<String, CIMSession> CHANNELS = new ConcurrentHashMap<>();
 
-    private static final Map<Long, Channel> CHANNELS = new ConcurrentHashMap<>();
+    private static final Map<String, DefaultFuture> FUTURES = new ConcurrentHashMap<>();
 
-    private static final Map<Long, DefaultFuture> FUTURES = new ConcurrentHashMap<>();
+    static {
+        Thread th = new Thread(new RemotingInvocationTimeoutScan(), "DubboResponseTimeoutScanTimer");
+        th.setDaemon(true);
+        th.start();
+    }
 
-    public static final Timer TIME_OUT_TIMER = new HashedWheelTimer(
-            new NamedThreadFactory("dubbo-future-timeout", true),
-            30,
-            TimeUnit.MILLISECONDS);
-
-    // invoke id.
-    private final Long id;
-    private final Channel channel;
-    private final Request request;
+    // invoke key.
+    private final String key;
+    private final CIMSession channel;
+    private final Message request;
     private final int timeout;
+    private final Lock lock = new ReentrantLock();
+    private final Condition done = lock.newCondition();
     private final long start = System.currentTimeMillis();
     private volatile long sent;
-    private Timeout timeoutCheckTask;
+    private volatile SentBody response;
+//    private volatile ResponseCallback callback;
 
-    private ExecutorService executor;
-
-    public ExecutorService getExecutor() {
-        return executor;
-    }
-
-    public void setExecutor(ExecutorService executor) {
-        this.executor = executor;
-    }
-
-    private DefaultFuture(Channel channel, Request request, int timeout) {
+    public DefaultFuture(CIMSession channel, Message request, int timeout) {
         this.channel = channel;
         this.request = request;
-        this.id = request.getId();
-        this.timeout = timeout > 0 ? timeout : channel.getUrl().getPositiveParameter(TIMEOUT_KEY, DEFAULT_TIMEOUT);
+        this.key = request.getKey();
+        this.timeout = timeout;
         // put into waiting map.
-        FUTURES.put(id, this);
-        CHANNELS.put(id, channel);
+        FUTURES.put(key, this);
+        CHANNELS.put(key, channel);
     }
 
-    /**
-     * check time out of the future
-     */
-    private static void timeoutCheck(DefaultFuture future) {
-        TimeoutCheckTask task = new TimeoutCheckTask(future.getId());
-        future.timeoutCheckTask = TIME_OUT_TIMER.newTimeout(task, future.getTimeout(), TimeUnit.MILLISECONDS);
+    public static DefaultFuture getFuture(String key) {
+        return FUTURES.get(key);
     }
 
-    /**
-     * init a DefaultFuture
-     * 1.init a DefaultFuture
-     * 2.timeout check
-     *
-     * @param channel channel
-     * @param request the request
-     * @param timeout timeout
-     * @return a new DefaultFuture
-     */
-    public static DefaultFuture newFuture(Channel channel, Request request, int timeout, ExecutorService executor) {
-        final DefaultFuture future = new DefaultFuture(channel, request, timeout);
-        future.setExecutor(executor);
-        // ThreadlessExecutor needs to hold the waiting future in case of circuit return.
-        if (executor instanceof ThreadlessExecutor) {
-            ((ThreadlessExecutor) executor).setWaitingFuture(future);
-        }
-        // timeout check
-        timeoutCheck(future);
-        return future;
-    }
-
-    public static DefaultFuture getFuture(long id) {
-        return FUTURES.get(id);
-    }
-
-    public static boolean hasFuture(Channel channel) {
+    public static boolean hasFuture(CIMSession channel) {
         return CHANNELS.containsValue(channel);
     }
 
-    public static void sent(Channel channel, Request request) {
-        DefaultFuture future = FUTURES.get(request.getId());
+    public static void sent(CIMSession channel, Message request) {
+        DefaultFuture future = FUTURES.get(request.getKey());
+        System.out.println(request.getId());
         if (future != null) {
+            System.out.println("key................");
             future.doSent();
         }
     }
 
-    /**
-     * close a channel when a channel is inactive
-     * directly return the unfinished requests.
-     *
-     * @param channel channel to close
-     */
-    public static void closeChannel(Channel channel) {
-        for (Map.Entry<Long, Channel> entry : CHANNELS.entrySet()) {
-            if (channel.equals(entry.getValue())) {
-                DefaultFuture future = getFuture(entry.getKey());
-                if (future != null && !future.isDone()) {
-                    ExecutorService futureExecutor = future.getExecutor();
-                    if (futureExecutor != null && !futureExecutor.isTerminated()) {
-                        futureExecutor.shutdownNow();
-                    }
-
-                    Response disconnectResponse = new Response(future.getId());
-                    disconnectResponse.setStatus(Response.CHANNEL_INACTIVE);
-                    disconnectResponse.setErrorMessage("Channel " +
-                            channel +
-                            " is inactive. Directly return the unFinished request : " +
-                            future.getRequest());
-                    DefaultFuture.received(channel, disconnectResponse);
-                }
-            }
-        }
-    }
-
-    public static void received(Channel channel, Response response) {
-        received(channel, response, false);
-    }
-
-    public static void received(Channel channel, Response response, boolean timeout) {
+    public static void received(CIMSession channel, SentBody response) {
         try {
-            DefaultFuture future = FUTURES.remove(response.getId());
+            DefaultFuture future = FUTURES.remove(response.getKey());
             if (future != null) {
-                Timeout t = future.timeoutCheckTask;
-                if (!timeout) {
-                    // decrease Time
-                    t.cancel();
-                }
                 future.doReceived(response);
             } else {
-                logger.warn("The timeout response finally returned at "
+                System.out.println("The timeout response finally returned at "
                         + (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date()))
                         + ", response " + response
-                        + (channel == null ? "" : ", channel: " + channel.getLocalAddress()
+                        + (channel == null ? "" : ", channel: " + channel.getLocation()
                         + " -> " + channel.getRemoteAddress()));
             }
         } finally {
-            CHANNELS.remove(response.getId());
+            CHANNELS.remove(response.getKey());
         }
     }
 
-    @Override
-    public boolean cancel(boolean mayInterruptIfRunning) {
-        Response errorResult = new Response(id);
-        errorResult.setStatus(Response.CLIENT_ERROR);
-        errorResult.setErrorMessage("request future has been canceled.");
-        this.doReceived(errorResult);
-        FUTURES.remove(id);
-        CHANNELS.remove(id);
-        return true;
+    public Object get() {
+        return get(timeout);
+    }
+
+    public Object get(int timeout)  {
+        if (timeout <= 0) {
+            timeout = 1000 * 10;
+        }
+        if (!isDone()) {
+            long start = System.currentTimeMillis();
+            lock.lock();
+            try {
+                while (!isDone()) {
+                    done.await(timeout, TimeUnit.MILLISECONDS);
+                    if (isDone() || System.currentTimeMillis() - start > timeout) {
+                        break;
+                    }
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } finally {
+                lock.unlock();
+            }
+
+            if (!isDone()) {
+//                throw new TimeoutException(sent > 0, channel, getTimeoutMessage(false));
+            }
+        }
+        return returnFromResponse();
     }
 
     public void cancel() {
-        this.cancel(true);
+        SentBody errorResult = new SentBody();
+        errorResult.setKey(key);
+        errorResult.put("errorMsg", "request future has been canceled.");
+        response = errorResult;
+        FUTURES.remove(key);
+        CHANNELS.remove(key);
     }
 
+    public boolean isDone() {
+        return response != null;
+    }
 
-    private void doReceived(Response res) {
+//    public void setCallback(ResponseCallback callback) {
+//        if (isDone()) {
+//            invokeCallback(callback);
+//        } else {
+//            boolean isdone = false;
+//            lock.lock();
+//            try {
+//                if (!isDone()) {
+//                    this.callback = callback;
+//                } else {
+//                    isdone = true;
+//                }
+//            } finally {
+//                lock.unlock();
+//            }
+//            if (isdone) {
+//                invokeCallback(callback);
+//            }
+//        }
+//    }
+
+//    private void invokeCallback(ResponseCallback c) {
+//        ResponseCallback callbackCopy = c;
+//        if (callbackCopy == null) {
+//            throw new NullPointerException("callback cannot be null.");
+//        }
+//        c = null;
+//        Response res = response;
+//        if (res == null) {
+//            throw new IllegalStateException("response cannot be null. url:" + channel.getUrl());
+//        }
+//
+//        if (res.getStatus() == Response.OK) {
+//            try {
+//                callbackCopy.done(res.getResult());
+//            } catch (Exception e) {
+//                logger.error("callback invoke error .reasult:" + res.getResult() + ",url:" + channel.getUrl(), e);
+//            }
+//        } else if (res.getStatus() == Response.CLIENT_TIMEOUT || res.getStatus() == Response.SERVER_TIMEOUT) {
+//            try {
+//                TimeoutException te = new TimeoutException(res.getStatus() == Response.SERVER_TIMEOUT, channel, res.getErrorMessage());
+//                callbackCopy.caught(te);
+//            } catch (Exception e) {
+//                logger.error("callback invoke error ,url:" + channel.getUrl(), e);
+//            }
+//        } else {
+//            try {
+//                RuntimeException re = new RuntimeException(res.getErrorMessage());
+//                callbackCopy.caught(re);
+//            } catch (Exception e) {
+//                logger.error("callback invoke error ,url:" + channel.getUrl(), e);
+//            }
+//        }
+//    }
+
+    private Object returnFromResponse(){
+        SentBody res = response;
         if (res == null) {
             throw new IllegalStateException("response cannot be null");
         }
-        if (res.getStatus() == Response.OK) {
-            this.complete(res.getResult());
-        } else if (res.getStatus() == Response.CLIENT_TIMEOUT || res.getStatus() == Response.SERVER_TIMEOUT) {
-            this.completeExceptionally(new TimeoutException(res.getStatus() == Response.SERVER_TIMEOUT, channel, res.getErrorMessage()));
-        } else {
-            this.completeExceptionally(new RemotingException(channel, res.getErrorMessage()));
+        if (res.get("status").equals("success")) {
+            return res.get("reply");
         }
-        // the result is returning, but the caller thread may still waiting
-        // to avoid endless waiting for whatever reason, notify caller thread to return.
-        if (executor != null && executor instanceof ThreadlessExecutor) {
-            ThreadlessExecutor threadlessExecutor = (ThreadlessExecutor) executor;
-            if (threadlessExecutor.isWaiting()) {
-                threadlessExecutor.notifyReturn(new IllegalStateException("The result has returned, but the biz thread is still waiting" +
-                        " which is not an expected state, interrupt the thread manually by returning an exception."));
-            }
+        if (res.get("status").equals("client_timeout") || res.get("status").equals("server_timeout")) {
+//            throw new TimeoutException(res.getStatus() == Response.SERVER_TIMEOUT, channel, res.getErrorMessage());
+            System.out.println("timeout");
         }
+//        throw new RemotingException(channel, res.getErrorMessage());
+        throw new RuntimeException(res.get("errorMsg"));
     }
 
-    private long getId() {
-        return id;
+    private String getKey() {
+        return key;
     }
 
-    private Channel getChannel() {
+    private CIMSession getChannel() {
         return channel;
     }
 
@@ -200,7 +211,7 @@ public class DefaultFuture extends CompletableFuture<Object> {
         return sent > 0;
     }
 
-    public Request getRequest() {
+    public Message getRequest() {
         return request;
     }
 
@@ -208,8 +219,25 @@ public class DefaultFuture extends CompletableFuture<Object> {
         return timeout;
     }
 
+    private long getStartTimestamp() {
+        return start;
+    }
+
     private void doSent() {
         sent = System.currentTimeMillis();
+    }
+
+    private void doReceived(SentBody res) {
+        lock.lock();
+        try {
+            response = res;
+            done.signal();
+        } finally {
+            lock.unlock();
+        }
+//        if (callback != null) {
+//            invokeCallback(callback);
+//        }
     }
 
     private String getTimeoutMessage(boolean scan) {
@@ -217,49 +245,38 @@ public class DefaultFuture extends CompletableFuture<Object> {
         return (sent > 0 ? "Waiting server-side response timeout" : "Sending request timeout in client-side")
                 + (scan ? " by scan timer" : "") + ". start time: "
                 + (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date(start))) + ", end time: "
-                + (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date(nowTimestamp))) + ","
+                + (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date())) + ","
                 + (sent > 0 ? " client elapsed: " + (sent - start)
                 + " ms, server elapsed: " + (nowTimestamp - sent)
                 : " elapsed: " + (nowTimestamp - start)) + " ms, timeout: "
-                + timeout + " ms, request: " + (logger.isDebugEnabled() ? request : getRequestWithoutData()) + ", channel: " + channel.getLocalAddress()
+                + timeout + " ms, request: " + request + ", channel: " + channel.getLocation()
                 + " -> " + channel.getRemoteAddress();
     }
 
-    private Request getRequestWithoutData() {
-        Request newRequest = request;
-        newRequest.setData(null);
-        return newRequest;
-    }
-
-    private static class TimeoutCheckTask implements TimerTask {
-
-        private final Long requestID;
-
-        TimeoutCheckTask(Long requestID) {
-            this.requestID = requestID;
-        }
-
-        @Override
-        public void run(Timeout timeout) {
-            DefaultFuture future = DefaultFuture.getFuture(requestID);
-            if (future == null || future.isDone()) {
-                return;
+    private static class RemotingInvocationTimeoutScan implements Runnable {
+        public void run() {
+            while (true) {
+                try {
+                    for (DefaultFuture future : FUTURES.values()) {
+                        if (future == null || future.isDone()) {
+                            continue;
+                        }
+                        if (System.currentTimeMillis() - future.getStartTimestamp() > future.getTimeout()) {
+                            // create exception response.
+                            SentBody timeoutResponse = new SentBody();
+                            timeoutResponse.setKey(future.getKey());
+                            // set timeout status.
+                            timeoutResponse.put("status", future.isSent() ? "client_timeout" : "server_timeout");
+                            timeoutResponse.put("errorMsg", future.getTimeoutMessage(true));
+                            // handle response.
+                            DefaultFuture.received(future.getChannel(), timeoutResponse);
+                        }
+                    }
+                    Thread.sleep(30);
+                } catch (Throwable e) {
+                    System.out.println("Exception when scan the timeout invocation of remoting." + e);
+                }
             }
-            if (future.getExecutor() != null) {
-                future.getExecutor().execute(() -> notifyTimeout(future));
-            } else {
-                notifyTimeout(future);
-            }
-        }
-
-        private void notifyTimeout(DefaultFuture future) {
-            // create exception response.
-            Response timeoutResponse = new Response(future.getId());
-            // set timeout status.
-            timeoutResponse.setStatus(future.isSent() ? Response.SERVER_TIMEOUT : Response.CLIENT_TIMEOUT);
-            timeoutResponse.setErrorMessage(future.getTimeoutMessage(true));
-            // handle response.
-            DefaultFuture.received(future.getChannel(), timeoutResponse, true);
         }
     }
 }

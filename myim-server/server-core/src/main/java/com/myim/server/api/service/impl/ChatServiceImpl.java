@@ -2,6 +2,7 @@ package com.myim.server.api.service.impl;
 
 import com.myim.server.api.dto.resp.base.BaseResponse;
 import com.myim.server.api.service.ChatService;
+import com.myim.server.common.DefaultFuture;
 import com.myim.server.constant.Constant;
 import com.myim.server.gen.domain.*;
 import com.myim.server.gen.mapper.ImMessageMapper;
@@ -54,9 +55,9 @@ public class ChatServiceImpl implements ChatService {
         imMessageMapper.insertSelective(imMessage);
 
         //发送给接收方
+        Message msg = new Message();
         if (toSession != null) {
             executor.submit(() -> {
-                Message msg = new Message();
 
                 msg.setKey(singleMessageReqBo.getKey());
                 msg.setAction(Constant.MES_SINGLE);
@@ -69,15 +70,8 @@ public class ChatServiceImpl implements ChatService {
             });
         }
 
-        CompletableFuture completableFuture = new CompletableFuture();
-
-        try {
-            completableFuture.get(5, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            //TODO:chenjian 重试逻辑
-            e.printStackTrace();
-        }
-
+        //等待接收方响应，异常处理
+        new DefaultFuture(toSession, msg, 5).get();
         return BaseResponse.success(new SingleMessageRespBo());
     }
 
