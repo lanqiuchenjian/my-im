@@ -1,31 +1,56 @@
-package com.myim.server.gen.mapper;
+package com.myim.server.dao.gen.mapper;
 
-import com.myim.server.gen.domain.ImUserGroupRelation;
-import com.myim.server.gen.domain.ImUserGroupRelationExample;
+import com.myim.server.dao.gen.domain.ImUser;
+import com.myim.server.dao.gen.domain.ImUserExample.Criteria;
+import com.myim.server.dao.gen.domain.ImUserExample.Criterion;
+import com.myim.server.dao.gen.domain.ImUserExample;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.ibatis.jdbc.SQL;
 
-public class ImUserGroupRelationSqlProvider {
+public class ImUserSqlProvider {
 
-    public String deleteByExample(ImUserGroupRelationExample example) {
+    public String deleteByExample(ImUserExample example) {
         SQL sql = new SQL();
-        sql.DELETE_FROM("im_user_group_relation");
+        sql.DELETE_FROM("im_user");
         applyWhere(sql, example, false);
         return sql.toString();
     }
 
-    public String insertSelective(ImUserGroupRelation record) {
+    public String insertSelective(ImUser record) {
         SQL sql = new SQL();
-        sql.INSERT_INTO("im_user_group_relation");
+        sql.INSERT_INTO("im_user");
         
-        if (record.getImUserGroupCategoryId() != null) {
-            sql.VALUES("im_user_group_category_id", "#{imUserGroupCategoryId,jdbcType=BIGINT}");
+        if (record.getUserName() != null) {
+            sql.VALUES("user_name", "#{userName,jdbcType=VARCHAR}");
         }
         
-        if (record.getImUserId() != null) {
-            sql.VALUES("im_user_id", "#{imUserId,jdbcType=BIGINT}");
+        if (record.getNickName() != null) {
+            sql.VALUES("nick_name", "#{nickName,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getPhone() != null) {
+            sql.VALUES("phone", "#{phone,jdbcType=INTEGER}");
+        }
+        
+        if (record.getPhoto() != null) {
+            sql.VALUES("photo", "#{photo,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getLoginName() != null) {
+            sql.VALUES("login_name", "#{loginName,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getLoginPassword() != null) {
+            sql.VALUES("login_password", "#{loginPassword,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getUserStatus() != null) {
+            sql.VALUES("user_status", "#{userStatus,jdbcType=INTEGER}");
+        }
+        
+        if (record.getServiceAliasName() != null) {
+            sql.VALUES("service_alias_name", "#{serviceAliasName,jdbcType=VARCHAR}");
         }
         
         if (record.getExtChar1() != null) {
@@ -43,19 +68,25 @@ public class ImUserGroupRelationSqlProvider {
         return sql.toString();
     }
 
-    public String selectByExample(ImUserGroupRelationExample example) {
+    public String selectByExample(ImUserExample example) {
         SQL sql = new SQL();
         if (example != null && example.isDistinct()) {
             sql.SELECT_DISTINCT("id");
         } else {
             sql.SELECT("id");
         }
-        sql.SELECT("im_user_group_category_id");
-        sql.SELECT("im_user_id");
+        sql.SELECT("user_name");
+        sql.SELECT("nick_name");
+        sql.SELECT("phone");
+        sql.SELECT("photo");
+        sql.SELECT("login_name");
+        sql.SELECT("login_password");
+        sql.SELECT("user_status");
+        sql.SELECT("service_alias_name");
         sql.SELECT("ext_char1");
         sql.SELECT("update_time");
         sql.SELECT("create_time");
-        sql.FROM("im_user_group_relation");
+        sql.FROM("im_user");
         applyWhere(sql, example, false);
         
         if (example != null && example.getOrderByClause() != null) {
@@ -66,22 +97,46 @@ public class ImUserGroupRelationSqlProvider {
     }
 
     public String updateByExampleSelective(Map<String, Object> parameter) {
-        ImUserGroupRelation record = (ImUserGroupRelation) parameter.get("record");
-        ImUserGroupRelationExample example = (ImUserGroupRelationExample) parameter.get("example");
+        ImUser record = (ImUser) parameter.get("record");
+        ImUserExample example = (ImUserExample) parameter.get("example");
         
         SQL sql = new SQL();
-        sql.UPDATE("im_user_group_relation");
+        sql.UPDATE("im_user");
         
         if (record.getId() != null) {
             sql.SET("id = #{record.id,jdbcType=BIGINT}");
         }
         
-        if (record.getImUserGroupCategoryId() != null) {
-            sql.SET("im_user_group_category_id = #{record.imUserGroupCategoryId,jdbcType=BIGINT}");
+        if (record.getUserName() != null) {
+            sql.SET("user_name = #{record.userName,jdbcType=VARCHAR}");
         }
         
-        if (record.getImUserId() != null) {
-            sql.SET("im_user_id = #{record.imUserId,jdbcType=BIGINT}");
+        if (record.getNickName() != null) {
+            sql.SET("nick_name = #{record.nickName,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getPhone() != null) {
+            sql.SET("phone = #{record.phone,jdbcType=INTEGER}");
+        }
+        
+        if (record.getPhoto() != null) {
+            sql.SET("photo = #{record.photo,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getLoginName() != null) {
+            sql.SET("login_name = #{record.loginName,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getLoginPassword() != null) {
+            sql.SET("login_password = #{record.loginPassword,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getUserStatus() != null) {
+            sql.SET("user_status = #{record.userStatus,jdbcType=INTEGER}");
+        }
+        
+        if (record.getServiceAliasName() != null) {
+            sql.SET("service_alias_name = #{record.serviceAliasName,jdbcType=VARCHAR}");
         }
         
         if (record.getExtChar1() != null) {
@@ -102,30 +157,60 @@ public class ImUserGroupRelationSqlProvider {
 
     public String updateByExample(Map<String, Object> parameter) {
         SQL sql = new SQL();
-        sql.UPDATE("im_user_group_relation");
+        sql.UPDATE("im_user");
         
         sql.SET("id = #{record.id,jdbcType=BIGINT}");
-        sql.SET("im_user_group_category_id = #{record.imUserGroupCategoryId,jdbcType=BIGINT}");
-        sql.SET("im_user_id = #{record.imUserId,jdbcType=BIGINT}");
+        sql.SET("user_name = #{record.userName,jdbcType=VARCHAR}");
+        sql.SET("nick_name = #{record.nickName,jdbcType=VARCHAR}");
+        sql.SET("phone = #{record.phone,jdbcType=INTEGER}");
+        sql.SET("photo = #{record.photo,jdbcType=VARCHAR}");
+        sql.SET("login_name = #{record.loginName,jdbcType=VARCHAR}");
+        sql.SET("login_password = #{record.loginPassword,jdbcType=VARCHAR}");
+        sql.SET("user_status = #{record.userStatus,jdbcType=INTEGER}");
+        sql.SET("service_alias_name = #{record.serviceAliasName,jdbcType=VARCHAR}");
         sql.SET("ext_char1 = #{record.extChar1,jdbcType=VARCHAR}");
         sql.SET("update_time = #{record.updateTime,jdbcType=TIMESTAMP}");
         sql.SET("create_time = #{record.createTime,jdbcType=TIMESTAMP}");
         
-        ImUserGroupRelationExample example = (ImUserGroupRelationExample) parameter.get("example");
+        ImUserExample example = (ImUserExample) parameter.get("example");
         applyWhere(sql, example, true);
         return sql.toString();
     }
 
-    public String updateByPrimaryKeySelective(ImUserGroupRelation record) {
+    public String updateByPrimaryKeySelective(ImUser record) {
         SQL sql = new SQL();
-        sql.UPDATE("im_user_group_relation");
+        sql.UPDATE("im_user");
         
-        if (record.getImUserGroupCategoryId() != null) {
-            sql.SET("im_user_group_category_id = #{imUserGroupCategoryId,jdbcType=BIGINT}");
+        if (record.getUserName() != null) {
+            sql.SET("user_name = #{userName,jdbcType=VARCHAR}");
         }
         
-        if (record.getImUserId() != null) {
-            sql.SET("im_user_id = #{imUserId,jdbcType=BIGINT}");
+        if (record.getNickName() != null) {
+            sql.SET("nick_name = #{nickName,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getPhone() != null) {
+            sql.SET("phone = #{phone,jdbcType=INTEGER}");
+        }
+        
+        if (record.getPhoto() != null) {
+            sql.SET("photo = #{photo,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getLoginName() != null) {
+            sql.SET("login_name = #{loginName,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getLoginPassword() != null) {
+            sql.SET("login_password = #{loginPassword,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getUserStatus() != null) {
+            sql.SET("user_status = #{userStatus,jdbcType=INTEGER}");
+        }
+        
+        if (record.getServiceAliasName() != null) {
+            sql.SET("service_alias_name = #{serviceAliasName,jdbcType=VARCHAR}");
         }
         
         if (record.getExtChar1() != null) {
@@ -145,7 +230,7 @@ public class ImUserGroupRelationSqlProvider {
         return sql.toString();
     }
 
-    protected void applyWhere(SQL sql, ImUserGroupRelationExample example, boolean includeExamplePhrase) {
+    protected void applyWhere(SQL sql, ImUserExample example, boolean includeExamplePhrase) {
         if (example == null) {
             return;
         }
@@ -173,10 +258,10 @@ public class ImUserGroupRelationSqlProvider {
         }
         
         StringBuilder sb = new StringBuilder();
-        List<ImUserGroupRelationExample.Criteria> oredCriteria = example.getOredCriteria();
+        List<Criteria> oredCriteria = example.getOredCriteria();
         boolean firstCriteria = true;
         for (int i = 0; i < oredCriteria.size(); i++) {
-            ImUserGroupRelationExample.Criteria criteria = oredCriteria.get(i);
+            Criteria criteria = oredCriteria.get(i);
             if (criteria.isValid()) {
                 if (firstCriteria) {
                     firstCriteria = false;
@@ -185,10 +270,10 @@ public class ImUserGroupRelationSqlProvider {
                 }
                 
                 sb.append('(');
-                List<ImUserGroupRelationExample.Criterion> criterions = criteria.getAllCriteria();
+                List<Criterion> criterions = criteria.getAllCriteria();
                 boolean firstCriterion = true;
                 for (int j = 0; j < criterions.size(); j++) {
-                    ImUserGroupRelationExample.Criterion criterion = criterions.get(j);
+                    Criterion criterion = criterions.get(j);
                     if (firstCriterion) {
                         firstCriterion = false;
                     } else {

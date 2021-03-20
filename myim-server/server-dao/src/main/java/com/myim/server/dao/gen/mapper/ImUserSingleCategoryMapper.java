@@ -1,7 +1,8 @@
-package com.myim.server.gen.mapper;
+package com.myim.server.dao.gen.mapper;
 
-import com.myim.server.gen.domain.ImUserSingleCategory;
-import com.myim.server.gen.domain.ImUserSingleCategoryExample;
+import com.myim.server.dao.gen.domain.ImUserSingleCategory;
+import com.myim.server.dao.gen.domain.ImUserSingleCategoryExample;
+
 import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;

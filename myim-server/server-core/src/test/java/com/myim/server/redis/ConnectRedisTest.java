@@ -2,9 +2,9 @@ package com.myim.server.redis;
 
 import com.myim.server.constant.Constant;
 import com.myim.server.BaseTest;
-import com.myim.server.gen.domain.ImUser;
-import com.myim.server.gen.domain.ImUserExample;
-import com.myim.server.gen.mapper.ImUserMapper;
+import com.myim.server.dao.gen.domain.ImUser;
+import com.myim.server.dao.gen.domain.ImUserExample;
+import com.myim.server.dao.gen.mapper.ImUserMapper;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

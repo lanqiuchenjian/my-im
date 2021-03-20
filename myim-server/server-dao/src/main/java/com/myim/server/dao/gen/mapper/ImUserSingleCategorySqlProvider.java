@@ -1,9 +1,8 @@
-package com.myim.server.gen.mapper;
+package com.myim.server.dao.gen.mapper;
 
-import com.myim.server.gen.domain.ImUserSingleCategory;
-import com.myim.server.gen.domain.ImUserSingleCategoryExample.Criteria;
-import com.myim.server.gen.domain.ImUserSingleCategoryExample.Criterion;
-import com.myim.server.gen.domain.ImUserSingleCategoryExample;
+import com.myim.server.dao.gen.domain.ImUserSingleCategoryExample;
+import com.myim.server.dao.gen.domain.ImUserSingleCategory;
+
 import java.util.List;
 import java.util.Map;
 import org.apache.ibatis.jdbc.SQL;
@@ -188,10 +187,10 @@ public class ImUserSingleCategorySqlProvider {
         }
         
         StringBuilder sb = new StringBuilder();
-        List<Criteria> oredCriteria = example.getOredCriteria();
+        List<ImUserSingleCategoryExample.Criteria> oredCriteria = example.getOredCriteria();
         boolean firstCriteria = true;
         for (int i = 0; i < oredCriteria.size(); i++) {
-            Criteria criteria = oredCriteria.get(i);
+            ImUserSingleCategoryExample.Criteria criteria = oredCriteria.get(i);
             if (criteria.isValid()) {
                 if (firstCriteria) {
                     firstCriteria = false;
@@ -200,10 +199,10 @@ public class ImUserSingleCategorySqlProvider {
                 }
                 
                 sb.append('(');
-                List<Criterion> criterions = criteria.getAllCriteria();
+                List<ImUserSingleCategoryExample.Criterion> criterions = criteria.getAllCriteria();
                 boolean firstCriterion = true;
                 for (int j = 0; j < criterions.size(); j++) {
-                    Criterion criterion = criterions.get(j);
+                    ImUserSingleCategoryExample.Criterion criterion = criterions.get(j);
                     if (firstCriterion) {
                         firstCriterion = false;
                     } else {

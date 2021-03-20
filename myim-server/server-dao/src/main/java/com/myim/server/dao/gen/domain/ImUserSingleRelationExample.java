@@ -1,4 +1,4 @@
-package com.myim.server.gen.domain;
+package com.myim.server.dao.gen.domain;
 
 import java.util.ArrayList;
 import java.util.Date;

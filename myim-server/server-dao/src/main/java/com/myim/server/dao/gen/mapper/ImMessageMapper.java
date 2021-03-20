@@ -1,7 +1,8 @@
-package com.myim.server.gen.mapper;
+package com.myim.server.dao.gen.mapper;
 
-import com.myim.server.gen.domain.ImMessage;
-import com.myim.server.gen.domain.ImMessageExample;
+import com.myim.server.dao.gen.domain.ImMessageExample;
+import com.myim.server.dao.gen.domain.ImMessage;
+
 import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;

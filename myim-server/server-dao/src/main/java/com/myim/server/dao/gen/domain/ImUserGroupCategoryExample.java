@@ -1,17 +1,17 @@
-package com.myim.server.gen.domain;
+package com.myim.server.dao.gen.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ImUserSingleCategoryExample {
+public class ImUserGroupCategoryExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ImUserSingleCategoryExample() {
+    public ImUserGroupCategoryExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -225,73 +225,143 @@ public class ImUserSingleCategoryExample {
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNameIsNull() {
-            addCriterion("category_name is null");
+        public Criteria andGroupNameIsNull() {
+            addCriterion("group_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNameIsNotNull() {
-            addCriterion("category_name is not null");
+        public Criteria andGroupNameIsNotNull() {
+            addCriterion("group_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNameEqualTo(String value) {
-            addCriterion("category_name =", value, "categoryName");
+        public Criteria andGroupNameEqualTo(String value) {
+            addCriterion("group_name =", value, "groupName");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNameNotEqualTo(String value) {
-            addCriterion("category_name <>", value, "categoryName");
+        public Criteria andGroupNameNotEqualTo(String value) {
+            addCriterion("group_name <>", value, "groupName");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNameGreaterThan(String value) {
-            addCriterion("category_name >", value, "categoryName");
+        public Criteria andGroupNameGreaterThan(String value) {
+            addCriterion("group_name >", value, "groupName");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNameGreaterThanOrEqualTo(String value) {
-            addCriterion("category_name >=", value, "categoryName");
+        public Criteria andGroupNameGreaterThanOrEqualTo(String value) {
+            addCriterion("group_name >=", value, "groupName");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNameLessThan(String value) {
-            addCriterion("category_name <", value, "categoryName");
+        public Criteria andGroupNameLessThan(String value) {
+            addCriterion("group_name <", value, "groupName");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNameLessThanOrEqualTo(String value) {
-            addCriterion("category_name <=", value, "categoryName");
+        public Criteria andGroupNameLessThanOrEqualTo(String value) {
+            addCriterion("group_name <=", value, "groupName");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNameLike(String value) {
-            addCriterion("category_name like", value, "categoryName");
+        public Criteria andGroupNameLike(String value) {
+            addCriterion("group_name like", value, "groupName");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNameNotLike(String value) {
-            addCriterion("category_name not like", value, "categoryName");
+        public Criteria andGroupNameNotLike(String value) {
+            addCriterion("group_name not like", value, "groupName");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNameIn(List<String> values) {
-            addCriterion("category_name in", values, "categoryName");
+        public Criteria andGroupNameIn(List<String> values) {
+            addCriterion("group_name in", values, "groupName");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNameNotIn(List<String> values) {
-            addCriterion("category_name not in", values, "categoryName");
+        public Criteria andGroupNameNotIn(List<String> values) {
+            addCriterion("group_name not in", values, "groupName");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNameBetween(String value1, String value2) {
-            addCriterion("category_name between", value1, value2, "categoryName");
+        public Criteria andGroupNameBetween(String value1, String value2) {
+            addCriterion("group_name between", value1, value2, "groupName");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNameNotBetween(String value1, String value2) {
-            addCriterion("category_name not between", value1, value2, "categoryName");
+        public Criteria andGroupNameNotBetween(String value1, String value2) {
+            addCriterion("group_name not between", value1, value2, "groupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupDescIsNull() {
+            addCriterion("group_desc is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupDescIsNotNull() {
+            addCriterion("group_desc is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupDescEqualTo(String value) {
+            addCriterion("group_desc =", value, "groupDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupDescNotEqualTo(String value) {
+            addCriterion("group_desc <>", value, "groupDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupDescGreaterThan(String value) {
+            addCriterion("group_desc >", value, "groupDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupDescGreaterThanOrEqualTo(String value) {
+            addCriterion("group_desc >=", value, "groupDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupDescLessThan(String value) {
+            addCriterion("group_desc <", value, "groupDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupDescLessThanOrEqualTo(String value) {
+            addCriterion("group_desc <=", value, "groupDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupDescLike(String value) {
+            addCriterion("group_desc like", value, "groupDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupDescNotLike(String value) {
+            addCriterion("group_desc not like", value, "groupDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupDescIn(List<String> values) {
+            addCriterion("group_desc in", values, "groupDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupDescNotIn(List<String> values) {
+            addCriterion("group_desc not in", values, "groupDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupDescBetween(String value1, String value2) {
+            addCriterion("group_desc between", value1, value2, "groupDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andGroupDescNotBetween(String value1, String value2) {
+            addCriterion("group_desc not between", value1, value2, "groupDesc");
             return (Criteria) this;
         }
 

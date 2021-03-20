@@ -1,14 +1,16 @@
-package com.myim.server.gen.domain;
+package com.myim.server.dao.gen.domain;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class ImUserGroupRelation implements Serializable {
+public class ImUserSingleCategory implements Serializable {
     private Long id;
 
-    private Long imUserGroupCategoryId;
-
     private Long imUserId;
+
+    private String categoryName;
+
+    private Long count;
 
     private String extChar1;
 
@@ -26,20 +28,28 @@ public class ImUserGroupRelation implements Serializable {
         this.id = id;
     }
 
-    public Long getImUserGroupCategoryId() {
-        return imUserGroupCategoryId;
-    }
-
-    public void setImUserGroupCategoryId(Long imUserGroupCategoryId) {
-        this.imUserGroupCategoryId = imUserGroupCategoryId;
-    }
-
     public Long getImUserId() {
         return imUserId;
     }
 
     public void setImUserId(Long imUserId) {
         this.imUserId = imUserId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public Long getCount() {
+        return count;
+    }
+
+    public void setCount(Long count) {
+        this.count = count;
     }
 
     public String getExtChar1() {
@@ -73,8 +83,9 @@ public class ImUserGroupRelation implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", imUserGroupCategoryId=").append(imUserGroupCategoryId);
         sb.append(", imUserId=").append(imUserId);
+        sb.append(", categoryName=").append(categoryName);
+        sb.append(", count=").append(count);
         sb.append(", extChar1=").append(extChar1);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", createTime=").append(createTime);
