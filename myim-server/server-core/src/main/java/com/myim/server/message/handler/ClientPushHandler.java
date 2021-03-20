@@ -87,7 +87,7 @@ public class ClientPushHandler implements CIMRequestHandler {
                 reply.setCode(e.getCodeMsgEnum().getCode());
                 reply.setMessage(e.getCodeMsgEnum().getMsg());
             }
-            logger.error("push has error", exception);
+//            logger.error("push has error", exception);
         }
 
         reply.put("content", new Gson().toJson(object));
@@ -111,7 +111,7 @@ public class ClientPushHandler implements CIMRequestHandler {
             return msgMethodBean.invoke(msgServiceBean, objects);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
-            logger.error("push error", e);
+//            logger.error("push error", e);
             throw new PushMessageException(CodeMsgEnum.SYSTEM_ERROR);
         }
     }
@@ -119,13 +119,26 @@ public class ClientPushHandler implements CIMRequestHandler {
     private Object setField(SentBody body, Class pCls, Object obj) throws IllegalAccessException {
         Field[] declaredFields = pCls.getDeclaredFields();
         for (Field declaredField : declaredFields) {
+            String name = declaredField.getName();
             declaredField.setAccessible(true);
-            String value = body.getData().get(declaredField.getName());
+
+            if (name.equals("key")) {
+                declaredField.set(obj, body.getKey());
+                continue;
+            }
+
+            if (name.equals("timestamp")) {
+                declaredField.set(obj, body.getTimestamp());
+                continue;
+            }
+
+            String value = body.getData().get(name);
             if (value != null) {
                 Object to = getToBean(declaredField.getType(), value);
                 declaredField.set(obj, to);
             }
         }
+
         Class<?> superclass = pCls.getSuperclass();
         if (superclass != null) {
             setField(body, superclass, obj);

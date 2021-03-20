@@ -56,22 +56,18 @@ public class ChatServiceImpl implements ChatService {
 
         //发送给接收方
         Message msg = new Message();
+        msg.setKey(singleMessageReqBo.getKey());
+        msg.setAction(Constant.MES_SINGLE);
+        msg.setSender(singleMessageReqBo.getFromLoginName());
+        msg.setReceiver(singleMessageReqBo.getToLoginName());
+        msg.setContent(singleMessageReqBo.getContent());
+        msg.setTimestamp(singleMessageReqBo.getTimestamp());
+
         if (toSession != null) {
-            executor.submit(() -> {
-
-                msg.setKey(singleMessageReqBo.getKey());
-                msg.setAction(Constant.MES_SINGLE);
-                msg.setSender(singleMessageReqBo.getFromLoginName());
-                msg.setReceiver(singleMessageReqBo.getToLoginName());
-                msg.setContent(singleMessageReqBo.getContent());
-                msg.setTimestamp(new Date().getTime());
-
-                toSession.write(msg);
-            });
+            executor.submit(() -> toSession.write(msg));
+            //等待接收方响应，异常处理
+            new DefaultFuture(toSession, msg, 1500).get();
         }
-
-        //等待接收方响应，异常处理
-        new DefaultFuture(toSession, msg, 5).get();
         return BaseResponse.success(new SingleMessageRespBo());
     }
 
@@ -88,21 +84,21 @@ public class ChatServiceImpl implements ChatService {
 
         ImMessage imMessage = new ImMessage();
 
-        imMessage.setAction(singleMessageReqBo.getAction());
+        imMessage.setmAction(singleMessageReqBo.getAction());
         //TODO:chenjian 成功更新为true，现在先设为true
-        imMessage.setCheck(true);
+        imMessage.setmCheck(true);
         imMessage.setContent(singleMessageReqBo.getContent());
-        imMessage.setFormat("string");
-        imMessage.setKey(singleMessageReqBo.getKey());
-        imMessage.setImusersinglerelationid(imUserSingleRelation.getId());
+        imMessage.setmFormat("string");
+        imMessage.setmKey(singleMessageReqBo.getKey());
+        imMessage.setImUserSingleRelationId(imUserSingleRelation.getId());
         imMessage.setReceiver(singleMessageReqBo.getToLoginName());
         imMessage.setSender(singleMessageReqBo.getFromLoginName());
-        imMessage.setRepeat("0");
+        imMessage.setmRepeat("0");
         //TODO: 0:正常 1：发送者删除 2：接收者删除 3:撤销
-        imMessage.setStatus(0);
+        imMessage.setmStatus(0);
         imMessage.setTitle("");
         //TODO: 新增是否是离线消息，新建离线消息表，保持最后一条记录id
-
+        imMessage.setmTimestamp(new Date(singleMessageReqBo.getTimestamp()));
         return imMessage;
     }
 

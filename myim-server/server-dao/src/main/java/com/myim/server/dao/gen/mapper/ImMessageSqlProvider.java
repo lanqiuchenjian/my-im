@@ -1,10 +1,11 @@
 package com.myim.server.dao.gen.mapper;
 
 import com.myim.server.dao.gen.domain.ImMessage;
+import com.myim.server.dao.gen.domain.ImMessageExample.Criteria;
+import com.myim.server.dao.gen.domain.ImMessageExample.Criterion;
 import com.myim.server.dao.gen.domain.ImMessageExample;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.ibatis.jdbc.SQL;
 
 public class ImMessageSqlProvider {
@@ -20,32 +21,32 @@ public class ImMessageSqlProvider {
         SQL sql = new SQL();
         sql.INSERT_INTO("im_message");
         
-        if (record.getImusersinglerelationid() != null) {
-            sql.VALUES("imUserSingleRelationId", "#{imusersinglerelationid,jdbcType=BIGINT}");
+        if (record.getImUserSingleRelationId() != null) {
+            sql.VALUES("im_user_single_relation_id", "#{imUserSingleRelationId,jdbcType=BIGINT}");
         }
         
-        if (record.getKey() != null) {
-            sql.VALUES("key", "#{key,jdbcType=VARCHAR}");
+        if (record.getmKey() != null) {
+            sql.VALUES("m_key", "#{mKey,jdbcType=VARCHAR}");
         }
         
-        if (record.getRepeat() != null) {
-            sql.VALUES("repeat", "#{repeat,jdbcType=VARCHAR}");
+        if (record.getmRepeat() != null) {
+            sql.VALUES("m_repeat", "#{mRepeat,jdbcType=VARCHAR}");
         }
         
-        if (record.getCheck() != null) {
-            sql.VALUES("check", "#{check,jdbcType=BIT}");
+        if (record.getmCheck() != null) {
+            sql.VALUES("m_check", "#{mCheck,jdbcType=BIT}");
         }
         
-        if (record.getStatus() != null) {
-            sql.VALUES("status", "#{status,jdbcType=INTEGER}");
+        if (record.getmStatus() != null) {
+            sql.VALUES("m_status", "#{mStatus,jdbcType=INTEGER}");
         }
         
         if (record.getMsgId() != null) {
             sql.VALUES("msg_id", "#{msgId,jdbcType=INTEGER}");
         }
         
-        if (record.getAction() != null) {
-            sql.VALUES("action", "#{action,jdbcType=VARCHAR}");
+        if (record.getmAction() != null) {
+            sql.VALUES("m_action", "#{mAction,jdbcType=VARCHAR}");
         }
         
         if (record.getTitle() != null) {
@@ -56,8 +57,8 @@ public class ImMessageSqlProvider {
             sql.VALUES("content", "#{content,jdbcType=VARCHAR}");
         }
         
-        if (record.getFormat() != null) {
-            sql.VALUES("format", "#{format,jdbcType=VARCHAR}");
+        if (record.getmFormat() != null) {
+            sql.VALUES("m_format", "#{mFormat,jdbcType=VARCHAR}");
         }
         
         if (record.getSender() != null) {
@@ -72,8 +73,8 @@ public class ImMessageSqlProvider {
             sql.VALUES("extra", "#{extra,jdbcType=VARCHAR}");
         }
         
-        if (record.getTimestamp() != null) {
-            sql.VALUES("timestamp", "#{timestamp,jdbcType=TIMESTAMP}");
+        if (record.getmTimestamp() != null) {
+            sql.VALUES("m_timestamp", "#{mTimestamp,jdbcType=TIMESTAMP}");
         }
         
         if (record.getUpdateTime() != null) {
@@ -94,20 +95,20 @@ public class ImMessageSqlProvider {
         } else {
             sql.SELECT("id");
         }
-        sql.SELECT("imUserSingleRelationId");
-        sql.SELECT("key");
-        sql.SELECT("repeat");
-        sql.SELECT("check");
-        sql.SELECT("status");
+        sql.SELECT("im_user_single_relation_id");
+        sql.SELECT("m_key");
+        sql.SELECT("m_repeat");
+        sql.SELECT("m_check");
+        sql.SELECT("m_status");
         sql.SELECT("msg_id");
-        sql.SELECT("action");
+        sql.SELECT("m_action");
         sql.SELECT("title");
         sql.SELECT("content");
-        sql.SELECT("format");
+        sql.SELECT("m_format");
         sql.SELECT("sender");
         sql.SELECT("receiver");
         sql.SELECT("extra");
-        sql.SELECT("timestamp");
+        sql.SELECT("m_timestamp");
         sql.SELECT("update_time");
         sql.SELECT("create_time");
         sql.FROM("im_message");
@@ -131,32 +132,32 @@ public class ImMessageSqlProvider {
             sql.SET("id = #{record.id,jdbcType=BIGINT}");
         }
         
-        if (record.getImusersinglerelationid() != null) {
-            sql.SET("imUserSingleRelationId = #{record.imusersinglerelationid,jdbcType=BIGINT}");
+        if (record.getImUserSingleRelationId() != null) {
+            sql.SET("im_user_single_relation_id = #{record.imUserSingleRelationId,jdbcType=BIGINT}");
         }
         
-        if (record.getKey() != null) {
-            sql.SET("key = #{record.key,jdbcType=VARCHAR}");
+        if (record.getmKey() != null) {
+            sql.SET("m_key = #{record.mKey,jdbcType=VARCHAR}");
         }
         
-        if (record.getRepeat() != null) {
-            sql.SET("repeat = #{record.repeat,jdbcType=VARCHAR}");
+        if (record.getmRepeat() != null) {
+            sql.SET("m_repeat = #{record.mRepeat,jdbcType=VARCHAR}");
         }
         
-        if (record.getCheck() != null) {
-            sql.SET("check = #{record.check,jdbcType=BIT}");
+        if (record.getmCheck() != null) {
+            sql.SET("m_check = #{record.mCheck,jdbcType=BIT}");
         }
         
-        if (record.getStatus() != null) {
-            sql.SET("status = #{record.status,jdbcType=INTEGER}");
+        if (record.getmStatus() != null) {
+            sql.SET("m_status = #{record.mStatus,jdbcType=INTEGER}");
         }
         
         if (record.getMsgId() != null) {
             sql.SET("msg_id = #{record.msgId,jdbcType=INTEGER}");
         }
         
-        if (record.getAction() != null) {
-            sql.SET("action = #{record.action,jdbcType=VARCHAR}");
+        if (record.getmAction() != null) {
+            sql.SET("m_action = #{record.mAction,jdbcType=VARCHAR}");
         }
         
         if (record.getTitle() != null) {
@@ -167,8 +168,8 @@ public class ImMessageSqlProvider {
             sql.SET("content = #{record.content,jdbcType=VARCHAR}");
         }
         
-        if (record.getFormat() != null) {
-            sql.SET("format = #{record.format,jdbcType=VARCHAR}");
+        if (record.getmFormat() != null) {
+            sql.SET("m_format = #{record.mFormat,jdbcType=VARCHAR}");
         }
         
         if (record.getSender() != null) {
@@ -183,8 +184,8 @@ public class ImMessageSqlProvider {
             sql.SET("extra = #{record.extra,jdbcType=VARCHAR}");
         }
         
-        if (record.getTimestamp() != null) {
-            sql.SET("timestamp = #{record.timestamp,jdbcType=TIMESTAMP}");
+        if (record.getmTimestamp() != null) {
+            sql.SET("m_timestamp = #{record.mTimestamp,jdbcType=TIMESTAMP}");
         }
         
         if (record.getUpdateTime() != null) {
@@ -204,20 +205,20 @@ public class ImMessageSqlProvider {
         sql.UPDATE("im_message");
         
         sql.SET("id = #{record.id,jdbcType=BIGINT}");
-        sql.SET("imUserSingleRelationId = #{record.imusersinglerelationid,jdbcType=BIGINT}");
-        sql.SET("key = #{record.key,jdbcType=VARCHAR}");
-        sql.SET("repeat = #{record.repeat,jdbcType=VARCHAR}");
-        sql.SET("check = #{record.check,jdbcType=BIT}");
-        sql.SET("status = #{record.status,jdbcType=INTEGER}");
+        sql.SET("im_user_single_relation_id = #{record.imUserSingleRelationId,jdbcType=BIGINT}");
+        sql.SET("m_key = #{record.mKey,jdbcType=VARCHAR}");
+        sql.SET("m_repeat = #{record.mRepeat,jdbcType=VARCHAR}");
+        sql.SET("m_check = #{record.mCheck,jdbcType=BIT}");
+        sql.SET("m_status = #{record.mStatus,jdbcType=INTEGER}");
         sql.SET("msg_id = #{record.msgId,jdbcType=INTEGER}");
-        sql.SET("action = #{record.action,jdbcType=VARCHAR}");
+        sql.SET("m_action = #{record.mAction,jdbcType=VARCHAR}");
         sql.SET("title = #{record.title,jdbcType=VARCHAR}");
         sql.SET("content = #{record.content,jdbcType=VARCHAR}");
-        sql.SET("format = #{record.format,jdbcType=VARCHAR}");
+        sql.SET("m_format = #{record.mFormat,jdbcType=VARCHAR}");
         sql.SET("sender = #{record.sender,jdbcType=VARCHAR}");
         sql.SET("receiver = #{record.receiver,jdbcType=VARCHAR}");
         sql.SET("extra = #{record.extra,jdbcType=VARCHAR}");
-        sql.SET("timestamp = #{record.timestamp,jdbcType=TIMESTAMP}");
+        sql.SET("m_timestamp = #{record.mTimestamp,jdbcType=TIMESTAMP}");
         sql.SET("update_time = #{record.updateTime,jdbcType=TIMESTAMP}");
         sql.SET("create_time = #{record.createTime,jdbcType=TIMESTAMP}");
         
@@ -230,32 +231,32 @@ public class ImMessageSqlProvider {
         SQL sql = new SQL();
         sql.UPDATE("im_message");
         
-        if (record.getImusersinglerelationid() != null) {
-            sql.SET("imUserSingleRelationId = #{imusersinglerelationid,jdbcType=BIGINT}");
+        if (record.getImUserSingleRelationId() != null) {
+            sql.SET("im_user_single_relation_id = #{imUserSingleRelationId,jdbcType=BIGINT}");
         }
         
-        if (record.getKey() != null) {
-            sql.SET("key = #{key,jdbcType=VARCHAR}");
+        if (record.getmKey() != null) {
+            sql.SET("m_key = #{mKey,jdbcType=VARCHAR}");
         }
         
-        if (record.getRepeat() != null) {
-            sql.SET("repeat = #{repeat,jdbcType=VARCHAR}");
+        if (record.getmRepeat() != null) {
+            sql.SET("m_repeat = #{mRepeat,jdbcType=VARCHAR}");
         }
         
-        if (record.getCheck() != null) {
-            sql.SET("check = #{check,jdbcType=BIT}");
+        if (record.getmCheck() != null) {
+            sql.SET("m_check = #{mCheck,jdbcType=BIT}");
         }
         
-        if (record.getStatus() != null) {
-            sql.SET("status = #{status,jdbcType=INTEGER}");
+        if (record.getmStatus() != null) {
+            sql.SET("m_status = #{mStatus,jdbcType=INTEGER}");
         }
         
         if (record.getMsgId() != null) {
             sql.SET("msg_id = #{msgId,jdbcType=INTEGER}");
         }
         
-        if (record.getAction() != null) {
-            sql.SET("action = #{action,jdbcType=VARCHAR}");
+        if (record.getmAction() != null) {
+            sql.SET("m_action = #{mAction,jdbcType=VARCHAR}");
         }
         
         if (record.getTitle() != null) {
@@ -266,8 +267,8 @@ public class ImMessageSqlProvider {
             sql.SET("content = #{content,jdbcType=VARCHAR}");
         }
         
-        if (record.getFormat() != null) {
-            sql.SET("format = #{format,jdbcType=VARCHAR}");
+        if (record.getmFormat() != null) {
+            sql.SET("m_format = #{mFormat,jdbcType=VARCHAR}");
         }
         
         if (record.getSender() != null) {
@@ -282,8 +283,8 @@ public class ImMessageSqlProvider {
             sql.SET("extra = #{extra,jdbcType=VARCHAR}");
         }
         
-        if (record.getTimestamp() != null) {
-            sql.SET("timestamp = #{timestamp,jdbcType=TIMESTAMP}");
+        if (record.getmTimestamp() != null) {
+            sql.SET("m_timestamp = #{mTimestamp,jdbcType=TIMESTAMP}");
         }
         
         if (record.getUpdateTime() != null) {
@@ -327,10 +328,10 @@ public class ImMessageSqlProvider {
         }
         
         StringBuilder sb = new StringBuilder();
-        List<ImMessageExample.Criteria> oredCriteria = example.getOredCriteria();
+        List<Criteria> oredCriteria = example.getOredCriteria();
         boolean firstCriteria = true;
         for (int i = 0; i < oredCriteria.size(); i++) {
-            ImMessageExample.Criteria criteria = oredCriteria.get(i);
+            Criteria criteria = oredCriteria.get(i);
             if (criteria.isValid()) {
                 if (firstCriteria) {
                     firstCriteria = false;
@@ -339,10 +340,10 @@ public class ImMessageSqlProvider {
                 }
                 
                 sb.append('(');
-                List<ImMessageExample.Criterion> criterions = criteria.getAllCriteria();
+                List<Criterion> criterions = criteria.getAllCriteria();
                 boolean firstCriterion = true;
                 for (int j = 0; j < criterions.size(); j++) {
-                    ImMessageExample.Criterion criterion = criterions.get(j);
+                    Criterion criterion = criterions.get(j);
                     if (firstCriterion) {
                         firstCriterion = false;
                     } else {

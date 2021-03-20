@@ -21,7 +21,8 @@
     var userId = ''
     var singleCategoryId= ''
     var friendList;
-    var singleChatName;
+    var singleChatToName;
+    var singleChatToId;
 
     /***********************************推送配置开始**************************/
 
@@ -33,7 +34,7 @@
     /** 当收到请求回复时候回调  **/
     function onReplyReceived(reply) {
         console.log(reply);
-        if (reply.data.type === CLIENT_BIND && reply.code === 200) {
+        if (reply.data.type === CLIENT_BIND && reply.code == 200) {
             hideProcess();
 
             $('#LoginDialog').fadeOut();
@@ -44,7 +45,7 @@
             getUserList(userId, singleCategoryId);
         }
 
-        if (reply.data.type === CLIENT_PUSH && reply.code === 200) {
+        if (reply.data.type === CLIENT_PUSH && reply.code == 200) {
             var content = reply.data.content;
 
             if (content != "null") {
@@ -67,13 +68,14 @@
                     }
                 }else if(parse.serviceType === "applySingleFriend") {
                     getUserList(userId, singleCategoryId)
-                } else {
+                } else { //展示所有好友
                     friendList = jsonReply;
                     doSearch()
+                    $('#userList').html("")
                     for (var i in jsonReply) {
                         var loginName = jsonReply[i].loginName;
 //                        $("#userList").append("<div class='alert alert-info' onclick='newChatWin(\"" + loginName + "\"," + this + ")' onmouseover='friendInfo(\"" + loginName + "\")'>" + loginName + "</div>");
-                        $("#userList").append("<div class='alert " + loginName + " alert-info user-list' onclick='newChatWin(\"" + loginName + "\")' onmouseover='friendInfo(\"" + loginName + "\")'>" + loginName + "</div>");
+                        $("#userList").append("<div class='alert " + loginName + " alert-info user-list' onclick='newChatWin(" + JSON.stringify(jsonReply[i]) + ")' onmouseover='friendInfo(\"" + loginName + "\")'>" + loginName + "</div>");
                     }
                 }
             }
@@ -96,18 +98,23 @@
         CIMPushManager.sendRequest(body);
     }
 
-    function newChatWin(name) {
+    function newChatWin(user) {
         console.log("好友名字,新的聊天窗口:" + name);
+        var imUser = eval(user);
+        var name = imUser.loginName;
+
         $('#messageList').html("")
         if($("." + name).hasClass("red")){
             $("." + name).removeClass("red");
-            singleChatName = ''
+            singleChatToName = ''
+            singleChatToId  = ''
         }else{
-            if (singleChatName !== '')
-                $("." + singleChatName).removeClass("red");
+            if (singleChatToName !== '')
+                $("." + singleChatToName).removeClass("red");
 
             $("." + name).addClass("red");
-            singleChatName = name;
+            singleChatToName = name;
+            singleChatToId = imUser.imUserId + "";
         }
     }
 
@@ -231,7 +238,7 @@
         let browser = getBrowser();
         let body = new proto.com.myim.web.model.SentBody();
 
-        if (singleChatName === '') {
+        if (singleChatToName == null) {
             broadcastMsg(body, browser, deviceId, text);
         }else {
             singleMsg(body, browser, deviceId, text)
@@ -243,7 +250,9 @@
         body.setKey(guid());
         body.setTimestamp(new Date().getTime());
         body.getDataMap().set("fromLoginName", $('#account').val());
-        body.getDataMap().set("toLoginName", singleChatName);
+        body.getDataMap().set("fromImUserId", userId);
+        body.getDataMap().set("toLoginName", singleChatToName);
+        body.getDataMap().set("toImUserId", singleChatToId);
         body.getDataMap().set("channel", APP_CHANNEL);
         body.getDataMap().set("appVersion", APP_VERSION);
         body.getDataMap().set("osVersion", browser.version);
@@ -294,7 +303,7 @@
 
         //利用event的timeStamp来标记时间，这样每次的keyup事件都会修改last的值，注意last必需为全局变量
         setTimeout(function () {    //设时延迟0.5s执行
-            if (last - event.timeStamp === 0)
+            if (last - event.timeStamp == 0)
             //如果时间差为0（也就是你停止输入0.5s之内都没有其它的keyup事件发生）则做你想要做的事
             {
                 //user:UserMsgService:searchFriendListInfo&&loginNamePre=cj&&offset=0&&size=5

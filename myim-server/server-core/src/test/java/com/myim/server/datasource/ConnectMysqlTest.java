@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ConnectMysqlTest extends BaseTest {
     @Autowired
     private ImUserMapper imUserMapper;
+
     @Test
     public void dataSourceConntect() {
         ImUser imUser = imUserMapper.selectByPrimaryKey(1L);

@@ -44,6 +44,7 @@ public class DefaultFuture extends CompletableFuture<Object> {
         this.channel = channel;
         this.request = request;
         this.key = request.getKey();
+        System.out.println("++++++++++++" + request.getKey() + "++++++++++++" + Thread.currentThread());
         this.timeout = timeout;
         // put into waiting map.
         FUTURES.put(key, this);
@@ -127,61 +128,6 @@ public class DefaultFuture extends CompletableFuture<Object> {
     public boolean isDone() {
         return response != null;
     }
-
-//    public void setCallback(ResponseCallback callback) {
-//        if (isDone()) {
-//            invokeCallback(callback);
-//        } else {
-//            boolean isdone = false;
-//            lock.lock();
-//            try {
-//                if (!isDone()) {
-//                    this.callback = callback;
-//                } else {
-//                    isdone = true;
-//                }
-//            } finally {
-//                lock.unlock();
-//            }
-//            if (isdone) {
-//                invokeCallback(callback);
-//            }
-//        }
-//    }
-
-//    private void invokeCallback(ResponseCallback c) {
-//        ResponseCallback callbackCopy = c;
-//        if (callbackCopy == null) {
-//            throw new NullPointerException("callback cannot be null.");
-//        }
-//        c = null;
-//        Response res = response;
-//        if (res == null) {
-//            throw new IllegalStateException("response cannot be null. url:" + channel.getUrl());
-//        }
-//
-//        if (res.getStatus() == Response.OK) {
-//            try {
-//                callbackCopy.done(res.getResult());
-//            } catch (Exception e) {
-//                logger.error("callback invoke error .reasult:" + res.getResult() + ",url:" + channel.getUrl(), e);
-//            }
-//        } else if (res.getStatus() == Response.CLIENT_TIMEOUT || res.getStatus() == Response.SERVER_TIMEOUT) {
-//            try {
-//                TimeoutException te = new TimeoutException(res.getStatus() == Response.SERVER_TIMEOUT, channel, res.getErrorMessage());
-//                callbackCopy.caught(te);
-//            } catch (Exception e) {
-//                logger.error("callback invoke error ,url:" + channel.getUrl(), e);
-//            }
-//        } else {
-//            try {
-//                RuntimeException re = new RuntimeException(res.getErrorMessage());
-//                callbackCopy.caught(re);
-//            } catch (Exception e) {
-//                logger.error("callback invoke error ,url:" + channel.getUrl(), e);
-//            }
-//        }
-//    }
 
     private Object returnFromResponse(){
         SentBody res = response;

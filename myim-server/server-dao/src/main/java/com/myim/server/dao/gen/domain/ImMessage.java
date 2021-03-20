@@ -6,25 +6,25 @@ import java.util.Date;
 public class ImMessage implements Serializable {
     private Long id;
 
-    private Long imusersinglerelationid;
+    private Long imUserSingleRelationId;
 
-    private String key;
+    private String mKey;
 
-    private String repeat;
+    private String mRepeat;
 
-    private Boolean check;
+    private Boolean mCheck;
 
-    private Integer status;
+    private Integer mStatus;
 
     private Integer msgId;
 
-    private String action;
+    private String mAction;
 
     private String title;
 
     private String content;
 
-    private String format;
+    private String mFormat;
 
     private String sender;
 
@@ -32,7 +32,7 @@ public class ImMessage implements Serializable {
 
     private String extra;
 
-    private Date timestamp;
+    private Date mTimestamp;
 
     private Date updateTime;
 
@@ -48,44 +48,44 @@ public class ImMessage implements Serializable {
         this.id = id;
     }
 
-    public Long getImusersinglerelationid() {
-        return imusersinglerelationid;
+    public Long getImUserSingleRelationId() {
+        return imUserSingleRelationId;
     }
 
-    public void setImusersinglerelationid(Long imusersinglerelationid) {
-        this.imusersinglerelationid = imusersinglerelationid;
+    public void setImUserSingleRelationId(Long imUserSingleRelationId) {
+        this.imUserSingleRelationId = imUserSingleRelationId;
     }
 
-    public String getKey() {
-        return key;
+    public String getmKey() {
+        return mKey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setmKey(String mKey) {
+        this.mKey = mKey;
     }
 
-    public String getRepeat() {
-        return repeat;
+    public String getmRepeat() {
+        return mRepeat;
     }
 
-    public void setRepeat(String repeat) {
-        this.repeat = repeat;
+    public void setmRepeat(String mRepeat) {
+        this.mRepeat = mRepeat;
     }
 
-    public Boolean getCheck() {
-        return check;
+    public Boolean getmCheck() {
+        return mCheck;
     }
 
-    public void setCheck(Boolean check) {
-        this.check = check;
+    public void setmCheck(Boolean mCheck) {
+        this.mCheck = mCheck;
     }
 
-    public Integer getStatus() {
-        return status;
+    public Integer getmStatus() {
+        return mStatus;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setmStatus(Integer mStatus) {
+        this.mStatus = mStatus;
     }
 
     public Integer getMsgId() {
@@ -96,12 +96,12 @@ public class ImMessage implements Serializable {
         this.msgId = msgId;
     }
 
-    public String getAction() {
-        return action;
+    public String getmAction() {
+        return mAction;
     }
 
-    public void setAction(String action) {
-        this.action = action;
+    public void setmAction(String mAction) {
+        this.mAction = mAction;
     }
 
     public String getTitle() {
@@ -120,12 +120,12 @@ public class ImMessage implements Serializable {
         this.content = content;
     }
 
-    public String getFormat() {
-        return format;
+    public String getmFormat() {
+        return mFormat;
     }
 
-    public void setFormat(String format) {
-        this.format = format;
+    public void setmFormat(String mFormat) {
+        this.mFormat = mFormat;
     }
 
     public String getSender() {
@@ -152,12 +152,12 @@ public class ImMessage implements Serializable {
         this.extra = extra;
     }
 
-    public Date getTimestamp() {
-        return timestamp;
+    public Date getmTimestamp() {
+        return mTimestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
+    public void setmTimestamp(Date mTimestamp) {
+        this.mTimestamp = mTimestamp;
     }
 
     public Date getUpdateTime() {
@@ -183,20 +183,20 @@ public class ImMessage implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", imusersinglerelationid=").append(imusersinglerelationid);
-        sb.append(", key=").append(key);
-        sb.append(", repeat=").append(repeat);
-        sb.append(", check=").append(check);
-        sb.append(", status=").append(status);
+        sb.append(", imUserSingleRelationId=").append(imUserSingleRelationId);
+        sb.append(", mKey=").append(mKey);
+        sb.append(", mRepeat=").append(mRepeat);
+        sb.append(", mCheck=").append(mCheck);
+        sb.append(", mStatus=").append(mStatus);
         sb.append(", msgId=").append(msgId);
-        sb.append(", action=").append(action);
+        sb.append(", mAction=").append(mAction);
         sb.append(", title=").append(title);
         sb.append(", content=").append(content);
-        sb.append(", format=").append(format);
+        sb.append(", mFormat=").append(mFormat);
         sb.append(", sender=").append(sender);
         sb.append(", receiver=").append(receiver);
         sb.append(", extra=").append(extra);
-        sb.append(", timestamp=").append(timestamp);
+        sb.append(", mTimestamp=").append(mTimestamp);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", createTime=").append(createTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);

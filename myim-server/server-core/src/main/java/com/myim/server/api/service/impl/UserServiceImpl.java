@@ -146,6 +146,7 @@ public class UserServiceImpl implements UserService {
             FriendInfoRespBo friendInfoRespBo = new FriendInfoRespBo();
             ImUser imUser = imUserMapper.selectByPrimaryKey(imUserSingleRelation.getImUserId());
             BeanCommon.copyFromTo(imUser, friendInfoRespBo, false);
+            friendInfoRespBo.setImUserId(imUser.getId());
             list.add(friendInfoRespBo);
         });
         friendListInfoRespBo.setData(list);

@@ -87,10 +87,12 @@ CIMPushManager.innerOnConnectFinished = function () {
 function replyServer(msg) {
     //返回服务端响应
     let body = new proto.com.myim.web.model.SentBody();
-    body.setKey(body.getKey());
+    body.setKey(msg.key);
     body.setTimestamp(new Date().getTime());
     body.getDataMap().set("type", CLIENT_PUSH);
     body.getDataMap().set("action", "reply");
+    body.getDataMap().set("status", "success");
+    body.getDataMap().set("reply", "200 ok");
     CIMPushManager.sendRequest(body);
 }
 
@@ -116,7 +118,7 @@ CIMPushManager.innerOnMessageReceived = function (e) {
          */
         let reply = {};
         reply.code = message.getCode();
-        reply.data.type = message.getKey();
+        // reply.data.type = message.getDataMap().get("type");
         reply.message = message.getMessage();
         reply.timestamp = message.getTimestamp();
         reply.data = {};
