@@ -1,6 +1,6 @@
 /*CIM服务器IP*/
 // const CIM_HOST = "47.110.41.97";
-const CIM_HOST = "127.0.0.1";
+const CIM_HOST = "192.168.1.103";
 /*
  *服务端 websocket端口
  */
@@ -42,13 +42,13 @@ CIMPushManager.bindAccount = function (account) {
 
     window.localStorage.account = account;
 
-    // let deviceId = window.localStorage.deviceIddeviceId;
-    // if (deviceId == '' || deviceId == undefined) {
-    //     deviceId = generateUUID();
-    //     window.localStorage.deviceId = deviceId;
-    // }
+    let deviceId = window.localStorage.deviceId;
+    if (deviceId == '' || deviceId == undefined) {
+        deviceId = generateUUID();
+        window.localStorage.deviceId = deviceId;
+    }
 
-    // let browser = getBrowser();
+    let browser = getBrowser();
     let body = new proto.com.myim.web.model.SentBody();
     body.setKey(guid());
     body.setTimestamp(new Date().getTime());
@@ -58,8 +58,8 @@ CIMPushManager.bindAccount = function (account) {
     // body.getDataMap().set("osVersion", browser.version);
     body.getDataMap().set("packageName", APP_PACKAGE);
     body.getDataMap().set("type", CLIENT_BIND);
-    // body.getDataMap().set("deviceId", deviceId);
-    // body.getDataMap().set("device", browser.name);
+    body.getDataMap().set("deviceId", deviceId);
+    body.getDataMap().set("device", browser.name);
     CIMPushManager.sendRequest(body);
 };
 
@@ -105,6 +105,7 @@ CIMPushManager.innerOnMessageReceived = function (e) {
         let message = proto.com.myim.web.model.Message.deserializeBinary(body);
         var msg = message.toObject(false);
 
+        // alert("1....")
         replyServer(msg);
 
         onInterceptMessageReceived(msg);
@@ -161,6 +162,7 @@ function onInterceptMessageReceived(message) {
      *收到消息后，将消息发送给页面
      */
     if (onMessageReceived instanceof Function) {
+    // alert("2.....")
         onMessageReceived(message);
     }
 }

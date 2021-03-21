@@ -1,7 +1,7 @@
-package com.myim.server.exception.user;
+package com.myim.common.exception.user;
 
-import com.myim.server.enumm.CodeMsgEnum;
-import com.myim.server.exception.BaseException;
+import com.myim.common.enumm.CodeMsgEnum;
+import com.myim.common.exception.BaseException;
 import lombok.Data;
 
 @Data

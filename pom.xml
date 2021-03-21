@@ -18,6 +18,8 @@
         <module>myim-server</module>
         <module>myim-client</module>
         <module>myim-common</module>
+        <module>myim-cluster</module>
+        <module>myim-register</module>
     </modules>
 
     <properties>
@@ -63,6 +65,11 @@
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjweaver</artifactId>
                 <version>${aspectj-aspectjweaver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>18.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

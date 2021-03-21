@@ -1,6 +1,6 @@
 package com.myim.server.api.dto.resp.base;
 
-import com.myim.server.enumm.CodeMsgEnum;
+import com.myim.common.enumm.CodeMsgEnum;
 import lombok.Data;
 
 @Data

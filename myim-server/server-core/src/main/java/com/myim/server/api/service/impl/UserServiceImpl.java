@@ -13,9 +13,9 @@ import com.myim.server.dao.gen.domain.*;
 import com.myim.server.dao.gen.mapper.ImUserMapper;
 import com.myim.server.dao.gen.mapper.ImUserSingleCategoryMapper;
 import com.myim.server.dao.gen.mapper.ImUserSingleRelationMapper;
-import com.myim.server.enumm.CodeMsgEnum;
-import com.myim.server.exception.user.UserExistedException;
-import com.myim.server.exception.user.UserNotExistException;
+import com.myim.common.enumm.CodeMsgEnum;
+import com.myim.common.exception.user.UserExistedException;
+import com.myim.common.exception.user.UserNotExistException;
 import com.myim.server.message.bo.req.user.ApplyFriendReqBo;
 import com.myim.server.message.bo.req.user.FriendInfoReqBo;
 import com.myim.server.message.bo.req.user.FriendListInfoReqBo;
@@ -150,6 +150,7 @@ public class UserServiceImpl implements UserService {
             list.add(friendInfoRespBo);
         });
         friendListInfoRespBo.setData(list);
+        friendListInfoRespBo.setServiceType("friendListInfo");
         return ListBaseResponse.success(friendListInfoRespBo);
     }
 

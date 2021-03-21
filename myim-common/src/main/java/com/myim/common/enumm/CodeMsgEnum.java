@@ -1,4 +1,4 @@
-package com.myim.server.enumm;
+package com.myim.common.enumm;
 
 public enum CodeMsgEnum {
     /********************成功0开头***************************/

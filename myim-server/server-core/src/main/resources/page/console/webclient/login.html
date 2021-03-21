@@ -31,7 +31,7 @@
         CIMPushManager.bindAccount($('#account').val());
     }
 
-    /** 当收到请求回复时候回调  **/
+    /** 请求收到的回复 **/
     function onReplyReceived(reply) {
         console.log(reply);
         if (reply.data.type === CLIENT_BIND && reply.code == 200) {
@@ -66,9 +66,9 @@
                         if (flag)
                             $("#searchList").append("<div class='alert alert-info' title='点击添加好友' onclick='addFriendWin(" + JSON.stringify(jsonReply[i]) + ")' >" + loginName + "</div>");
                     }
-                }else if(parse.serviceType === "applySingleFriend") {
+                } else if (parse.serviceType === "applySingleFriend") {
                     getUserList(userId, singleCategoryId)
-                } else { //展示所有好友
+                } else if (parse.serviceType === "friendListInfo"){ //展示所有好友
                     friendList = jsonReply;
                     doSearch()
                     $('#userList').html("")
@@ -77,6 +77,8 @@
 //                        $("#userList").append("<div class='alert alert-info' onclick='newChatWin(\"" + loginName + "\"," + this + ")' onmouseover='friendInfo(\"" + loginName + "\")'>" + loginName + "</div>");
                         $("#userList").append("<div class='alert " + loginName + " alert-info user-list' onclick='newChatWin(" + JSON.stringify(jsonReply[i]) + ")' onmouseover='friendInfo(\"" + loginName + "\")'>" + loginName + "</div>");
                     }
+                }else {
+                    console.log("send ok")
                 }
             }
         }
@@ -138,6 +140,7 @@
 
     function onMessageReceived(message) {
         console.log(message);
+        // alert("3......")
         if (message.action == ACTION_999) {
             socket.close();
             $('#MessageDialog').fadeOut();
@@ -146,8 +149,9 @@
             return;
         }
 
-        showNotification(message.content);
-
+        //手机端没法通知
+        // showNotification(message.content);
+        // alert("this" + message.content)
         $("#messageList").append("<h6 style='text-align: left;'>" + "对方:" + message.sender + " 时间:" + new Date(message.timestamp).toLocaleString() + "</h6>");
         $("#messageList").append("<div class='alert alert-info' >" + message.content + "</div>");
     }

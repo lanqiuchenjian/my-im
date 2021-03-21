@@ -1,7 +1,7 @@
-package com.myim.server.exception.system;
+package com.myim.common.exception.system;
 
-import com.myim.server.enumm.CodeMsgEnum;
-import com.myim.server.exception.BaseException;
+import com.myim.common.enumm.CodeMsgEnum;
+import com.myim.common.exception.BaseException;
 
 public class PushMessageException extends BaseException {
     public PushMessageException() {

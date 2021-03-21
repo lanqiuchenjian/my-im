@@ -1,8 +1,8 @@
 package com.myim.server.api.controller.global;
 
 import com.myim.server.api.dto.resp.base.BaseResponse;
-import com.myim.server.enumm.CodeMsgEnum;
-import com.myim.server.exception.BaseException;
+import com.myim.common.enumm.CodeMsgEnum;
+import com.myim.common.exception.BaseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
