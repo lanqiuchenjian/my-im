@@ -14,6 +14,8 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -21,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Component
 public class ImRouterServiceImpl implements ImRouterService, BeanPostProcessor {
-    private ConcurrentHashMap<String, ImServerInfo> imServerInfoMaps = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, List<ImServerInfo>> imServerInfoMaps = new ConcurrentHashMap<>();
     private ConcurrentHashMap<StrategyEnum, Strategy> strategyInfoMaps = new ConcurrentHashMap<>();
     private ZookeeperClient zookeeperClient = new CuratorZookeeperClient("47.110.41.97:2181");
 
@@ -33,14 +35,15 @@ public class ImRouterServiceImpl implements ImRouterService, BeanPostProcessor {
         //从imServerInfoMaps中选取一个im服务器
 
         Strategy strategy = strategyInfoMaps.get(se);
-        ServerInfo serverInfo = strategy.doStrategy(imServerInfoMaps, se);
+        ImServerInfo imServerInfo = strategy.doStrategy(imServerInfoMaps, se);
 
-        trans(imRouterReqDto, serverInfo);
+        trans(imRouterRespDto, imServerInfo);
         return imRouterRespDto;
     }
 
-    private void trans(ImRouterReqDto imRouterReqDto, ServerInfo serverInfo) {
-
+    private void trans(ImRouterRespDto imRouterReqDto, ImServerInfo serverInfo) {
+        imRouterReqDto.setHost(serverInfo.getHost());
+        imRouterReqDto.setPort(serverInfo.getPort());
     }
 
     private StrategyEnum getStrategy() {
@@ -57,6 +60,24 @@ public class ImRouterServiceImpl implements ImRouterService, BeanPostProcessor {
     @PostConstruct
     public void doZkListen() {
         System.out.println("start.....");
+        //启动的时候拉取一次全量信息，之后监听zk路径变化
+        List<String> children = zookeeperClient.getChildren("/myim/host");
+        children.forEach(c -> {
+            try {
+                String s = zookeeperClient.getValue("/myim/host" + "/" + c);
+                ImServerInfo imServerInfo = new ImServerInfo();
+
+                imServerInfo.setHost(s.split(":")[0]);
+                imServerInfo.setPort(s.split(":")[1]);
+
+                List<ImServerInfo> list = new ArrayList<>();
+                list.add(imServerInfo);
+                imServerInfoMaps.put("imServer", list);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
         zookeeperClient.addChildListener("/myim/host", (framework, event) -> {
             switch (event.getType()) {
                 case CHILD_ADDED:
@@ -65,9 +86,11 @@ public class ImRouterServiceImpl implements ImRouterService, BeanPostProcessor {
                     ImServerInfo imServerInfo = new ImServerInfo();
 
                     imServerInfo.setHost(s.split(":")[0]);
-                    imServerInfo.setHost(s.split(":")[1]);
+                    imServerInfo.setPort(s.split(":")[1]);
 
-                    imServerInfoMaps.put(s.split(":")[0], imServerInfo);
+                    List<ImServerInfo> list = new ArrayList<>();
+                    list.add(imServerInfo);
+                    imServerInfoMaps.put("imServer", list);
 
                     System.out.println("CHILD_ADDED，类型：" + event.getType() + "，路径：" + event.getData().getPath() + "，数据：" +
                             s + "，状态：" + event.getData().getStat());

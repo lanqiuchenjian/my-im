@@ -12,6 +12,8 @@ public interface ZookeeperClient {
 
     List<String> getChildren(String path);
 
+    String getValue(String path) throws Exception;
+
     void addChildListener(String path, PathChildrenCacheListener listener);
 
     void removeChildListener(String path);

@@ -6,6 +6,7 @@ import com.myim.router.strategy.StrategyEnum;
 import org.apache.catalina.util.ServerInfo;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Map;
 @Component(value = "HASH")
 public class HashingImpl implements Strategy {
     @Override
-    public ServerInfo doStrategy(Map<String, ImServerInfo> serverInfos, StrategyEnum strategyEnum) {
+    public ImServerInfo doStrategy(Map<String, List<ImServerInfo>> serverInfos, StrategyEnum strategyEnum) {
         return null;
     }
 }

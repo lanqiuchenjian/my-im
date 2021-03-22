@@ -20,6 +20,7 @@
         <module>myim-common</module>
         <module>myim-cluster</module>
         <module>myim-register</module>
+        <module>myim-mq</module>
     </modules>
 
     <properties>

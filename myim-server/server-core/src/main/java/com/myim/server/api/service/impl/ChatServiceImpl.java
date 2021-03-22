@@ -1,6 +1,6 @@
 package com.myim.server.api.service.impl;
 
-import com.myim.server.api.dto.resp.base.BaseResponse;
+import com.myim.common.basepojo.BaseResponse;
 import com.myim.server.api.service.ChatService;
 import com.myim.server.common.DefaultFuture;
 import com.myim.server.constant.Constant;

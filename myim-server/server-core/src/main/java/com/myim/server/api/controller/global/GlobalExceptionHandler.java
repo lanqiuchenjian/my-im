@@ -1,6 +1,6 @@
 package com.myim.server.api.controller.global;
 
-import com.myim.server.api.dto.resp.base.BaseResponse;
+import com.myim.common.basepojo.BaseResponse;
 import com.myim.common.enumm.CodeMsgEnum;
 import com.myim.common.exception.BaseException;
 import org.springframework.http.ResponseEntity;

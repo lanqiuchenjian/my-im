@@ -4,8 +4,6 @@ import com.myim.register.ZookeeperClient;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
-import org.apache.curator.framework.recipes.cache.NodeCache;
-import org.apache.curator.framework.recipes.cache.NodeCacheListener;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
 import org.apache.curator.retry.ExponentialBackoffRetry;
@@ -67,6 +65,11 @@ public class CuratorZookeeperClient implements ZookeeperClient {
         } catch (Exception e) {
             throw new IllegalStateException(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public String getValue(String path) throws Exception {
+        return new String(client.getData().forPath(path));
     }
 
     public boolean checkExists(String path) {

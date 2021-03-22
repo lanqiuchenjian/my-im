@@ -1,11 +1,8 @@
-/*CIM服务器IP*/
-// const CIM_HOST = "47.110.41.97";
-const CIM_HOST = "192.168.1.103";
-/*
- *服务端 websocket端口
+
+/**
+服务端 websocket端口
  */
-const CIM_PORT = 34567;
-const CIM_URI = "ws://" + CIM_HOST + ":" + CIM_PORT;
+var CIM_URI;
 
 const APP_VERSION = "1.0.0";
 const APP_CHANNEL = "browser";
@@ -27,9 +24,32 @@ const REPLY_BODY = 4;
 let socket;
 let manualStop = false;
 const CIMPushManager = {};
+
 CIMPushManager.connect = function () {
     manualStop = false;
     window.localStorage.account = '';
+
+    var json = {};
+    $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:9080/api/im/server/target/info",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(json),
+        dataType: "json",
+        async: false,
+        success: function (data) {
+            if (data.status === "success") {
+                CIM_URI = "ws://" + data.host + ":" + data.port;
+
+            } else {
+                alert("系统错误" + data.msg)
+            }
+        },
+        error: function (message) {
+            alert("提交数据失败！");
+        }
+    });
+
     socket = new WebSocket(CIM_URI);
     socket.cookieEnabled = false;
     socket.binaryType = 'arraybuffer';

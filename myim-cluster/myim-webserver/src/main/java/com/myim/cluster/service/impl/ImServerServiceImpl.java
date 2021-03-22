@@ -21,6 +21,10 @@ public class ImServerServiceImpl implements ImServerService {
         ImServerRespDto imServerRespDto = new ImServerRespDto();
         ImRouterReqDto imRouterReqDto = new ImRouterReqDto();
         ImRouterRespDto imRouterRespDto = imRouterService.doRouter(imRouterReqDto);
+
+        imServerRespDto.setHost(imRouterRespDto.getHost());
+        imServerRespDto.setPort(imRouterRespDto.getPort());
+
         return imServerRespDto;
     }
 }

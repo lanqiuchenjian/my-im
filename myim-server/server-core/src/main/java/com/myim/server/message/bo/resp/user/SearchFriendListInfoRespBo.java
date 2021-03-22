@@ -1,6 +1,6 @@
 package com.myim.server.message.bo.resp.user;
 
-import com.myim.server.api.dto.resp.base.ListBaseResponse;
+import com.myim.common.basepojo.ListBaseResponse;
 import lombok.Data;
 
 @Data

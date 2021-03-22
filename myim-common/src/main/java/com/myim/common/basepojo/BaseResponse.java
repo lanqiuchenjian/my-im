@@ -1,4 +1,4 @@
-package com.myim.server.api.dto.resp.base;
+package com.myim.common.basepojo;
 
 import com.myim.common.enumm.CodeMsgEnum;
 import lombok.Data;
