@@ -71,7 +71,9 @@ public class ImRouterServiceImpl implements ImRouterService, BeanPostProcessor {
                 imServerInfo.setHost(s.split(":")[0]);
                 imServerInfo.setPort(s.split(":")[1]);
 
-                imServerInfoMaps.get("imServer").add(imServerInfo);
+                List<ImServerInfo> list = imServerInfoMaps.get("imServer");
+                if (!list.contains(imServerInfo))
+                    list.add(imServerInfo);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -87,11 +89,10 @@ public class ImRouterServiceImpl implements ImRouterService, BeanPostProcessor {
                     imServerInfo.setHost(s.split(":")[0]);
                     imServerInfo.setPort(s.split(":")[1]);
 
-                    imServerInfoMaps.get("imServer").add(imServerInfo);
-//                    List<ImServerInfo> list = new ArrayList<>();
-//                    list.add(imServerInfo);
-//
-//                    imServerInfoMaps.put("imServer", list);
+                    List<ImServerInfo> list = imServerInfoMaps.get("imServer");
+
+                    if (!list.contains(imServerInfo))
+                        list.add(imServerInfo);
 
                     System.out.println("CHILD_ADDED，类型：" + event.getType() + "，路径：" + event.getData().getPath() + "，数据：" +
                             s + "，状态：" + event.getData().getStat());
