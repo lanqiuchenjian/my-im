@@ -22,8 +22,12 @@
 package com.myim.server.message.service.session.impl;
 
 
+import com.google.gson.Gson;
 import com.myim.server.message.repository.SessionRepository;
 import com.myim.server.message.service.session.CIMSessionService;
+import com.myim.server.redis.RedisDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import com.myim.server.handler.CIMNioSocketAcceptor;
 import com.myim.server.model.CIMSession;
@@ -34,6 +38,8 @@ import java.util.List;
 
 @Service
 public class CIMSessionServiceImpl implements CIMSessionService {
+	@Autowired
+	private RedisDao redisDao;
 
  	@Resource
  	private CIMNioSocketAcceptor nioSocketAcceptor;
@@ -44,6 +50,17 @@ public class CIMSessionServiceImpl implements CIMSessionService {
 	@Override
 	public void save(CIMSession session) {
 		sessionRepository.save(session);
+		redisDao.setKey(session.getAccount(), session.getHost());
+	}
+
+	@Override
+	public Boolean isLocal(String account) {
+		return sessionRepository.get(account) != null;
+	}
+
+	@Override
+	public String getHostName(String account) {
+		return (String)redisDao.getKey(account);
 	}
 
 	/*
@@ -53,9 +70,7 @@ public class CIMSessionServiceImpl implements CIMSessionService {
 	 */
 	@Override
 	public CIMSession get(String account) {
-		 
 		 CIMSession session = sessionRepository.get(account);
-
 		 if (session != null){
 			 session.setSession(nioSocketAcceptor.getManagedSession(session.getNid()));
 		 }
@@ -72,5 +87,4 @@ public class CIMSessionServiceImpl implements CIMSessionService {
 	public List<CIMSession> list() {
 		return sessionRepository.findAll();
 	}
-	 
 }

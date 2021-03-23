@@ -6,7 +6,6 @@ import com.myim.server.common.DefaultFuture;
 import com.myim.server.constant.Constant;
 import com.myim.server.dao.gen.domain.*;
 import com.myim.server.dao.gen.mapper.ImMessageMapper;
-import com.myim.server.dao.gen.mapper.ImUserMapper;
 import com.myim.server.dao.gen.mapper.ImUserSingleCategoryMapper;
 import com.myim.server.dao.gen.mapper.ImUserSingleRelationMapper;
 import com.myim.server.message.bo.req.chat.SingleMessageReqBo;
@@ -14,13 +13,15 @@ import com.myim.server.message.bo.resp.chat.SingleMessageRespBo;
 import com.myim.server.message.service.session.CIMSessionService;
 import com.myim.server.model.CIMSession;
 import com.myim.server.model.Message;
-import com.myim.server.redis.RedisDao;
+import com.myim.server.mq.MqInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,9 +29,6 @@ public class ChatServiceImpl implements ChatService {
     private ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 50,30, TimeUnit.MINUTES, new LinkedBlockingQueue<>(1000));
     @Autowired
     private CIMSessionService cimSessionService;
-
-    @Autowired
-    private ImUserMapper imUserMapper;
 
     @Autowired
     private ImUserSingleCategoryMapper imUserSingleCategoryMapper;
@@ -42,14 +40,25 @@ public class ChatServiceImpl implements ChatService {
     private ImMessageMapper imMessageMapper;
 
     @Autowired
-    private RedisDao redisDao;
+    private MqInstance mqInstance;
 
     @Override
     public SingleMessageRespBo sendSingleMessage(SingleMessageReqBo singleMessageReqBo) {
-        //TODO:chenjian  实现单台服务器先
-        CIMSession fromSession = cimSessionService.get(singleMessageReqBo.getFromLoginName());
-        CIMSession toSession = cimSessionService.get(singleMessageReqBo.getToLoginName());
+        Boolean local = cimSessionService.isLocal(singleMessageReqBo.getToLoginName());
+        String toLoginName = singleMessageReqBo.getToLoginName();
 
+        if (local) {
+            CIMSession toSession = cimSessionService.get(toLoginName);
+            doSendMsg(singleMessageReqBo, toSession);
+        }else {
+            //发送一条mq消息
+            String hostName = cimSessionService.getHostName(toLoginName);
+            mqInstance.sendMsg(singleMessageReqBo, hostName);
+        }
+        return BaseResponse.success(new SingleMessageRespBo());
+    }
+
+    private void doSendMsg(SingleMessageReqBo singleMessageReqBo, CIMSession toSession) {
         //存储消息内容
         ImMessage imMessage = saveMes(singleMessageReqBo);
         imMessageMapper.insertSelective(imMessage);
@@ -68,7 +77,6 @@ public class ChatServiceImpl implements ChatService {
             //等待接收方响应，异常处理
             new DefaultFuture(toSession, msg, 1500).get();
         }
-        return BaseResponse.success(new SingleMessageRespBo());
     }
 
     private ImMessage saveMes(SingleMessageReqBo singleMessageReqBo) {

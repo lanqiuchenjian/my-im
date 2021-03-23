@@ -21,6 +21,8 @@
  */
 package com.myim.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,6 +84,7 @@ public class SentBody implements Serializable {
 		data.putAll(map);
 	}
 
+	@JsonIgnore
 	public Set<String> getKeySet() {
 		return data.keySet();
 	}

@@ -62,6 +62,7 @@ public class ImRouterServiceImpl implements ImRouterService, BeanPostProcessor {
         System.out.println("start.....");
         //启动的时候拉取一次全量信息，之后监听zk路径变化
         List<String> children = zookeeperClient.getChildren("/myim/host");
+        imServerInfoMaps.put("imServer", new ArrayList<>());
         children.forEach(c -> {
             try {
                 String s = zookeeperClient.getValue("/myim/host" + "/" + c);
@@ -70,9 +71,7 @@ public class ImRouterServiceImpl implements ImRouterService, BeanPostProcessor {
                 imServerInfo.setHost(s.split(":")[0]);
                 imServerInfo.setPort(s.split(":")[1]);
 
-                List<ImServerInfo> list = new ArrayList<>();
-                list.add(imServerInfo);
-                imServerInfoMaps.put("imServer", list);
+                imServerInfoMaps.get("imServer").add(imServerInfo);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -88,9 +87,11 @@ public class ImRouterServiceImpl implements ImRouterService, BeanPostProcessor {
                     imServerInfo.setHost(s.split(":")[0]);
                     imServerInfo.setPort(s.split(":")[1]);
 
-                    List<ImServerInfo> list = new ArrayList<>();
-                    list.add(imServerInfo);
-                    imServerInfoMaps.put("imServer", list);
+                    imServerInfoMaps.get("imServer").add(imServerInfo);
+//                    List<ImServerInfo> list = new ArrayList<>();
+//                    list.add(imServerInfo);
+//
+//                    imServerInfoMaps.put("imServer", list);
 
                     System.out.println("CHILD_ADDED，类型：" + event.getType() + "，路径：" + event.getData().getPath() + "，数据：" +
                             s + "，状态：" + event.getData().getStat());
