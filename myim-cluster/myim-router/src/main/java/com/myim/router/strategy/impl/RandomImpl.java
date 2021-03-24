@@ -18,6 +18,6 @@ public class RandomImpl implements Strategy {
     AtomicInteger i = new AtomicInteger(0);
     @Override
     public ImServerInfo doStrategy(Map<String, List<ImServerInfo>> serverInfos, StrategyEnum strategyEnum) {
-        return serverInfos.get("imServer").get(i.getAndIncrement() /2);
+        return serverInfos.get("imServer").get(i.getAndIncrement() % 2);
     }
 }

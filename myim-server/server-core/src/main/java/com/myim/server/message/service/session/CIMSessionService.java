@@ -14,7 +14,7 @@ public interface CIMSessionService {
 
 	Boolean isLocal(String account);
 
-	public String getHostName(String account);
+	String getHostName(String account);
 
 	CIMSession get(String account);
 

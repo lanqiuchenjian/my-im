@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-@RocketMQMessageListener(topic = "${myim.rocketmq.msg-topic}", consumerGroup = "myim-consumer-group1",  selectorExpression = "${myim.rocketmq.ip-tag}")
+@RocketMQMessageListener(topic = "${myim.rocketmq.msg-topic}", consumerGroup = "myim-consumer-group1",  selectorExpression = "server127")
 public class MqListenr implements RocketMQListener<MessageExt> {
     @Autowired
     private ChatService chatService;

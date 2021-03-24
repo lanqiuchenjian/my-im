@@ -50,6 +50,7 @@ public class CIMSessionServiceImpl implements CIMSessionService {
 	@Override
 	public void save(CIMSession session) {
 		sessionRepository.save(session);
+		//机器挂掉，新连接在某台机器上需要覆盖原来的地址
 		redisDao.setKey(session.getAccount(), session.getHost());
 	}
 
@@ -81,6 +82,7 @@ public class CIMSessionServiceImpl implements CIMSessionService {
 	@Override
 	public void remove(String account) {
 		sessionRepository.remove(account);
+		redisDao.deleteKey(account);
 	}
 
 	@Override
