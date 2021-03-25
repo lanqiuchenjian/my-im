@@ -8,7 +8,7 @@ import com.myim.server.dao.gen.domain.*;
 import com.myim.server.dao.gen.mapper.ImMessageMapper;
 import com.myim.server.dao.gen.mapper.ImUserSingleCategoryMapper;
 import com.myim.server.dao.gen.mapper.ImUserSingleRelationMapper;
-import com.myim.server.message.bo.req.chat.SingleMessageReqBo;
+import com.myim.server.message.bo.req.chat.single.SingleMessageReqBo;
 import com.myim.server.message.bo.resp.chat.SingleMessageRespBo;
 import com.myim.server.message.service.session.CIMSessionService;
 import com.myim.server.model.CIMSession;
@@ -51,9 +51,15 @@ public class ChatServiceImpl implements ChatService {
             CIMSession toSession = cimSessionService.get(toLoginName);
             doSendMsg(singleMessageReqBo, toSession);
         }else {
-            //发送一条mq消息
             String hostName = cimSessionService.getHostName(toLoginName);
-            mqInstance.sendMsg(singleMessageReqBo, hostName);
+
+            //对方在线则发送一条mq消息
+            if (hostName != null && !hostName.trim().equalsIgnoreCase("")) {
+                mqInstance.sendMsg(singleMessageReqBo, hostName);
+            } else {
+                //不在线，则存储离线消息，保存未读的最早一条消息id到离线表
+
+            }
         }
         return BaseResponse.success(new SingleMessageRespBo());
     }

@@ -2,7 +2,7 @@ package com.myim.server.mq;
 
 import com.google.gson.Gson;
 import com.myim.server.api.service.ChatService;
-import com.myim.server.message.bo.req.chat.SingleMessageReqBo;
+import com.myim.server.message.bo.req.chat.single.SingleMessageReqBo;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
@@ -19,7 +19,6 @@ public class MqListenr implements RocketMQListener<MessageExt> {
     public void onMessage(MessageExt message) {
         SingleMessageReqBo msg = new Gson().fromJson(new String(message.getBody()), SingleMessageReqBo.class);
         System.out.printf("------- ConsumerWithReplyBytes received: %s \n", msg);
-
-        chatService.sendSingleMessage(msg);
+        new Thread(() -> chatService.sendSingleMessage(msg)).start();
     }
 }

@@ -1,6 +1,6 @@
 package com.myim.server.mq;
 
-import com.myim.server.message.bo.req.chat.SingleMessageReqBo;
+import com.myim.server.message.bo.req.chat.single.SingleMessageReqBo;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

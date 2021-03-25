@@ -19,7 +19,7 @@ public class ServerInit {
         String port = "34567";
         String address = host+ ":" + port;
 
-        ZookeeperClient zookeeperClient = new CuratorZookeeperClient("47.110.41.97:2181");
+        ZookeeperClient zookeeperClient = new CuratorZookeeperClient("127.0.0.1:2181");
         zookeeperClient.create("/myim/host", false, "ni hao a");
         zookeeperClient.create("/myim/host/server", true, address);
     }

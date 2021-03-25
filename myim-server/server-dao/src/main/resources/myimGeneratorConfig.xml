@@ -65,12 +65,19 @@
         <!--<generatedKey column="id" sqlStatement="JDBC"/>-->
         <!--</table>-->
 
-        <table tableName="im_message" domainObjectName="ImMessage"
+        <table tableName="im_offline_message" domainObjectName="ImOfflineMessage"
                enableCountByExample="false" enableUpdateByExample="true" enableDeleteByExample="true"
                enableSelectByExample="true" selectByExampleQueryId="true">
             <property name="useActualColumnNames" value="false"/>
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
+
+        <!--<table tableName="im_message" domainObjectName="ImMessage"-->
+               <!--enableCountByExample="false" enableUpdateByExample="true" enableDeleteByExample="true"-->
+               <!--enableSelectByExample="true" selectByExampleQueryId="true">-->
+            <!--<property name="useActualColumnNames" value="false"/>-->
+            <!--<generatedKey column="id" sqlStatement="JDBC"/>-->
+        <!--</table>-->
 
         <!--<table tableName="im_user" domainObjectName="ImUser"-->
                <!--enableCountByExample="false" enableUpdateByExample="true" enableDeleteByExample="true"-->

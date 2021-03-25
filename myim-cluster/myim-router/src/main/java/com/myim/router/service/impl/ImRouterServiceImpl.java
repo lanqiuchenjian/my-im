@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ImRouterServiceImpl implements ImRouterService, BeanPostProcessor {
     private ConcurrentHashMap<String, List<ImServerInfo>> imServerInfoMaps = new ConcurrentHashMap<>();
     private ConcurrentHashMap<StrategyEnum, Strategy> strategyInfoMaps = new ConcurrentHashMap<>();
-    private ZookeeperClient zookeeperClient = new CuratorZookeeperClient("47.110.41.97:2181");
+    private ZookeeperClient zookeeperClient = new CuratorZookeeperClient("127.0.0.1:2181");
 
     public ImRouterRespDto doRouter(ImRouterReqDto imRouterReqDto) {
         ImRouterRespDto imRouterRespDto = new ImRouterRespDto();
@@ -122,7 +122,7 @@ public class ImRouterServiceImpl implements ImRouterService, BeanPostProcessor {
         imServerInfo.setPort(s.split(":")[1]);
 
         List<ImServerInfo> list = imServerInfoMaps.get("imServer");
-        if (!list.contains(imServerInfo))
+        if (list.contains(imServerInfo))
             list.remove(imServerInfo);
     }
 }
