@@ -29,9 +29,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -182,6 +180,37 @@ public class UserServiceImpl implements UserService {
 
         friendListInfoRespBo.setData(list);
         return ListBaseResponse.success(friendListInfoRespBo);
+    }
+
+    @Override
+    public ImUserSingleRelation getRelationByImUserIAndCategoryId(Long toImUserId, Long categoryId) {
+        ImUserSingleRelationExample imUserSingleRelationExample = new ImUserSingleRelationExample();
+        imUserSingleRelationExample.createCriteria()
+                .andImUserSingleCategoryIdEqualTo(categoryId)
+                .andImUserIdEqualTo(toImUserId);
+        List<ImUserSingleRelation> imUserSingleRelations = imUserSingleRelationMapper.selectByExample(imUserSingleRelationExample);
+        return imUserSingleRelations.get(0);
+    }
+
+    @Override
+    public ImUserSingleRelation getRelationByFromAndToId(Long fromImUserId, Long toImUserId) {
+        ImUser imUser = imUserMapper.selectByPrimaryKey(fromImUserId);
+
+        ImUserSingleCategoryExample imUserSingleCategoryExample = new ImUserSingleCategoryExample();
+        imUserSingleCategoryExample.createCriteria().andImUserIdEqualTo(imUser.getId());
+        List<ImUserSingleCategory> imUserSingleCategories = imUserSingleCategoryMapper.selectByExample(imUserSingleCategoryExample);
+
+        for (ImUserSingleCategory i : imUserSingleCategories) {
+            ImUserSingleRelationExample imUserSingleRelationExample = new ImUserSingleRelationExample();
+            imUserSingleRelationExample.createCriteria().andImUserSingleCategoryIdEqualTo(i.getId());
+            List<ImUserSingleRelation> imUserSingleRelations = imUserSingleRelationMapper.selectByExample(imUserSingleRelationExample);
+
+            Optional<ImUserSingleRelation> any = imUserSingleRelations.stream().filter(iusr -> Objects.equals(iusr.getImUserId(), toImUserId)).findAny();
+
+            if (any.isPresent())
+                return any.get();
+        }
+        throw new UserNotExistException(CodeMsgEnum.USER_EXISTED_ERROR);
     }
 
     private void doApply(Long fromImUserId, Long toImUserId) {

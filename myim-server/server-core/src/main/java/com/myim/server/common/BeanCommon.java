@@ -21,7 +21,12 @@ public class BeanCommon {
                         return to.getClass().getMethod("get" + methodName.toString().substring(3)).invoke(to);
                     } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                         e.printStackTrace();
+                        return fromBean;
                     }
+                }
+
+                if (fromBean.getClass().equals(toClass)) {
+                    return fromBean;
                 }
 
                 if(toClass.isAssignableFrom(Integer.class)){

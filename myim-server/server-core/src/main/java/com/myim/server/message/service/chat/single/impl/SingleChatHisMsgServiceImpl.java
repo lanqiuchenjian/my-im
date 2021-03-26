@@ -16,8 +16,8 @@ public class SingleChatHisMsgServiceImpl implements SingleHistoryMsgService {
     private ChatHistoryService chatHistroyService;
 
     @Override
-    @ImMethod(value = "sendSingleMessage")
+    @ImMethod(value = "getSingleHisMsg")
     public SingleHistoryMessageRespBo getSingleHisMsg(SingleHistoryMessageReqBo singleMessageReqBo) {
-        return null;
+        return chatHistroyService.getSingleHisMsg(singleMessageReqBo);
     }
 }

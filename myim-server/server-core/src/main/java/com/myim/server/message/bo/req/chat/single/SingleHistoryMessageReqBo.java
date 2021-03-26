@@ -7,10 +7,9 @@ import lombok.Data;
 public class SingleHistoryMessageReqBo extends BaseRequestBo {
     //消息发送者
     private Long fromImUserId;
-    private String fromLoginName;
+    private Long imUserCategoryId;
     //消息接收者
     private Long toImUserId;
-    private String toLoginName;
 
     private String action;
 
@@ -18,4 +17,5 @@ public class SingleHistoryMessageReqBo extends BaseRequestBo {
     //每页10条记录
     private Long page = 0L;
     private Long size = 10L;
+    private Long lastId = 100000000000L;
 }

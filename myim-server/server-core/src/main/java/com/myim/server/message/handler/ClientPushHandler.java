@@ -78,7 +78,10 @@ public class ClientPushHandler implements CIMRequestHandler {
             } else if (type.equalsIgnoreCase(Constant.MES_SINGLE)) {
                 logger.info(Constant.MES_SINGLE + ":", body.getData());
                 object = user(body, action);
-            }else {
+            }else if (type.equalsIgnoreCase(Constant.MES_SINGLE_HIS)){
+                logger.info(Constant.MES_SINGLE + ":", body.getData());
+                object = user(body, action);
+            } else {
                 throw new PushMessageException(CodeMsgEnum.MESSAGE_TYPE_ERROR);
             }
         } catch (Exception exception) {

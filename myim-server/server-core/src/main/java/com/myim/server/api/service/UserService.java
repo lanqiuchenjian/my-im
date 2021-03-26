@@ -25,6 +25,7 @@ import com.myim.server.api.dto.req.UserLoginReqDto;
 import com.myim.server.api.dto.req.UserRegisterReqDto;
 import com.myim.server.api.dto.resp.UserLoginRespDto;
 import com.myim.server.api.dto.resp.UserRegisterRespDto;
+import com.myim.server.dao.gen.domain.ImUserSingleRelation;
 import com.myim.server.message.bo.req.user.ApplyFriendReqBo;
 import com.myim.server.message.bo.req.user.FriendInfoReqBo;
 import com.myim.server.message.bo.req.user.FriendListInfoReqBo;
@@ -47,4 +48,9 @@ public interface UserService {
 	FriendListInfoRespBo friendListInfo(FriendListInfoReqBo friendListInfoReqBo);
 
 	FriendListInfoRespBo searchFriendListInfo(SearchFriendListInfoReqBo searchFriendListInfoReqBo);
+
+	/*************************消息使用*************************************/
+	ImUserSingleRelation getRelationByImUserIAndCategoryId(Long toFromUserId, Long categoryId);
+
+	ImUserSingleRelation getRelationByFromAndToId(Long fromImUserId, Long toImUserId);
 }

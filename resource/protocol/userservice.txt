@@ -25,5 +25,6 @@ user:UserMsgService:searchFriendListInfo&&loginNamePre=cj&&offset=0&&size=3
 消息：
 5.单聊发送信息
 single:SingleChatServiceImpl:sendSingleMessage&&fromLoginName=10000&&toLoginName=20000&&content={"ni":"hao"}&&key=u1000
-
+6.历史消息查询
+singleHis:SingleChatHisMsgServiceImpl:getSingleHisMsg&&fromImUserId=10000&&imUserCategoryId=20000&&toImUserId=20000L&&action=dodo&&page=1&&size=10&&lastId=
 
