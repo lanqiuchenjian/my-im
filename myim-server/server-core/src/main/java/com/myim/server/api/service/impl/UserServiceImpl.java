@@ -8,7 +8,7 @@ import com.myim.common.basepojo.BaseResponse;
 import com.myim.common.basepojo.ListBaseResponse;
 import com.myim.server.api.service.UserService;
 import com.myim.server.common.BeanCommon;
-import com.myim.server.constant.Constant;
+import com.myim.common.constant.Constant;
 import com.myim.server.dao.gen.domain.*;
 import com.myim.server.dao.gen.mapper.ImUserMapper;
 import com.myim.server.dao.gen.mapper.ImUserSingleCategoryMapper;

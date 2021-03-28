@@ -45,7 +45,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.myim.server.coder.AppMessageEncoder;
 import com.myim.server.coder.WebMessageEncoder;
-import com.myim.server.constant.CIMConstant;
+import com.myim.common.constant.CIMConstant;
 import com.myim.server.model.HeartbeatRequest;
 import com.myim.server.model.SentBody;
 

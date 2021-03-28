@@ -22,7 +22,7 @@
 package com.myim.server.model;
 
 
-import com.myim.server.constant.CIMConstant;
+import com.myim.common.constant.CIMConstant;
 
 import java.io.Serializable;
 

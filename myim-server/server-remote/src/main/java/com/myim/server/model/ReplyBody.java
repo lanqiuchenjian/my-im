@@ -21,7 +21,7 @@
  */
 package com.myim.server.model;
 
-import com.myim.server.constant.CIMConstant;
+import com.myim.common.constant.CIMConstant;
 import com.myim.server.model.proto.ReplyBodyProto;
 
 import java.io.Serializable;

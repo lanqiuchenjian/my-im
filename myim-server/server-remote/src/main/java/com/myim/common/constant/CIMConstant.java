@@ -19,7 +19,7 @@
  *                                                                                     *
  ***************************************************************************************
  */
-package com.myim.server.constant;
+package com.myim.common.constant;
 
 /**
  * 常量

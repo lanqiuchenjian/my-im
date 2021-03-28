@@ -225,123 +225,143 @@ public class ImOfflineMessageExample {
             return (Criteria) this;
         }
 
-        public Criteria andFromImUserIdIsNull() {
-            addCriterion("from_im_user_id is null");
+        public Criteria andToImUserLoginNameIsNull() {
+            addCriterion("to_im_user_login_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andFromImUserIdIsNotNull() {
-            addCriterion("from_im_user_id is not null");
+        public Criteria andToImUserLoginNameIsNotNull() {
+            addCriterion("to_im_user_login_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andFromImUserIdEqualTo(Long value) {
-            addCriterion("from_im_user_id =", value, "fromImUserId");
+        public Criteria andToImUserLoginNameEqualTo(String value) {
+            addCriterion("to_im_user_login_name =", value, "toImUserLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andFromImUserIdNotEqualTo(Long value) {
-            addCriterion("from_im_user_id <>", value, "fromImUserId");
+        public Criteria andToImUserLoginNameNotEqualTo(String value) {
+            addCriterion("to_im_user_login_name <>", value, "toImUserLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andFromImUserIdGreaterThan(Long value) {
-            addCriterion("from_im_user_id >", value, "fromImUserId");
+        public Criteria andToImUserLoginNameGreaterThan(String value) {
+            addCriterion("to_im_user_login_name >", value, "toImUserLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andFromImUserIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("from_im_user_id >=", value, "fromImUserId");
+        public Criteria andToImUserLoginNameGreaterThanOrEqualTo(String value) {
+            addCriterion("to_im_user_login_name >=", value, "toImUserLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andFromImUserIdLessThan(Long value) {
-            addCriterion("from_im_user_id <", value, "fromImUserId");
+        public Criteria andToImUserLoginNameLessThan(String value) {
+            addCriterion("to_im_user_login_name <", value, "toImUserLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andFromImUserIdLessThanOrEqualTo(Long value) {
-            addCriterion("from_im_user_id <=", value, "fromImUserId");
+        public Criteria andToImUserLoginNameLessThanOrEqualTo(String value) {
+            addCriterion("to_im_user_login_name <=", value, "toImUserLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andFromImUserIdIn(List<Long> values) {
-            addCriterion("from_im_user_id in", values, "fromImUserId");
+        public Criteria andToImUserLoginNameLike(String value) {
+            addCriterion("to_im_user_login_name like", value, "toImUserLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andFromImUserIdNotIn(List<Long> values) {
-            addCriterion("from_im_user_id not in", values, "fromImUserId");
+        public Criteria andToImUserLoginNameNotLike(String value) {
+            addCriterion("to_im_user_login_name not like", value, "toImUserLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andFromImUserIdBetween(Long value1, Long value2) {
-            addCriterion("from_im_user_id between", value1, value2, "fromImUserId");
+        public Criteria andToImUserLoginNameIn(List<String> values) {
+            addCriterion("to_im_user_login_name in", values, "toImUserLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andFromImUserIdNotBetween(Long value1, Long value2) {
-            addCriterion("from_im_user_id not between", value1, value2, "fromImUserId");
+        public Criteria andToImUserLoginNameNotIn(List<String> values) {
+            addCriterion("to_im_user_login_name not in", values, "toImUserLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andImMessageIdIsNull() {
-            addCriterion("im_message_id is null");
+        public Criteria andToImUserLoginNameBetween(String value1, String value2) {
+            addCriterion("to_im_user_login_name between", value1, value2, "toImUserLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andImMessageIdIsNotNull() {
-            addCriterion("im_message_id is not null");
+        public Criteria andToImUserLoginNameNotBetween(String value1, String value2) {
+            addCriterion("to_im_user_login_name not between", value1, value2, "toImUserLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andImMessageIdEqualTo(Long value) {
-            addCriterion("im_message_id =", value, "imMessageId");
+        public Criteria andFromImUserLoginNameIsNull() {
+            addCriterion("from_im_user_login_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andImMessageIdNotEqualTo(Long value) {
-            addCriterion("im_message_id <>", value, "imMessageId");
+        public Criteria andFromImUserLoginNameIsNotNull() {
+            addCriterion("from_im_user_login_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andImMessageIdGreaterThan(Long value) {
-            addCriterion("im_message_id >", value, "imMessageId");
+        public Criteria andFromImUserLoginNameEqualTo(String value) {
+            addCriterion("from_im_user_login_name =", value, "fromImUserLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andImMessageIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("im_message_id >=", value, "imMessageId");
+        public Criteria andFromImUserLoginNameNotEqualTo(String value) {
+            addCriterion("from_im_user_login_name <>", value, "fromImUserLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andImMessageIdLessThan(Long value) {
-            addCriterion("im_message_id <", value, "imMessageId");
+        public Criteria andFromImUserLoginNameGreaterThan(String value) {
+            addCriterion("from_im_user_login_name >", value, "fromImUserLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andImMessageIdLessThanOrEqualTo(Long value) {
-            addCriterion("im_message_id <=", value, "imMessageId");
+        public Criteria andFromImUserLoginNameGreaterThanOrEqualTo(String value) {
+            addCriterion("from_im_user_login_name >=", value, "fromImUserLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andImMessageIdIn(List<Long> values) {
-            addCriterion("im_message_id in", values, "imMessageId");
+        public Criteria andFromImUserLoginNameLessThan(String value) {
+            addCriterion("from_im_user_login_name <", value, "fromImUserLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andImMessageIdNotIn(List<Long> values) {
-            addCriterion("im_message_id not in", values, "imMessageId");
+        public Criteria andFromImUserLoginNameLessThanOrEqualTo(String value) {
+            addCriterion("from_im_user_login_name <=", value, "fromImUserLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andImMessageIdBetween(Long value1, Long value2) {
-            addCriterion("im_message_id between", value1, value2, "imMessageId");
+        public Criteria andFromImUserLoginNameLike(String value) {
+            addCriterion("from_im_user_login_name like", value, "fromImUserLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andImMessageIdNotBetween(Long value1, Long value2) {
-            addCriterion("im_message_id not between", value1, value2, "imMessageId");
+        public Criteria andFromImUserLoginNameNotLike(String value) {
+            addCriterion("from_im_user_login_name not like", value, "fromImUserLoginName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromImUserLoginNameIn(List<String> values) {
+            addCriterion("from_im_user_login_name in", values, "fromImUserLoginName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromImUserLoginNameNotIn(List<String> values) {
+            addCriterion("from_im_user_login_name not in", values, "fromImUserLoginName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromImUserLoginNameBetween(String value1, String value2) {
+            addCriterion("from_im_user_login_name between", value1, value2, "fromImUserLoginName");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromImUserLoginNameNotBetween(String value1, String value2) {
+            addCriterion("from_im_user_login_name not between", value1, value2, "fromImUserLoginName");
             return (Criteria) this;
         }
 
@@ -652,6 +672,126 @@ public class ImOfflineMessageExample {
 
         public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
             addCriterion("create_time not between", value1, value2, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andImMessageIdIsNull() {
+            addCriterion("im_message_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andImMessageIdIsNotNull() {
+            addCriterion("im_message_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andImMessageIdEqualTo(Long value) {
+            addCriterion("im_message_id =", value, "imMessageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andImMessageIdNotEqualTo(Long value) {
+            addCriterion("im_message_id <>", value, "imMessageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andImMessageIdGreaterThan(Long value) {
+            addCriterion("im_message_id >", value, "imMessageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andImMessageIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("im_message_id >=", value, "imMessageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andImMessageIdLessThan(Long value) {
+            addCriterion("im_message_id <", value, "imMessageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andImMessageIdLessThanOrEqualTo(Long value) {
+            addCriterion("im_message_id <=", value, "imMessageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andImMessageIdIn(List<Long> values) {
+            addCriterion("im_message_id in", values, "imMessageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andImMessageIdNotIn(List<Long> values) {
+            addCriterion("im_message_id not in", values, "imMessageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andImMessageIdBetween(Long value1, Long value2) {
+            addCriterion("im_message_id between", value1, value2, "imMessageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andImMessageIdNotBetween(Long value1, Long value2) {
+            addCriterion("im_message_id not between", value1, value2, "imMessageId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromImUserIdIsNull() {
+            addCriterion("from_im_user_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromImUserIdIsNotNull() {
+            addCriterion("from_im_user_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromImUserIdEqualTo(Long value) {
+            addCriterion("from_im_user_id =", value, "fromImUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromImUserIdNotEqualTo(Long value) {
+            addCriterion("from_im_user_id <>", value, "fromImUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromImUserIdGreaterThan(Long value) {
+            addCriterion("from_im_user_id >", value, "fromImUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromImUserIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("from_im_user_id >=", value, "fromImUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromImUserIdLessThan(Long value) {
+            addCriterion("from_im_user_id <", value, "fromImUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromImUserIdLessThanOrEqualTo(Long value) {
+            addCriterion("from_im_user_id <=", value, "fromImUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromImUserIdIn(List<Long> values) {
+            addCriterion("from_im_user_id in", values, "fromImUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromImUserIdNotIn(List<Long> values) {
+            addCriterion("from_im_user_id not in", values, "fromImUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromImUserIdBetween(Long value1, Long value2) {
+            addCriterion("from_im_user_id between", value1, value2, "fromImUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromImUserIdNotBetween(Long value1, Long value2) {
+            addCriterion("from_im_user_id not between", value1, value2, "fromImUserId");
             return (Criteria) this;
         }
     }

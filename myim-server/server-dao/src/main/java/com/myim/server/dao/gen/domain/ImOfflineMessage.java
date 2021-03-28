@@ -8,9 +8,9 @@ public class ImOfflineMessage implements Serializable {
 
     private Long toImUserId;
 
-    private Long fromImUserId;
+    private String toImUserLoginName;
 
-    private Long imMessageId;
+    private String fromImUserLoginName;
 
     private Long offlineMesCount;
 
@@ -21,6 +21,10 @@ public class ImOfflineMessage implements Serializable {
     private Date updateTime;
 
     private Date createTime;
+
+    private Long imMessageId;
+
+    private Long fromImUserId;
 
     private static final long serialVersionUID = 1L;
 
@@ -40,20 +44,20 @@ public class ImOfflineMessage implements Serializable {
         this.toImUserId = toImUserId;
     }
 
-    public Long getFromImUserId() {
-        return fromImUserId;
+    public String getToImUserLoginName() {
+        return toImUserLoginName;
     }
 
-    public void setFromImUserId(Long fromImUserId) {
-        this.fromImUserId = fromImUserId;
+    public void setToImUserLoginName(String toImUserLoginName) {
+        this.toImUserLoginName = toImUserLoginName;
     }
 
-    public Long getImMessageId() {
-        return imMessageId;
+    public String getFromImUserLoginName() {
+        return fromImUserLoginName;
     }
 
-    public void setImMessageId(Long imMessageId) {
-        this.imMessageId = imMessageId;
+    public void setFromImUserLoginName(String fromImUserLoginName) {
+        this.fromImUserLoginName = fromImUserLoginName;
     }
 
     public Long getOfflineMesCount() {
@@ -96,6 +100,22 @@ public class ImOfflineMessage implements Serializable {
         this.createTime = createTime;
     }
 
+    public Long getImMessageId() {
+        return imMessageId;
+    }
+
+    public void setImMessageId(Long imMessageId) {
+        this.imMessageId = imMessageId;
+    }
+
+    public Long getFromImUserId() {
+        return fromImUserId;
+    }
+
+    public void setFromImUserId(Long fromImUserId) {
+        this.fromImUserId = fromImUserId;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -104,13 +124,15 @@ public class ImOfflineMessage implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", toImUserId=").append(toImUserId);
-        sb.append(", fromImUserId=").append(fromImUserId);
-        sb.append(", imMessageId=").append(imMessageId);
+        sb.append(", toImUserLoginName=").append(toImUserLoginName);
+        sb.append(", fromImUserLoginName=").append(fromImUserLoginName);
         sb.append(", offlineMesCount=").append(offlineMesCount);
         sb.append(", isOffline=").append(isOffline);
         sb.append(", extra=").append(extra);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", createTime=").append(createTime);
+        sb.append(", imMessageId=").append(imMessageId);
+        sb.append(", fromImUserId=").append(fromImUserId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

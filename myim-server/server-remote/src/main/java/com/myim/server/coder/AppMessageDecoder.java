@@ -25,7 +25,7 @@ import com.myim.server.model.HeartbeatResponse;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import com.myim.server.constant.CIMConstant;
+import com.myim.common.constant.CIMConstant;
 import com.myim.server.model.SentBody;
 import com.myim.server.model.proto.SentBodyProto;
 

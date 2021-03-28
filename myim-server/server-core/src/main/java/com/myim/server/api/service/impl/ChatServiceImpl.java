@@ -3,9 +3,10 @@ package com.myim.server.api.service.impl;
 import com.myim.common.basepojo.BaseResponse;
 import com.myim.server.api.service.ChatService;
 import com.myim.server.common.DefaultFuture;
-import com.myim.server.constant.Constant;
+import com.myim.common.constant.Constant;
 import com.myim.server.dao.gen.domain.*;
 import com.myim.server.dao.gen.mapper.ImMessageMapper;
+import com.myim.server.dao.gen.mapper.ImOfflineMessageMapper;
 import com.myim.server.dao.gen.mapper.ImUserSingleCategoryMapper;
 import com.myim.server.dao.gen.mapper.ImUserSingleRelationMapper;
 import com.myim.server.message.bo.req.chat.single.SingleMessageReqBo;
@@ -40,6 +41,9 @@ public class ChatServiceImpl implements ChatService {
     private ImMessageMapper imMessageMapper;
 
     @Autowired
+    private ImOfflineMessageMapper imOfflineMessageMapper;
+
+    @Autowired
     private MqInstance mqInstance;
 
     @Override
@@ -58,7 +62,45 @@ public class ChatServiceImpl implements ChatService {
                 mqInstance.sendMsg(singleMessageReqBo, hostName);
             } else {
                 //不在线，则存储离线消息，保存未读的最早一条消息id到离线表
+                ImMessage imMessage = saveMes(singleMessageReqBo);
+                imMessage.setTitle("offline");
+                imMessageMapper.insertSelective(imMessage);
 
+                //保存最早的一条离线记录到离线表中
+                ImOfflineMessageExample imOfflineMessageExample = new ImOfflineMessageExample();
+
+                imOfflineMessageExample.createCriteria()
+                        .andIsOfflineEqualTo(true)
+                        .andFromImUserIdEqualTo(singleMessageReqBo.getFromImUserId())
+                        .andToImUserIdEqualTo(singleMessageReqBo.getToImUserId());
+
+                List<ImOfflineMessage> imOfflineMessages = imOfflineMessageMapper.selectByExample(imOfflineMessageExample);
+                //不存在离线消息，则新增一条,存在则更新count条数
+                if (imOfflineMessages == null || imOfflineMessages.size() == 0) {
+                    ImOfflineMessage imOfflineMessage = new ImOfflineMessage();
+
+                    imOfflineMessage.setFromImUserId(singleMessageReqBo.getFromImUserId());
+                    imOfflineMessage.setFromImUserLoginName(singleMessageReqBo.getFromLoginName());
+                    imOfflineMessage.setToImUserId(singleMessageReqBo.getToImUserId());
+                    imOfflineMessage.setToImUserLoginName(singleMessageReqBo.getToLoginName());
+                    imOfflineMessage.setIsOffline(true);
+                    imOfflineMessage.setOfflineMesCount(1L);
+                    imOfflineMessage.setImMessageId(imMessage.getId());
+
+                    imOfflineMessageMapper.insertSelective(imOfflineMessage);
+                } else {
+                    ImOfflineMessage iolm = imOfflineMessages.get(0);
+
+                    Long count = iolm.getOfflineMesCount();
+                    Long offlineId = iolm.getId();
+
+                    ImOfflineMessage imOfflineMessage = new ImOfflineMessage();
+
+                    imOfflineMessage.setId(offlineId);
+                    imOfflineMessage.setOfflineMesCount(1L + count);
+
+                    imOfflineMessageMapper.updateByPrimaryKeySelective(imOfflineMessage);
+                }
             }
         }
         return BaseResponse.success(new SingleMessageRespBo());
@@ -110,7 +152,7 @@ public class ChatServiceImpl implements ChatService {
         imMessage.setmRepeat("0");
         //TODO: 0:正常 1：发送者删除 2：接收者删除 3:撤销
         imMessage.setmStatus(0);
-        imMessage.setTitle("");
+        imMessage.setTitle("online");
         //TODO: 新增是否是离线消息，新建离线消息表，保持最后一条记录id
         imMessage.setmTimestamp(new Date(singleMessageReqBo.getTimestamp()));
         return imMessage;

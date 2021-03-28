@@ -82,25 +82,42 @@
 //                        $("#userList").append("<div class='alert alert-info' onclick='newChatWin(\"" + loginName + "\"," + this + ")' onmouseover='friendInfo(\"" + loginName + "\")'>" + loginName + "</div>");
                         $("#userList").append("<div class='alert " + loginName + " alert-info user-list' onclick='newChatWin(" + JSON.stringify(jsonReply[i]) + ")' onmouseover='friendInfo(\"" + loginName + "\")'>" + loginName + "</div>");
                     }
+                    getOfflineMes();
                 }else if (parse.serviceType === "getSingleHisMsg") {
                     if (jsonReply.length == 0) {
+                        if ($("#moreTag")[0] != null)
+                            $("#moreTag").remove();
+
                         $("#messageList").prepend("<h6 style='text-align: center;'>无更多历史消息</h6>");
                     } else {
                         for (var i in jsonReply) {
                             var loginName = jsonReply[i].sender;
                             if (loginName == $('#account').val()) {
-                                $("#messageList").prepend("<h6 style='text-align: right;'>" + "自己:" + $('#account').val() + " 时间:" + jsonReply[i].mTimestamp.toLocaleString() + "</h6>");
                                 $("#messageList").prepend("<div style='text-align: right;' class='alert alert-info' >" + jsonReply[i].content + "</div>");
+                                $("#messageList").prepend("<h6 style='text-align: right;'>" + "自己:" + $('#account').val() + " 时间:" + jsonReply[i].mTimestamp.toLocaleString() + "</h6>");
                             } else {
-                                $("#messageList").prepend("<h6 style='text-align: left;'>" + "对方:" + jsonReply[i].sender + " 时间:" + jsonReply[i].mTimestamp.toLocaleString() + "</h6>");
                                 $("#messageList").prepend("<div class='alert alert-info' >" + jsonReply[i].content + "</div>");
+                                $("#messageList").prepend("<h6 style='text-align: left;'>" + "对方:" + jsonReply[i].sender + " 时间:" + jsonReply[i].mTimestamp.toLocaleString() + "</h6>");
                             }
                         }
                         //存储最早的一条记录id
-                        msgLastIdMap[singleChatToName] = jsonReply[0].id + ""
-                        $("#messageList").append("<h6 style='text-align: center;' onclick='getHisMes()'>点击加载更多历史消息</h6>");
+                        msgLastIdMap[singleChatToName] = jsonReply[jsonReply.length - 1].id + ""
+
+                        if ($("#moreTag")[0] == null)
+                            $("#messageList").prepend("<h6 id='moreTag' style='text-align: center;' onclick='getHisMes()'>点击加载更多历史消息</h6>");
+                        else {
+                            $("#moreTag").remove();
+                            $("#messageList").prepend("<h6 id='moreTag' style='text-align: center;' onclick='getHisMes()'>点击加载更多历史消息</h6>");
+                        }
                     }
-                } else {
+                } else if(parse.serviceType === "getSingleOfflineMsg"){
+                    console.log(parse)
+                    // for (var i in jsonReply) {
+                    //     if($("." + name).hasClass("red")){
+                    //
+                    //     }
+                    // }
+                }else {
                     console.log("send ok")
                 }
             }
@@ -145,6 +162,18 @@
         CIMPushManager.sendRequest(body);
     }
 
+    function getOfflineMes() {
+        //singleOffline:SingleChatHisMsgServiceImpl:getSingleOfflineMsg&&imUserId=&&imUserLoginName=
+        let body = new proto.com.myim.web.model.SentBody();
+        body.setKey(guid());
+        body.setTimestamp(new Date().getTime());
+        body.getDataMap().set("action", "singleHis:SingleChatHisMsgServiceImpl:getSingleOfflineMsg");
+        body.getDataMap().set("imUserId", userId);
+        body.getDataMap().set("imUserLoginName", $('#account').val() + "");
+        body.getDataMap().set("type", CLIENT_PUSH);
+        CIMPushManager.sendRequest(body);
+    }
+
     function newChatWin(user) {
         console.log("好友名字,新的聊天窗口:" + name);
         var imUser = eval(user);
@@ -152,6 +181,7 @@
 
         //清空聊天窗口
         $('#messageList').html("");
+        msgLastIdMap = {};
 
         //broadcast
         if($("." + name).hasClass("red")){

@@ -28,14 +28,16 @@ public interface ImOfflineMessageMapper {
     int deleteByPrimaryKey(Long id);
 
     @Insert({
-        "insert into im_offline_message (to_im_user_id, from_im_user_id, ",
-        "im_message_id, offline_mes_count, ",
+        "insert into im_offline_message (to_im_user_id, to_im_user_login_name, ",
+        "from_im_user_login_name, offline_mes_count, ",
         "is_offline, extra, update_time, ",
-        "create_time)",
-        "values (#{toImUserId,jdbcType=BIGINT}, #{fromImUserId,jdbcType=BIGINT}, ",
-        "#{imMessageId,jdbcType=BIGINT}, #{offlineMesCount,jdbcType=BIGINT}, ",
+        "create_time, im_message_id, ",
+        "from_im_user_id)",
+        "values (#{toImUserId,jdbcType=BIGINT}, #{toImUserLoginName,jdbcType=CHAR}, ",
+        "#{fromImUserLoginName,jdbcType=CHAR}, #{offlineMesCount,jdbcType=BIGINT}, ",
         "#{isOffline,jdbcType=BIT}, #{extra,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, ",
-        "#{createTime,jdbcType=TIMESTAMP})"
+        "#{createTime,jdbcType=TIMESTAMP}, #{imMessageId,jdbcType=BIGINT}, ",
+        "#{fromImUserId,jdbcType=BIGINT})"
     })
     @Options(useGeneratedKeys=true,keyProperty="id")
     int insert(ImOfflineMessage record);
@@ -48,33 +50,37 @@ public interface ImOfflineMessageMapper {
     @Results({
         @Result(column="id", property="id", jdbcType=JdbcType.BIGINT, id=true),
         @Result(column="to_im_user_id", property="toImUserId", jdbcType=JdbcType.BIGINT),
-        @Result(column="from_im_user_id", property="fromImUserId", jdbcType=JdbcType.BIGINT),
-        @Result(column="im_message_id", property="imMessageId", jdbcType=JdbcType.BIGINT),
+        @Result(column="to_im_user_login_name", property="toImUserLoginName", jdbcType=JdbcType.CHAR),
+        @Result(column="from_im_user_login_name", property="fromImUserLoginName", jdbcType=JdbcType.CHAR),
         @Result(column="offline_mes_count", property="offlineMesCount", jdbcType=JdbcType.BIGINT),
         @Result(column="is_offline", property="isOffline", jdbcType=JdbcType.BIT),
         @Result(column="extra", property="extra", jdbcType=JdbcType.VARCHAR),
         @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP),
-        @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP)
+        @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
+        @Result(column="im_message_id", property="imMessageId", jdbcType=JdbcType.BIGINT),
+        @Result(column="from_im_user_id", property="fromImUserId", jdbcType=JdbcType.BIGINT)
     })
     List<ImOfflineMessage> selectByExample(ImOfflineMessageExample example);
 
     @Select({
         "select",
-        "id, to_im_user_id, from_im_user_id, im_message_id, offline_mes_count, is_offline, ",
-        "extra, update_time, create_time",
+        "id, to_im_user_id, to_im_user_login_name, from_im_user_login_name, offline_mes_count, ",
+        "is_offline, extra, update_time, create_time, im_message_id, from_im_user_id",
         "from im_offline_message",
         "where id = #{id,jdbcType=BIGINT}"
     })
     @Results({
         @Result(column="id", property="id", jdbcType=JdbcType.BIGINT, id=true),
         @Result(column="to_im_user_id", property="toImUserId", jdbcType=JdbcType.BIGINT),
-        @Result(column="from_im_user_id", property="fromImUserId", jdbcType=JdbcType.BIGINT),
-        @Result(column="im_message_id", property="imMessageId", jdbcType=JdbcType.BIGINT),
+        @Result(column="to_im_user_login_name", property="toImUserLoginName", jdbcType=JdbcType.CHAR),
+        @Result(column="from_im_user_login_name", property="fromImUserLoginName", jdbcType=JdbcType.CHAR),
         @Result(column="offline_mes_count", property="offlineMesCount", jdbcType=JdbcType.BIGINT),
         @Result(column="is_offline", property="isOffline", jdbcType=JdbcType.BIT),
         @Result(column="extra", property="extra", jdbcType=JdbcType.VARCHAR),
         @Result(column="update_time", property="updateTime", jdbcType=JdbcType.TIMESTAMP),
-        @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP)
+        @Result(column="create_time", property="createTime", jdbcType=JdbcType.TIMESTAMP),
+        @Result(column="im_message_id", property="imMessageId", jdbcType=JdbcType.BIGINT),
+        @Result(column="from_im_user_id", property="fromImUserId", jdbcType=JdbcType.BIGINT)
     })
     ImOfflineMessage selectByPrimaryKey(Long id);
 
@@ -90,13 +96,15 @@ public interface ImOfflineMessageMapper {
     @Update({
         "update im_offline_message",
         "set to_im_user_id = #{toImUserId,jdbcType=BIGINT},",
-          "from_im_user_id = #{fromImUserId,jdbcType=BIGINT},",
-          "im_message_id = #{imMessageId,jdbcType=BIGINT},",
+          "to_im_user_login_name = #{toImUserLoginName,jdbcType=CHAR},",
+          "from_im_user_login_name = #{fromImUserLoginName,jdbcType=CHAR},",
           "offline_mes_count = #{offlineMesCount,jdbcType=BIGINT},",
           "is_offline = #{isOffline,jdbcType=BIT},",
           "extra = #{extra,jdbcType=VARCHAR},",
           "update_time = #{updateTime,jdbcType=TIMESTAMP},",
-          "create_time = #{createTime,jdbcType=TIMESTAMP}",
+          "create_time = #{createTime,jdbcType=TIMESTAMP},",
+          "im_message_id = #{imMessageId,jdbcType=BIGINT},",
+          "from_im_user_id = #{fromImUserId,jdbcType=BIGINT}",
         "where id = #{id,jdbcType=BIGINT}"
     })
     int updateByPrimaryKey(ImOfflineMessage record);

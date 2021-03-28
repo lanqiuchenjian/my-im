@@ -1,6 +1,6 @@
 package com.myim.server.config;
 
-import com.myim.server.constant.Constant;
+import com.myim.common.constant.Constant;
 import com.myim.server.handler.CIMNioSocketAcceptor;
 import com.myim.server.handler.CIMRequestHandler;
 import com.myim.server.message.handler.BindHandler;

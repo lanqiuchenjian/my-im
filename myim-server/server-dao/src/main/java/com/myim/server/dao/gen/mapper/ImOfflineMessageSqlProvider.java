@@ -25,12 +25,12 @@ public class ImOfflineMessageSqlProvider {
             sql.VALUES("to_im_user_id", "#{toImUserId,jdbcType=BIGINT}");
         }
         
-        if (record.getFromImUserId() != null) {
-            sql.VALUES("from_im_user_id", "#{fromImUserId,jdbcType=BIGINT}");
+        if (record.getToImUserLoginName() != null) {
+            sql.VALUES("to_im_user_login_name", "#{toImUserLoginName,jdbcType=CHAR}");
         }
         
-        if (record.getImMessageId() != null) {
-            sql.VALUES("im_message_id", "#{imMessageId,jdbcType=BIGINT}");
+        if (record.getFromImUserLoginName() != null) {
+            sql.VALUES("from_im_user_login_name", "#{fromImUserLoginName,jdbcType=CHAR}");
         }
         
         if (record.getOfflineMesCount() != null) {
@@ -53,6 +53,14 @@ public class ImOfflineMessageSqlProvider {
             sql.VALUES("create_time", "#{createTime,jdbcType=TIMESTAMP}");
         }
         
+        if (record.getImMessageId() != null) {
+            sql.VALUES("im_message_id", "#{imMessageId,jdbcType=BIGINT}");
+        }
+        
+        if (record.getFromImUserId() != null) {
+            sql.VALUES("from_im_user_id", "#{fromImUserId,jdbcType=BIGINT}");
+        }
+        
         return sql.toString();
     }
 
@@ -64,13 +72,15 @@ public class ImOfflineMessageSqlProvider {
             sql.SELECT("id");
         }
         sql.SELECT("to_im_user_id");
-        sql.SELECT("from_im_user_id");
-        sql.SELECT("im_message_id");
+        sql.SELECT("to_im_user_login_name");
+        sql.SELECT("from_im_user_login_name");
         sql.SELECT("offline_mes_count");
         sql.SELECT("is_offline");
         sql.SELECT("extra");
         sql.SELECT("update_time");
         sql.SELECT("create_time");
+        sql.SELECT("im_message_id");
+        sql.SELECT("from_im_user_id");
         sql.FROM("im_offline_message");
         applyWhere(sql, example, false);
         
@@ -96,12 +106,12 @@ public class ImOfflineMessageSqlProvider {
             sql.SET("to_im_user_id = #{record.toImUserId,jdbcType=BIGINT}");
         }
         
-        if (record.getFromImUserId() != null) {
-            sql.SET("from_im_user_id = #{record.fromImUserId,jdbcType=BIGINT}");
+        if (record.getToImUserLoginName() != null) {
+            sql.SET("to_im_user_login_name = #{record.toImUserLoginName,jdbcType=CHAR}");
         }
         
-        if (record.getImMessageId() != null) {
-            sql.SET("im_message_id = #{record.imMessageId,jdbcType=BIGINT}");
+        if (record.getFromImUserLoginName() != null) {
+            sql.SET("from_im_user_login_name = #{record.fromImUserLoginName,jdbcType=CHAR}");
         }
         
         if (record.getOfflineMesCount() != null) {
@@ -124,6 +134,14 @@ public class ImOfflineMessageSqlProvider {
             sql.SET("create_time = #{record.createTime,jdbcType=TIMESTAMP}");
         }
         
+        if (record.getImMessageId() != null) {
+            sql.SET("im_message_id = #{record.imMessageId,jdbcType=BIGINT}");
+        }
+        
+        if (record.getFromImUserId() != null) {
+            sql.SET("from_im_user_id = #{record.fromImUserId,jdbcType=BIGINT}");
+        }
+        
         applyWhere(sql, example, true);
         return sql.toString();
     }
@@ -134,13 +152,15 @@ public class ImOfflineMessageSqlProvider {
         
         sql.SET("id = #{record.id,jdbcType=BIGINT}");
         sql.SET("to_im_user_id = #{record.toImUserId,jdbcType=BIGINT}");
-        sql.SET("from_im_user_id = #{record.fromImUserId,jdbcType=BIGINT}");
-        sql.SET("im_message_id = #{record.imMessageId,jdbcType=BIGINT}");
+        sql.SET("to_im_user_login_name = #{record.toImUserLoginName,jdbcType=CHAR}");
+        sql.SET("from_im_user_login_name = #{record.fromImUserLoginName,jdbcType=CHAR}");
         sql.SET("offline_mes_count = #{record.offlineMesCount,jdbcType=BIGINT}");
         sql.SET("is_offline = #{record.isOffline,jdbcType=BIT}");
         sql.SET("extra = #{record.extra,jdbcType=VARCHAR}");
         sql.SET("update_time = #{record.updateTime,jdbcType=TIMESTAMP}");
         sql.SET("create_time = #{record.createTime,jdbcType=TIMESTAMP}");
+        sql.SET("im_message_id = #{record.imMessageId,jdbcType=BIGINT}");
+        sql.SET("from_im_user_id = #{record.fromImUserId,jdbcType=BIGINT}");
         
         ImOfflineMessageExample example = (ImOfflineMessageExample) parameter.get("example");
         applyWhere(sql, example, true);
@@ -155,12 +175,12 @@ public class ImOfflineMessageSqlProvider {
             sql.SET("to_im_user_id = #{toImUserId,jdbcType=BIGINT}");
         }
         
-        if (record.getFromImUserId() != null) {
-            sql.SET("from_im_user_id = #{fromImUserId,jdbcType=BIGINT}");
+        if (record.getToImUserLoginName() != null) {
+            sql.SET("to_im_user_login_name = #{toImUserLoginName,jdbcType=CHAR}");
         }
         
-        if (record.getImMessageId() != null) {
-            sql.SET("im_message_id = #{imMessageId,jdbcType=BIGINT}");
+        if (record.getFromImUserLoginName() != null) {
+            sql.SET("from_im_user_login_name = #{fromImUserLoginName,jdbcType=CHAR}");
         }
         
         if (record.getOfflineMesCount() != null) {
@@ -181,6 +201,14 @@ public class ImOfflineMessageSqlProvider {
         
         if (record.getCreateTime() != null) {
             sql.SET("create_time = #{createTime,jdbcType=TIMESTAMP}");
+        }
+        
+        if (record.getImMessageId() != null) {
+            sql.SET("im_message_id = #{imMessageId,jdbcType=BIGINT}");
+        }
+        
+        if (record.getFromImUserId() != null) {
+            sql.SET("from_im_user_id = #{fromImUserId,jdbcType=BIGINT}");
         }
         
         sql.WHERE("id = #{id,jdbcType=BIGINT}");

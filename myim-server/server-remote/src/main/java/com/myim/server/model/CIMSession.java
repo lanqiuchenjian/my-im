@@ -24,7 +24,7 @@ package com.myim.server.model;
 import com.google.protobuf.InvalidProtocolBufferException;
 import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
-import com.myim.server.constant.CIMConstant;
+import com.myim.common.constant.CIMConstant;
 import com.myim.server.model.proto.SessionProto;
 
 import java.io.Serializable;

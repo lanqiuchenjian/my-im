@@ -1,6 +1,6 @@
 package com.myim.server.redis;
 
-import com.myim.server.constant.Constant;
+import com.myim.common.constant.Constant;
 import com.myim.server.BaseTest;
 import com.myim.server.dao.gen.domain.ImUser;
 import com.myim.server.dao.gen.domain.ImUserExample;

@@ -2,7 +2,7 @@ package com.myim.server.message.handler;
 
 import com.google.gson.Gson;
 import com.myim.server.common.DefaultFuture;
-import com.myim.server.constant.Constant;
+import com.myim.common.constant.Constant;
 import com.myim.common.enumm.CodeMsgEnum;
 import com.myim.common.exception.BaseException;
 import com.myim.common.exception.system.PushMessageException;

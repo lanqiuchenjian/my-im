@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import com.myim.server.constant.CIMConstant;
+import com.myim.common.constant.CIMConstant;
 import com.myim.server.model.CIMSession;
 import com.myim.server.model.Message;
 import com.myim.server.model.ReplyBody;
