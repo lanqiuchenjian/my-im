@@ -27,6 +27,7 @@
     var msgPage = "0";
     var msgSize = "10";
     var msgLastIdMap = {}
+    var offlineMsg = {}
 
     /***********************************推送配置开始**************************/
 
@@ -79,8 +80,7 @@
                     $('#userList').html("")
                     for (var i in jsonReply) {
                         var loginName = jsonReply[i].loginName;
-//                        $("#userList").append("<div class='alert alert-info' onclick='newChatWin(\"" + loginName + "\"," + this + ")' onmouseover='friendInfo(\"" + loginName + "\")'>" + loginName + "</div>");
-                        $("#userList").append("<div class='alert " + loginName + " alert-info user-list' onclick='newChatWin(" + JSON.stringify(jsonReply[i]) + ")' onmouseover='friendInfo(\"" + loginName + "\")'>" + loginName + "</div>");
+                        $("#userList").append("<div class='alert " + loginName + ' offline_' + loginName + " alert-info user-list' onclick='newChatWin(" + JSON.stringify(jsonReply[i]) + ")' onmouseover='friendInfo(\"" + loginName + "\")'>" + loginName + "</div>");
                     }
                     getOfflineMes();
                 }else if (parse.serviceType === "getSingleHisMsg") {
@@ -112,11 +112,17 @@
                     }
                 } else if(parse.serviceType === "getSingleOfflineMsg"){
                     console.log(parse)
-                    // for (var i in jsonReply) {
-                    //     if($("." + name).hasClass("red")){
-                    //
-                    //     }
-                    // }
+                     for (var i in jsonReply) {
+//                         if($("." + "offline_" + i.toImUserLoginName).hasClass(singleChatToName)){
+//                             for (var j in jsonReply[i].list) {
+//                                 $("#messageList").append("<h6 style='text-align: left;'>" + "对方:" + jsonReply[i].list[j].sender + " 时间:" + new Date(jsonReply[i].list[j].timestamp).toLocaleString() + "</h6>");
+//                                 $("#messageList").append("<div class='alert alert-info' >" + jsonReply[i].list[j].content + "</div>");
+//                             }
+//                         } else {
+                             offlineMsg[jsonReply[i].toImUserLoginName] = jsonReply[i].list;
+                             $("." + "offline_" + jsonReply[i].toImUserLoginName).append("  " + jsonReply[i].count + "条未读")
+//                         }
+                    }
                 }else {
                     console.log("send ok")
                 }
@@ -186,6 +192,7 @@
         //broadcast
         if($("." + name).hasClass("red")){
             $("." + name).removeClass("red");
+            $("#messageList").removeClass("offline_" + singleChatToName);
             singleChatToName = ''
             singleChatToId  = ''
         }else{
@@ -195,8 +202,23 @@
             $("." + name).addClass("red");
             singleChatToName = name;
             singleChatToId = imUser.imUserId + "";
-            //获取聊天信息
-            getHisMes();
+            if (offlineMsg[singleChatToName] == null || offlineMsg[singleChatToName] == undefined) {
+                //获取聊天信息
+                getHisMes();
+            } else {
+                $("#messageList").append("<h6 id='moreTag' style='text-align: center;' onclick='getHisMes()'>点击加载更多历史消息</h6>");
+                //获取离线消息
+                var offlineMessage = offlineMsg[singleChatToName];
+                for (var j in offlineMessage) {
+                    $("#messageList").append("<h6 style='text-align: left;'>" + "对方:" + offlineMessage[j].sender + " 时间:" + new Date(offlineMessage[j].mTimestamp).toLocaleString() + "</h6>");
+                    $("#messageList").append("<div class='alert alert-info' >" + offlineMessage[j].content + "</div>");
+                }
+                offlineMsg[singleChatToName] = null
+                msgLastIdMap[singleChatToName] = offlineMessage[0].id + "";
+                $("." + "offline_" + singleChatToName).html("")
+                $("." + "offline_" + singleChatToName).append(singleChatToName)
+                $("#messageList").removeClass("offline_" + name);
+            }
         }
     }
 

@@ -1,6 +1,5 @@
 package com.myim.server.api.service.impl;
 
-import com.myim.common.basepojo.BaseResponse;
 import com.myim.common.basepojo.ListBaseResponse;
 import com.myim.server.api.service.ChatHistoryService;
 import com.myim.server.api.service.UserService;
@@ -99,9 +98,10 @@ public class ChatHistoryServiceImpl implements ChatHistoryService {
                 boList.add(bo);
             });
 
+//            boList.sort(Comparator.comparing(MessageBo::getId).reversed());
             offlineMessageBo.setList(boList);
             offlineMessageBo.setCount(i.getOfflineMesCount());
-            offlineMessageBo.setToImUserLoginName(i.getToImUserLoginName());
+            offlineMessageBo.setToImUserLoginName(i.getFromImUserLoginName());
 
             offlineMessageBos.add(offlineMessageBo);
         });
