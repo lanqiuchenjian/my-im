@@ -209,10 +209,19 @@
                 $("#messageList").append("<h6 id='moreTag' style='text-align: center;' onclick='getHisMes()'>点击加载更多历史消息</h6>");
                 //获取离线消息
                 var offlineMessage = offlineMsg[singleChatToName];
+                var jumpId = '';
                 for (var j in offlineMessage) {
+                    if (j == 0) {
+                        jumpId = "jumpId_" + offlineMessage[j].sender;
+                        $("#messageList").append("<h6 id='" + jumpId + "'style='text-align: left;'>" + "对方:" + offlineMessage[j].sender + " 时间:" + new Date(offlineMessage[j].mTimestamp).toLocaleString() + "</h6>");
+                    }
                     $("#messageList").append("<h6 style='text-align: left;'>" + "对方:" + offlineMessage[j].sender + " 时间:" + new Date(offlineMessage[j].mTimestamp).toLocaleString() + "</h6>");
                     $("#messageList").append("<div class='alert alert-info' >" + offlineMessage[j].content + "</div>");
                 }
+                //添加一个标签，点击跳到离线第一条消息
+                var jumpIdHref = "#" + jumpId
+                $("#messageList").append("<h6 id='jumpToFirst' href='" + jumpIdHref + "' style='text-align: right;' onclick='jumpToFirst()'>最早一条</h6>");
+
                 offlineMsg[singleChatToName] = null
                 msgLastIdMap[singleChatToName] = offlineMessage[0].id + "";
                 $("." + "offline_" + singleChatToName).html("")
@@ -220,6 +229,10 @@
                 $("#messageList").removeClass("offline_" + name);
             }
         }
+    }
+
+    function jumpToFirst() {
+        $("#jumpToFirst").remove();
     }
 
     function friendInfo(name) {

@@ -6,7 +6,13 @@ import com.myim.cluster.service.ImServerService;
 import com.myim.common.basepojo.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -19,5 +25,28 @@ public class ImServerController {
 	public ResponseEntity<ImServerRespDto> getTargetServerInfo(@RequestBody ImServerReqDto imServerReqDto)  {
 		ImServerRespDto targetServerInfo = imServerService.getTargetServerInfo(imServerReqDto);
 		return ResponseEntity.ok(BaseResponse.success(targetServerInfo));
+	}
+
+	@PostMapping(value = "/target/one")
+	public OneR one(@RequestBody One one)  {
+		System.out.println("one===" + one);
+		OneR oneR = new OneR();
+
+		List<String> res = new ArrayList<>();
+		res.add("success");
+		res.add("fail");
+		oneR.setStatus(res);
+		return oneR;
+	}
+
+	@PostMapping(value = "/target/two")
+	public TwoR two(@RequestBody Two two)  {
+		System.out.println("two===" + two);
+		TwoR twoR = new TwoR();
+		List<String> list = new ArrayList<>();
+		list.add("res1");
+		list.add("res2");
+		twoR.setApiRes(list);
+		return twoR;
 	}
 }

@@ -76,6 +76,13 @@ public class ChatHistoryServiceImpl implements ChatHistoryService {
                 .andIsOfflineEqualTo(true);
 
         List<ImOfflineMessage> imOfflineMessages = imOfflineMessageMapper.selectByExample(imOfflineMessageExample);
+        //异步更新离线消息以处理
+        new Thread(() -> imOfflineMessages.forEach(i -> {
+            ImOfflineMessage imOfflineMessage = new ImOfflineMessage();
+            imOfflineMessage.setId(i.getId());
+            imOfflineMessage.setIsOffline(false);
+            imOfflineMessageMapper.updateByPrimaryKeySelective(imOfflineMessage);
+        })).start();
 
         List<OfflineMessageBo> offlineMessageBos = new ArrayList<>();
         imOfflineMessages.forEach(i -> {
