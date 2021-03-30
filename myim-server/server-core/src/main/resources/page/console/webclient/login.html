@@ -103,8 +103,10 @@
                         //存储最早的一条记录id
                         msgLastIdMap[singleChatToName] = jsonReply[jsonReply.length - 1].id + ""
 
-                        if ($("#moreTag")[0] == null)
+                        if ($("#moreTag")[0] == null) {
                             $("#messageList").prepend("<h6 id='moreTag' style='text-align: center;' onclick='getHisMes()'>点击加载更多历史消息</h6>");
+                            $('#messageList').scrollTop( $('#messageList')[0].scrollHeight )
+                        }
                         else {
                             $("#moreTag").remove();
                             $("#messageList").prepend("<h6 id='moreTag' style='text-align: center;' onclick='getHisMes()'>点击加载更多历史消息</h6>");
@@ -214,8 +216,10 @@
                     if (j == 0) {
                         jumpId = "jumpId_" + offlineMessage[j].sender;
                         $("#messageList").append("<h6 id='" + jumpId + "'style='text-align: left;'>" + "对方:" + offlineMessage[j].sender + " 时间:" + new Date(offlineMessage[j].mTimestamp).toLocaleString() + "</h6>");
+                    } else {
+                        $("#messageList").append("<h6 style='text-align: left;'>" + "对方:" + offlineMessage[j].sender + " 时间:" + new Date(offlineMessage[j].mTimestamp).toLocaleString() + "</h6>");
                     }
-                    $("#messageList").append("<h6 style='text-align: left;'>" + "对方:" + offlineMessage[j].sender + " 时间:" + new Date(offlineMessage[j].mTimestamp).toLocaleString() + "</h6>");
+
                     $("#messageList").append("<div class='alert alert-info' >" + offlineMessage[j].content + "</div>");
                 }
                 //添加一个标签，点击跳到离线第一条消息
@@ -227,11 +231,13 @@
                 $("." + "offline_" + singleChatToName).html("")
                 $("." + "offline_" + singleChatToName).append(singleChatToName)
                 $("#messageList").removeClass("offline_" + name);
+                $('#messageList').scrollTop( $('#messageList')[0].scrollHeight )
             }
         }
     }
 
     function jumpToFirst() {
+        $('#messageList').scrollTop( 0 );
         $("#jumpToFirst").remove();
     }
 
@@ -384,6 +390,7 @@
         CIMPushManager.sendRequest(body);
         $("#messageList").append("<h6 style='text-align: right;'>" + "自己:" + $('#account').val() + " 时间:" + new Date().toLocaleString() + "</h6>");
         $("#messageList").append("<div style='text-align: right;' class='alert alert-info' >" + text + "</div>");
+        $('#messageList').scrollTop( $('#messageList')[0].scrollHeight )
     }
 
     function guid() {

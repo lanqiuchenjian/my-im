@@ -50,6 +50,7 @@ CIMPushManager.connect = function () {
         }
     });
 
+    CIM_URI = "ws://" + "192.168.1.103" + ":" + "34567"
     socket = new WebSocket(CIM_URI);
     socket.cookieEnabled = false;
     socket.binaryType = 'arraybuffer';
