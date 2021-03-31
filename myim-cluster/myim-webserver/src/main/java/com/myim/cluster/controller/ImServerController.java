@@ -1,15 +1,14 @@
 package com.myim.cluster.controller;
 
 import com.myim.cluster.dto.request.ImServerReqDto;
+import com.myim.cluster.dto.request.MulReqDto;
 import com.myim.cluster.dto.response.ImServerRespDto;
 import com.myim.cluster.service.ImServerService;
 import com.myim.common.basepojo.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +24,13 @@ public class ImServerController {
 	public ResponseEntity<ImServerRespDto> getTargetServerInfo(@RequestBody ImServerReqDto imServerReqDto)  {
 		ImServerRespDto targetServerInfo = imServerService.getTargetServerInfo(imServerReqDto);
 		return ResponseEntity.ok(BaseResponse.success(targetServerInfo));
+	}
+
+	@PostMapping(value = "/target/mul")
+	public ResponseEntity<ImServerRespDto> getMul (MulReqDto mulReqDto, MultipartFile[] applyFiles)  {
+		System.out.println(mulReqDto);
+		System.out.println(applyFiles);
+		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping(value = "/target/one")
