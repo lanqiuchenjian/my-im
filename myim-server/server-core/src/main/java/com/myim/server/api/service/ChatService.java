@@ -24,10 +24,12 @@ package com.myim.server.api.service;
 import com.myim.server.message.bo.req.chat.single.SingleMessageReqBo;
 import com.myim.server.message.bo.resp.chat.SingleMessageRespBo;
 
+import java.io.IOException;
+
 public interface ChatService {
 	/*************************tcp*************************************/
 	//发送单聊消息
-	SingleMessageRespBo sendSingleMessage(SingleMessageReqBo singleMessageReqBo);
+	SingleMessageRespBo sendSingleMessage(SingleMessageReqBo singleMessageReqBo) throws IOException;
 
 
 }

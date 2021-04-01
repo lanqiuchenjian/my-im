@@ -275,6 +275,10 @@
         // alert("this" + message.content)
         $("#messageList").append("<h6 style='text-align: left;'>" + "对方:" + message.sender + " 时间:" + new Date(message.timestamp).toLocaleString() + "</h6>");
         $("#messageList").append("<div class='alert alert-info' >" + message.content + "</div>");
+        if (message.extra != null && message != "") {
+            $("#messageList").append("<a class='alert alert-info' href='" + message.extra  + "' target='_blank'>" + "语音" + "</a>");
+        }
+        $('#messageList').scrollTop( $('#messageList')[0].scrollHeight )
     }
 
     /***********************************推送配置结束**************************/

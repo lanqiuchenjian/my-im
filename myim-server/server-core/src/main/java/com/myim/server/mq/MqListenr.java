@@ -9,6 +9,8 @@ import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+
 @Service
 @RocketMQMessageListener(topic = "${myim.rocketmq.msg-topic}", consumerGroup = "myim-consumer-group1",  selectorExpression = "server127")
 public class MqListenr implements RocketMQListener<MessageExt> {
@@ -19,6 +21,12 @@ public class MqListenr implements RocketMQListener<MessageExt> {
     public void onMessage(MessageExt message) {
         SingleMessageReqBo msg = new Gson().fromJson(new String(message.getBody()), SingleMessageReqBo.class);
         System.out.printf("------- ConsumerWithReplyBytes received: %s \n", msg);
-        new Thread(() -> chatService.sendSingleMessage(msg)).start();
+        new Thread(() -> {
+            try {
+                chatService.sendSingleMessage(msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 }

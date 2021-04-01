@@ -4,6 +4,7 @@ import com.myim.common.basepojo.BaseResponse;
 import com.myim.server.api.service.ChatService;
 import com.myim.server.common.DefaultFuture;
 import com.myim.common.constant.Constant;
+import com.myim.server.common.RobotUtils;
 import com.myim.server.dao.gen.domain.*;
 import com.myim.server.dao.gen.mapper.ImMessageMapper;
 import com.myim.server.dao.gen.mapper.ImOfflineMessageMapper;
@@ -18,8 +19,12 @@ import com.myim.server.mq.MqInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -47,7 +52,7 @@ public class ChatServiceImpl implements ChatService {
     private MqInstance mqInstance;
 
     @Override
-    public SingleMessageRespBo sendSingleMessage(SingleMessageReqBo singleMessageReqBo) {
+    public SingleMessageRespBo sendSingleMessage(SingleMessageReqBo singleMessageReqBo) throws IOException {
         Boolean local = cimSessionService.isLocal(singleMessageReqBo.getToLoginName());
         String toLoginName = singleMessageReqBo.getToLoginName();
 
@@ -56,14 +61,32 @@ public class ChatServiceImpl implements ChatService {
             doSendMsg(singleMessageReqBo, toSession);
         }else {
             String hostName = cimSessionService.getHostName(toLoginName);
-
             //机器人
-            if (singleMessageReqBo.getKey().startsWith("@AI@")) {
+            if (singleMessageReqBo.getContent().startsWith("@AI@")) {
+                //{"message": "ok",
+                // "audio": "http://0.0.0.0:5000/audio/e2c43fb5e4a7ae6bba2a4f110f2ed719.mp3",
+                // "plugin": "",
+                // "code": 0,
+                // "resp": "\u4e0a\u6d77\u5c0f\u96e8\uff0c\u5fae\u98ce\u62c2\u9762\uff0c\u5439\u5439\u633a\u8212\u670d\u5462\u3002\u9884\u8ba116\u2103~19\u2103\uff0c\u6b64\u523b16\u5ea6\u3002\u7a7a\u6c14\u4e0d\u9519\uff0c\u597d\u5f00\u5fc3\u3002\u5e26\u4e0a\u5c0f\u82b1\u4f1e\uff0c\u4e0d\u8981\u8ba9\u5c0f\u96e8\u6b3a\u8d1f\u4e86\u54e6^_^\n\u660e\u65e5\u5929\u6c14\u5c0f\u96e8\uff0c16\u2103~21\u2103\uff0c\u4e2d\u7ea7\u98ce\uff0c\u98ce\u529b2\u7ea7\u3002"}
+                CIMSession fromSession = cimSessionService.get(singleMessageReqBo.getFromLoginName());
 
+                Map map = RobotUtils.answerWithAiRobot(singleMessageReqBo.getContent().substring(4));
+
+                Message msg = new Message();
+                msg.setKey(singleMessageReqBo.getKey());
+                msg.setAction(Constant.MES_SINGLE);
+                msg.setSender("@AI@");
+                msg.setReceiver(singleMessageReqBo.getFromLoginName());
+                msg.setContent(URLDecoder.decode(map.get("resp").toString(),"UTF-8"));
+                msg.setTimestamp(new Date().getTime());
+                String audio = ((String) map.get("audio")).replace("0.0.0.0", "47.110.41.97");
+                msg.setExtra(audio);
+
+                fromSession.write(msg);
             }
 
             //对方在线则发送一条mq消息
-            if (hostName != null && !hostName.trim().equalsIgnoreCase("")) {
+            else if (hostName != null && !hostName.trim().equalsIgnoreCase("")) {
                 mqInstance.sendMsg(singleMessageReqBo, hostName);
             } else {
                 //不在线，则存储离线消息，保存未读的最早一条消息id到离线表
