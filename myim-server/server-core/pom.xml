@@ -143,6 +143,11 @@
             <artifactId>rocketmq-spring-boot-starter</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>fluent-hc</artifactId>
+        </dependency>
+
         <!--========================tess=======================-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

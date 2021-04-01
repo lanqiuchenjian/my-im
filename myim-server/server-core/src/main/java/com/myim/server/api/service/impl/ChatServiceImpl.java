@@ -57,6 +57,11 @@ public class ChatServiceImpl implements ChatService {
         }else {
             String hostName = cimSessionService.getHostName(toLoginName);
 
+            //机器人
+            if (singleMessageReqBo.getKey().startsWith("@AI@")) {
+
+            }
+
             //对方在线则发送一条mq消息
             if (hostName != null && !hostName.trim().equalsIgnoreCase("")) {
                 mqInstance.sendMsg(singleMessageReqBo, hostName);
