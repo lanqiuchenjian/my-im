@@ -11,7 +11,9 @@ import com.myim.server.dao.gen.mapper.ImOfflineMessageMapper;
 import com.myim.server.dao.gen.mapper.ImUserSingleCategoryMapper;
 import com.myim.server.dao.gen.mapper.ImUserSingleRelationMapper;
 import com.myim.server.message.bo.req.chat.single.SingleMessageReqBo;
+import com.myim.server.message.bo.req.chat.single.SingleWebrtcReqBo;
 import com.myim.server.message.bo.resp.chat.SingleMessageRespBo;
+import com.myim.server.message.bo.resp.chat.SingleWebrtcRespBo;
 import com.myim.server.message.service.session.CIMSessionService;
 import com.myim.server.model.CIMSession;
 import com.myim.server.model.Message;
@@ -132,6 +134,11 @@ public class ChatServiceImpl implements ChatService {
             }
         }
         return BaseResponse.success(new SingleMessageRespBo());
+    }
+
+    @Override
+    public SingleWebrtcRespBo webrtcCreate(SingleWebrtcReqBo singleWebrtcReqBo) {
+        return BaseResponse.success(new SingleWebrtcRespBo());
     }
 
     private void doSendMsg(SingleMessageReqBo singleMessageReqBo, CIMSession toSession) {

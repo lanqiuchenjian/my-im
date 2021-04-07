@@ -12,6 +12,7 @@ public class Constant {
     public static String MES_USER = "user";
     public static String MES_SINGLE = "single";
     public static String MES_SINGLE_HIS = "singleHis";
+    public static String MES_WEB_RTC = "webrtc";
 
     //消息服务
 

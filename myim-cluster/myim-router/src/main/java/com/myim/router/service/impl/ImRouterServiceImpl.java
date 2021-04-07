@@ -26,7 +26,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ImRouterServiceImpl implements ImRouterService, BeanPostProcessor {
     private ConcurrentHashMap<String, List<ImServerInfo>> imServerInfoMaps = new ConcurrentHashMap<>();
     private ConcurrentHashMap<StrategyEnum, Strategy> strategyInfoMaps = new ConcurrentHashMap<>();
-    private ZookeeperClient zookeeperClient = new CuratorZookeeperClient("127.0.0.1:2181");
+//    private ZookeeperClient zookeeperClient = new CuratorZookeeperClient("127.0.0.1:2181");
+    private ZookeeperClient zookeeperClient = null;
 
     public ImRouterRespDto doRouter(ImRouterReqDto imRouterReqDto) {
         ImRouterRespDto imRouterRespDto = new ImRouterRespDto();
@@ -58,7 +59,7 @@ public class ImRouterServiceImpl implements ImRouterService, BeanPostProcessor {
     }
 
     //监听ZK变化,动态更新imServerInfoMaps存活的im服务器
-    @PostConstruct
+//    @PostConstruct
     public void doZkListen() {
         //启动的时候拉取一次全量信息，之后监听zk路径变化
         List<String> children = zookeeperClient.getChildren("/myim/host");

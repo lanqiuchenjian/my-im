@@ -30,3 +30,6 @@ singleHis:SingleChatHisMsgServiceImpl:getSingleHisMsg&&fromImUserId=10000&&imUse
 6.历史消息查询
 singleOffline:SingleChatHisMsgServiceImpl:getSingleOfflineMsg&&imUserId=&&imUserLoginName=
 
+webrtc：
+7.创建链接
+webrtc:SingleChatWebrtcServiceImpl:webrtcCreate

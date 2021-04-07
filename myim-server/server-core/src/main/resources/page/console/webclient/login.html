@@ -7,6 +7,10 @@
     <link rel="shortcut icon" href="/image/favicon.ico" type="image/x-icon">
     <link charset="utf-8" rel="stylesheet" href="/bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
     <link charset="utf-8" rel="stylesheet" href="/css/common.css"/>
+
+    <link rel="stylesheet" href="/css/main.css" />
+
+
     <script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/js/common.js"></script>
@@ -14,6 +18,10 @@
     <script type="text/javascript" src="/js/cim/replybody.js"></script>
     <script type="text/javascript" src="/js/cim/sentbody.js"></script>
     <script type="text/javascript" src="/js/cim/cim.web.sdk.js"></script>
+
+    <!--<script src="/js/socketio.js"></script>-->
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+
 </head>
 
 
@@ -125,7 +133,9 @@
                              $("." + "offline_" + jsonReply[i].toImUserLoginName).append("  " + jsonReply[i].count + "条未读")
 //                         }
                     }
-                }else {
+                }else if (parse.serviceType === "webrtcCreate") {
+                    grabWebCamVideo();
+                } else {
                     console.log("send ok")
                 }
             }
@@ -549,6 +559,27 @@
                 <textarea id="inputList" cols="25" rows="4" placeholder="input..."></textarea>
                 <button onclick="sendMyMessage()">send</button>
             </div>
+
+            <div>=======================================================================</div>
+            <h1>Realtime communication with WebRTC</h1>
+
+            <div id="videoCanvas">
+                <video id="camera" autoplay playsinline></video>
+                <canvas id="photo"></canvas>
+            </div>
+
+            <div id="buttons">
+                <button id="snap">Snap</button><span> then </span><button id="send">Send</button>
+                <span> or </span>
+                <button id="snapAndSend">Snap &amp; Send</button>
+            </div>
+
+            <div id="incoming">
+                <h2>Incoming photos</h2>
+                <div id="trail"></div>
+            </div>
+
+            <div>=======================================================================</div>
         </div>
     </div>
 </div>
