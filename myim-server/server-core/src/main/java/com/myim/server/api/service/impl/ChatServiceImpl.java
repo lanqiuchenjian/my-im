@@ -138,7 +138,9 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public SingleWebrtcRespBo webrtcCreate(SingleWebrtcReqBo singleWebrtcReqBo) {
-        return BaseResponse.success(new SingleWebrtcRespBo());
+        SingleWebrtcRespBo singleWebrtcRespBo = new SingleWebrtcRespBo();
+        singleWebrtcRespBo.setServiceType("webrtcCreate");
+        return BaseResponse.success(singleWebrtcRespBo);
     }
 
     private void doSendMsg(SingleMessageReqBo singleMessageReqBo, CIMSession toSession) {

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 @Service
-@RocketMQMessageListener(topic = "${myim.rocketmq.msg-topic}", consumerGroup = "myim-consumer-group1",  selectorExpression = "server127")
+//@RocketMQMessageListener(topic = "${myim.rocketmq.msg-topic}", consumerGroup = "myim-consumer-group1",  selectorExpression = "server127")
 public class MqListenr implements RocketMQListener<MessageExt> {
     @Autowired
     private ChatService chatService;

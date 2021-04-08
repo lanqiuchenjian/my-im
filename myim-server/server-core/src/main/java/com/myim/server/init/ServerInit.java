@@ -13,7 +13,7 @@ import java.net.UnknownHostException;
  */
 @Component
 public class ServerInit {
-    @PostConstruct
+//    @PostConstruct
     public void init() throws UnknownHostException {
         String host = InetAddress.getLocalHost().getHostAddress();
         String port = "34567";

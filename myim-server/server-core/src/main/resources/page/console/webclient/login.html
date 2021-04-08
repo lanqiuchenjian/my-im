@@ -17,7 +17,6 @@
     <script type="text/javascript" src="/js/cim/message.js"></script>
     <script type="text/javascript" src="/js/cim/replybody.js"></script>
     <script type="text/javascript" src="/js/cim/sentbody.js"></script>
-    <script type="text/javascript" src="/js/cim/cim.web.sdk.js"></script>
 
     <!--<script src="/js/socketio.js"></script>-->
     <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
@@ -57,6 +56,13 @@
             $("#current_account").text($('#account').val());
             //获取好友列表
             getUserList(userId, singleCategoryId);
+
+            let body = new proto.com.myim.web.model.SentBody();
+            body.setKey(guid());
+            body.setTimestamp(new Date().getTime());
+            body.getDataMap().set("action", "webrtc:SingleChatWebrtcServiceImpl:webrtcCreate");
+            body.getDataMap().set("type", CLIENT_PUSH);
+            CIMPushManager.sendRequest(body);
         }
 
         if (reply.data.type === CLIENT_PUSH && reply.code == 200) {
@@ -525,7 +531,7 @@
 </div>
 
 <!-- 消息提示页面 -->
-<div class="modal fade" data-backdrop="static" id="MessageDialog" tabindex="-1" role="dialog">
+<div class="modal fade" data-backdrop="static" id="MessageDialog" tabindex="-1" role="dialog" style="overflow-y:auto">
     <div class="modal-dialog" style="width: 1000px;height:600px;margin: 30px auto;">
         <!--<div class="modal-content">-->
         <div class="">
@@ -584,4 +590,5 @@
     </div>
 </div>
 </body>
+<script type="text/javascript" src="/js/cim/cim.web.sdk.js"></script>
 </html>
