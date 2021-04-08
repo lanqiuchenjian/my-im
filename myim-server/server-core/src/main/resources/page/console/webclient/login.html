@@ -56,13 +56,6 @@
             $("#current_account").text($('#account').val());
             //获取好友列表
             getUserList(userId, singleCategoryId);
-
-            let body = new proto.com.myim.web.model.SentBody();
-            body.setKey(guid());
-            body.setTimestamp(new Date().getTime());
-            body.getDataMap().set("action", "webrtc:SingleChatWebrtcServiceImpl:webrtcCreate");
-            body.getDataMap().set("type", CLIENT_PUSH);
-            CIMPushManager.sendRequest(body);
         }
 
         if (reply.data.type === CLIENT_PUSH && reply.code == 200) {
@@ -129,19 +122,58 @@
                 } else if(parse.serviceType === "getSingleOfflineMsg"){
                     console.log(parse)
                      for (var i in jsonReply) {
-//                         if($("." + "offline_" + i.toImUserLoginName).hasClass(singleChatToName)){
-//                             for (var j in jsonReply[i].list) {
-//                                 $("#messageList").append("<h6 style='text-align: left;'>" + "对方:" + jsonReply[i].list[j].sender + " 时间:" + new Date(jsonReply[i].list[j].timestamp).toLocaleString() + "</h6>");
-//                                 $("#messageList").append("<div class='alert alert-info' >" + jsonReply[i].list[j].content + "</div>");
-//                             }
-//                         } else {
                              offlineMsg[jsonReply[i].toImUserLoginName] = jsonReply[i].list;
                              $("." + "offline_" + jsonReply[i].toImUserLoginName).append("  " + jsonReply[i].count + "条未读")
-//                         }
                     }
                 }else if (parse.serviceType === "webrtcCreate") {
-                    grabWebCamVideo();
-                } else {
+                    navigator.mediaDevices.getUserMedia({
+                        audio: false,
+                        video: true
+                    }).then(gotStream)
+                        .catch(function(e) {
+                            alert('getUserMedia() error: ' + e.name);
+                        });
+
+                    if (parse.act === 'created') {
+                        isInitiator = true;
+                        maybeStart();
+                    } else if(parse.act === 'join') {
+                        isChannelReady = true;
+                    }
+
+                }else if (parse.serviceType === "webrtcMessage") {
+                    var message = parse.message;
+                    if (message === 'got user media') {
+                        maybeStart();
+                    }
+
+                    if (message.type === 'offer') {
+                        if (!isInitiator && !isStarted) {
+                            maybeStart();
+                        }
+                        pc.setRemoteDescription(new RTCSessionDescription(message));
+                        doAnswer();
+                    }
+
+                    if (message.type === 'answer' && isStarted) {
+                        //触发handleRemoteStreamAdded事件
+                        pc.setRemoteDescription(new RTCSessionDescription(message));
+                    }
+
+                    if (message.type === 'candidate' && isStarted) {
+                        var candidate = new RTCIceCandidate({
+                            sdpMLineIndex: message.label,
+                            candidate: message.candidate
+                        });
+                        pc.addIceCandidate(candidate);
+                    }
+
+
+                    if (message === 'bye' && isStarted) {
+                        handleRemoteHangup();
+                    }
+
+                }  else {
                     console.log("send ok")
                 }
             }
@@ -390,6 +422,24 @@
         }
     }
 
+    function openCamera() {
+//        let body = new proto.com.myim.web.model.SentBody();
+//        body.setKey(guid());
+//        body.setTimestamp(new Date().getTime());
+//        body.getDataMap().set("action", "webrtc:SingleChatWebrtcServiceImpl:webrtcCreate");
+//        body.getDataMap().set("type", CLIENT_PUSH);
+//        CIMPushManager.sendRequest(body);
+
+        var room = "foo";
+
+        let body = new proto.com.myim.web.model.SentBody();
+        body.setKey(guid());
+        body.setTimestamp(new Date().getTime());
+        body.getDataMap().set("action", "webrtc:SingleChatWebrtcServiceImpl:webrtcCreate");
+        body.getDataMap().set("type", CLIENT_PUSH);
+        CIMPushManager.sendRequest(body);
+    }
+
     //single:SingleChatServiceImpl:sendSingleMessage&&fromLoginName=10000&&toLoginName=20000&&content={"ni":"hao"}&&key=u1000
     function singleMsg(body, browser, deviceId, text) {
         body.setKey(guid());
@@ -530,6 +580,7 @@
     </div>
 </div>
 
+
 <!-- 消息提示页面 -->
 <div class="modal fade" data-backdrop="static" id="MessageDialog" tabindex="-1" role="dialog" style="overflow-y:auto">
     <div class="modal-dialog" style="width: 1000px;height:600px;margin: 30px auto;">
@@ -564,25 +615,16 @@
             <div class="" style="height: 200px;width:600px;float:left;">
                 <textarea id="inputList" cols="25" rows="4" placeholder="input..."></textarea>
                 <button onclick="sendMyMessage()">send</button>
+                <button onclick="openCamera()">send</button>
             </div>
 
             <div>=======================================================================</div>
+
             <h1>Realtime communication with WebRTC</h1>
 
-            <div id="videoCanvas">
-                <video id="camera" autoplay playsinline></video>
-                <canvas id="photo"></canvas>
-            </div>
-
-            <div id="buttons">
-                <button id="snap">Snap</button><span> then </span><button id="send">Send</button>
-                <span> or </span>
-                <button id="snapAndSend">Snap &amp; Send</button>
-            </div>
-
-            <div id="incoming">
-                <h2>Incoming photos</h2>
-                <div id="trail"></div>
+            <div id="videos">
+                <video id="localVideo" autoplay muted playsinline></video>
+                <video id="remoteVideo" autoplay playsinline></video>
             </div>
 
             <div>=======================================================================</div>

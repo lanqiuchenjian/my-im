@@ -1,9 +1,9 @@
 package com.myim.server.api.service.impl;
 
 import com.myim.common.basepojo.BaseResponse;
+import com.myim.common.constant.Constant;
 import com.myim.server.api.service.ChatService;
 import com.myim.server.common.DefaultFuture;
-import com.myim.common.constant.Constant;
 import com.myim.server.common.RobotUtils;
 import com.myim.server.dao.gen.domain.*;
 import com.myim.server.dao.gen.mapper.ImMessageMapper;
@@ -11,8 +11,10 @@ import com.myim.server.dao.gen.mapper.ImOfflineMessageMapper;
 import com.myim.server.dao.gen.mapper.ImUserSingleCategoryMapper;
 import com.myim.server.dao.gen.mapper.ImUserSingleRelationMapper;
 import com.myim.server.message.bo.req.chat.single.SingleMessageReqBo;
+import com.myim.server.message.bo.req.chat.single.SingleWebrtcMessageReqBo;
 import com.myim.server.message.bo.req.chat.single.SingleWebrtcReqBo;
 import com.myim.server.message.bo.resp.chat.SingleMessageRespBo;
+import com.myim.server.message.bo.resp.chat.SingleWebrtcMessageRespBo;
 import com.myim.server.message.bo.resp.chat.SingleWebrtcRespBo;
 import com.myim.server.message.service.session.CIMSessionService;
 import com.myim.server.model.CIMSession;
@@ -23,17 +25,19 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
 public class ChatServiceImpl implements ChatService {
+    private AtomicInteger nums = new AtomicInteger(0);
+
     private ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 50,30, TimeUnit.MINUTES, new LinkedBlockingQueue<>(1000));
     @Autowired
     private CIMSessionService cimSessionService;
@@ -139,8 +143,26 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public SingleWebrtcRespBo webrtcCreate(SingleWebrtcReqBo singleWebrtcReqBo) {
         SingleWebrtcRespBo singleWebrtcRespBo = new SingleWebrtcRespBo();
+
+        int andIncrement = nums.getAndIncrement();
+
+        if (andIncrement == 0) {
+            singleWebrtcRespBo.setAct("created");
+        } else if (andIncrement == 1) {
+            singleWebrtcRespBo.setAct("join");
+        } else {
+
+        }
+
         singleWebrtcRespBo.setServiceType("webrtcCreate");
         return BaseResponse.success(singleWebrtcRespBo);
+    }
+
+    @Override
+    public SingleWebrtcMessageRespBo webrtcMessage(SingleWebrtcMessageReqBo singleWebrtcMessageReqBo) {
+        SingleWebrtcMessageRespBo singleWebrtcMessageRespBo = new SingleWebrtcMessageRespBo();
+        singleWebrtcMessageRespBo.setServiceType("webrtcMessage");
+        return BaseResponse.success(singleWebrtcMessageRespBo);
     }
 
     private void doSendMsg(SingleMessageReqBo singleMessageReqBo, CIMSession toSession) {

@@ -22,8 +22,10 @@
 package com.myim.server.api.service;
 
 import com.myim.server.message.bo.req.chat.single.SingleMessageReqBo;
+import com.myim.server.message.bo.req.chat.single.SingleWebrtcMessageReqBo;
 import com.myim.server.message.bo.req.chat.single.SingleWebrtcReqBo;
 import com.myim.server.message.bo.resp.chat.SingleMessageRespBo;
+import com.myim.server.message.bo.resp.chat.SingleWebrtcMessageRespBo;
 import com.myim.server.message.bo.resp.chat.SingleWebrtcRespBo;
 
 import java.io.IOException;
@@ -35,4 +37,6 @@ public interface ChatService {
 
 
 	SingleWebrtcRespBo webrtcCreate(SingleWebrtcReqBo singleWebrtcReqBo);
+
+	SingleWebrtcMessageRespBo webrtcMessage(SingleWebrtcMessageReqBo singleWebrtcMessageReqBo);
 }

@@ -4,6 +4,6 @@ import com.myim.common.basepojo.BaseResponse;
 import lombok.Data;
 
 @Data
-public class SingleWebrtcRespBo extends BaseResponse{
-    private String act;
+public class SingleWebrtcMessageRespBo extends BaseResponse{
+    private Object message;
 }
