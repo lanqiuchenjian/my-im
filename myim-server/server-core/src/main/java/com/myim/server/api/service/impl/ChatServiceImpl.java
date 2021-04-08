@@ -149,9 +149,16 @@ public class ChatServiceImpl implements ChatService {
         if (andIncrement == 0) {
             singleWebrtcRespBo.setAct("created");
         } else if (andIncrement == 1) {
-            singleWebrtcRespBo.setAct("join");
-        } else {
+//            CIMSession fromSession = cimSessionService.get(singleMessageReqBo.getFromLoginName());
+//
+//            Map map = RobotUtils.answerWithAiRobot(singleMessageReqBo.getContent().substring(4));
 
+            Message msg = new Message();
+            msg.setAction("join");
+
+            cimSessionService.get("chenjian").write(msg);
+        } else {
+            //do nothing
         }
 
         singleWebrtcRespBo.setServiceType("webrtcCreate");

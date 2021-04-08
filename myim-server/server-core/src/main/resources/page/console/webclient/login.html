@@ -136,10 +136,11 @@
 
                     if (parse.act === 'created') {
                         isInitiator = true;
-                        maybeStart();
-                    } else if(parse.act === 'join') {
-                        isChannelReady = true;
                     }
+//                    else if(parse.act === 'join') {
+//                        isChannelReady = true;
+//                        maybeStart();
+//                    }
 
                 }else if (parse.serviceType === "webrtcMessage") {
                     var message = parse.message;
@@ -309,12 +310,17 @@
 
     function onMessageReceived(message) {
         console.log(message);
-        // alert("3......")
         if (message.action == ACTION_999) {
             socket.close();
             $('#MessageDialog').fadeOut();
             $('#LoginDialog').fadeIn();
             $('#LoginDialog').addClass("in");
+            return;
+        }
+
+        if (message.action === "join") {
+            isChannelReady = true;
+            maybeStart();
             return;
         }
 
