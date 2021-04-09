@@ -126,53 +126,10 @@
                              $("." + "offline_" + jsonReply[i].toImUserLoginName).append("  " + jsonReply[i].count + "条未读")
                     }
                 }else if (parse.serviceType === "webrtcCreate") {
-                    navigator.mediaDevices.getUserMedia({
-                        audio: false,
-                        video: true
-                    }).then(gotStream)
-                        .catch(function(e) {
-                            alert('getUserMedia() error: ' + e.name);
-                        });
-
                     if (parse.act === 'created') {
                         isInitiator = true;
                     }
 
-                }else if (parse.serviceType === "webrtcMessage") {
-                    var message = parse.message;
-
-                    if (typeof message === "string") {
-                        if (message === 'got user media') {
-                            maybeStart();
-                        }
-
-                        if (message === 'bye' && isStarted) {
-                            handleRemoteHangup();
-                        }
-                    } else {
-                        var messageObject = JSON.parse(message);
-
-                        if (messageObject.type === 'offer') {
-                            if (!isInitiator && !isStarted) {
-                                maybeStart();
-                            }
-                            pc.setRemoteDescription(new RTCSessionDescription(messageObject));
-                            doAnswer();
-                        }
-
-                        if (messageObject.type === 'answer' && isStarted) {
-                            //触发handleRemoteStreamAdded事件
-                            pc.setRemoteDescription(new RTCSessionDescription(messageObject));
-                        }
-
-                        if (messageObject.type === 'candidate' && isStarted) {
-                            var candidate = new RTCIceCandidate({
-                                sdpMLineIndex: messageObject.label,
-                                candidate: messageObject.candidate
-                            });
-                            pc.addIceCandidate(candidate);
-                        }
-                    }
                 }  else {
                     console.log("send ok")
                 }
@@ -319,7 +276,43 @@
 
         if (message.action === "join") {
             isChannelReady = true;
-            maybeStart();
+            // maybeStart();
+            return;
+        }
+
+        if (message.action === "message") {
+            if (message.format === "str") {
+                if (message.content === 'got user media') {
+                    maybeStart();
+                }
+
+                if (message.content === 'bye' && isStarted) {
+                    handleRemoteHangup();
+                }
+            } else {
+                var messageObject = JSON.parse(message.content);
+
+                if (messageObject.type === 'offer') {
+                    if (!isInitiator && !isStarted) {
+                        maybeStart();
+                    }
+                    pc.setRemoteDescription(new RTCSessionDescription(messageObject));
+                    doAnswer();
+                }
+
+                if (messageObject.type === 'answer' && isStarted) {
+                    //触发handleRemoteStreamAdded事件
+                    pc.setRemoteDescription(new RTCSessionDescription(messageObject));
+                }
+
+                if (messageObject.type === 'candidate' && isStarted) {
+                    var candidate = new RTCIceCandidate({
+                        sdpMLineIndex: messageObject.label,
+                        candidate: messageObject.candidate
+                    });
+                    pc.addIceCandidate(candidate);
+                }
+            }
             return;
         }
 
@@ -437,6 +430,17 @@
 
         var room = "foo";
 
+        navigator.mediaDevices.getUserMedia({
+            audio: false,
+            video: true
+        }).then(gotStream)
+            .catch(function(e) {
+                alert('getUserMedia() error: ' + e.name + "===" + e);
+            });
+        connecitonCamera()
+    }
+
+    function connecitonCamera() {
         let body = new proto.com.myim.web.model.SentBody();
         body.setKey(guid());
         body.setTimestamp(new Date().getTime());
@@ -620,7 +624,8 @@
             <div class="" style="height: 200px;width:600px;float:left;">
                 <textarea id="inputList" cols="25" rows="4" placeholder="input..."></textarea>
                 <button onclick="sendMyMessage()">send</button>
-                <button onclick="openCamera()">send</button>
+                <button onclick="openCamera()">opencamera</button>
+                <button onclick="connecitonCamera()">connection_camera</button>
             </div>
 
             <div>=======================================================================</div>

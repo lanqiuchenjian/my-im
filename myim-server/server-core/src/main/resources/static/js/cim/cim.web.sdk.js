@@ -45,7 +45,7 @@ CIMPushManager.connect = function () {
             }
         },
         error: function (message) {
-            alert("提交数据失败！");
+            // alert("提交数据失败！");
         }
     });
 
@@ -246,7 +246,6 @@ var sdpConstraints = {
     offerToReceiveVideo: true
 };
 
-
 function sendMessage(message) {
     let body = new proto.com.myim.web.model.SentBody();
     body.setKey(guid());
@@ -254,6 +253,11 @@ function sendMessage(message) {
     body.getDataMap().set("action", "webrtc:SingleChatWebrtcServiceImpl:webrtcMessage");
     body.getDataMap().set("type", CLIENT_PUSH);
     body.getDataMap().set("message", message);
+    if (singleChatToName == undefined || singleChatToName == null)
+        body.getDataMap().set("toImUserName", "none");
+    else
+        body.getDataMap().set("toImUserName", singleChatToName);
+
     CIMPushManager.sendRequest(body);
 }
 

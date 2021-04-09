@@ -194,12 +194,6 @@ public class Message implements Serializable, Transportable {
 	@Override
 	public byte[] getBody() {
 		MessageProto.Model.Builder builder = MessageProto.Model.newBuilder();
-		builder.setId(id);
-		builder.setAction(action);
-		builder.setSender(sender);
-		builder.setReceiver(receiver);
-		builder.setTimestamp(timestamp);
-
 		/**
 		 * 下面字段可能为空
 		 */
@@ -221,6 +215,20 @@ public class Message implements Serializable, Transportable {
 		if (format != null) {
 			builder.setFormat(format);
 		}
+
+		if (action != null) {
+			builder.setAction(action);
+		}
+		if (sender != null) {
+			builder.setSender(sender);
+		}
+		if (receiver != null) {
+			builder.setReceiver(receiver);
+		}
+
+		builder.setId(id);
+		builder.setTimestamp(timestamp);
+
 		return builder.build().toByteArray();
 	}
 

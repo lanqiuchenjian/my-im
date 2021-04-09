@@ -158,6 +158,8 @@ public class ChatServiceImpl implements ChatService {
             msg.setAction("join");
 
             cimSessionService.get("chenjian").write(msg);
+            cimSessionService.get("linhaiyi").write(msg);
+
         }
 
         singleWebrtcRespBo.setServiceType("webrtcCreate");
@@ -170,21 +172,31 @@ public class ChatServiceImpl implements ChatService {
 
         String message = singleWebrtcMessageReqBo.getMessage();
 
-//        Map map = null;
-//        try {
-//            map = new Gson().fromJson(message, Map.class);
-//        } catch (Exception ignored) {}
-//
-//        if (map != null) {
-//
-//        } else {
-//
-//        }
+        Map map = null;
+        try {
+            map = new Gson().fromJson(message, Map.class);
+        } catch (Exception ignored) {}
+
 
         CIMSession cimSession = cimSessionService.get(singleWebrtcMessageReqBo.getToImUserName());
-        Message msg = new Message();
-        msg.setContent(message);
-        cimSession.write(msg);
+
+        if (message.equals("bye"))
+            nums.decrementAndGet();
+
+        if (cimSession != null) {
+            Message msg = new Message();
+            msg.setContent(message);
+            msg.setAction("message");
+
+            if (map != null) {
+                msg.setFormat("obj");
+            } else {
+                msg.setFormat("str");
+            }
+
+            cimSession.write(msg);
+        }
+
 
         return BaseResponse.success(singleWebrtcMessageRespBo);
     }

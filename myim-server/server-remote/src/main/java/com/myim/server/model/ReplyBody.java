@@ -147,7 +147,10 @@ public class ReplyBody implements Serializable, Transportable {
 		if (!data.isEmpty()) {
 			builder.putAllData(data);
 		}
-		builder.setKey(key);
+
+		if (key != null) {
+			builder.setKey(key);
+		}
 		builder.setTimestamp(timestamp);
 
 		return builder.build().toByteArray();
