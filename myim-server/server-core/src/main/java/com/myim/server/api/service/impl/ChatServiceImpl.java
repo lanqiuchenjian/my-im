@@ -148,7 +148,7 @@ public class ChatServiceImpl implements ChatService {
 
         if (andIncrement == 0) {
             singleWebrtcRespBo.setAct("created");
-        } else if (andIncrement == 1) {
+        } else if (andIncrement >= 1) {
 //            CIMSession fromSession = cimSessionService.get(singleMessageReqBo.getFromLoginName());
 //
 //            Map map = RobotUtils.answerWithAiRobot(singleMessageReqBo.getContent().substring(4));
@@ -157,8 +157,6 @@ public class ChatServiceImpl implements ChatService {
             msg.setAction("join");
 
             cimSessionService.get("chenjian").write(msg);
-        } else {
-            //do nothing
         }
 
         singleWebrtcRespBo.setServiceType("webrtcCreate");
@@ -168,7 +166,13 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public SingleWebrtcMessageRespBo webrtcMessage(SingleWebrtcMessageReqBo singleWebrtcMessageReqBo) {
         SingleWebrtcMessageRespBo singleWebrtcMessageRespBo = new SingleWebrtcMessageRespBo();
-        singleWebrtcMessageRespBo.setServiceType("webrtcMessage");
+
+
+        CIMSession cimSession = cimSessionService.get(singleWebrtcMessageReqBo.getToImUserName());
+        Message msg = new Message();
+        msg.setExtra();
+        cimSession.write();
+
         return BaseResponse.success(singleWebrtcMessageRespBo);
     }
 

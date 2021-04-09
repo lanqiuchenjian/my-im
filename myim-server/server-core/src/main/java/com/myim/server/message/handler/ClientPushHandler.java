@@ -155,6 +155,9 @@ public class ClientPushHandler implements CIMRequestHandler {
     //TODO:先处理简单请求类型，复杂的参考springmvc解析对象
     //TODO:考虑更改sentBody的Map结构，直接传入json
     private Object getToBean(Class<?> type, String from) {
+        if (type.isAssignableFrom(Object.class))
+            return from;
+
         if (type.isAssignableFrom(Integer.class))
             return Integer.valueOf(from);
 

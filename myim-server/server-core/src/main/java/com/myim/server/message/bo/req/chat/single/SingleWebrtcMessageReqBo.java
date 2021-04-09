@@ -6,4 +6,5 @@ import lombok.Data;
 @Data
 public class SingleWebrtcMessageReqBo extends BaseRequestBo {
     private Object message;
+    private String toImUserName;
 }
