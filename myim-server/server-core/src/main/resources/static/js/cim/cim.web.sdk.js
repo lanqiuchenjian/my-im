@@ -341,7 +341,7 @@ function doAnswer() {
 function setLocalAndSendMessage(sessionDescription) {
     pc.setLocalDescription(sessionDescription);
     console.log('setLocalAndSendMessage sending message', sessionDescription);
-    sendMessage(sessionDescription);
+    sendMessage(JSON.stringify(sessionDescription));
 }
 
 function onCreateSessionDescriptionError(error) {
@@ -401,12 +401,13 @@ function stop() {
 function handleIceCandidate(event) {
     console.log('icecandidate event: ', event);
     if (event.candidate) {
-        sendMessage({
+        var message = {
             type: 'candidate',
             label: event.candidate.sdpMLineIndex,
             id: event.candidate.sdpMid,
             candidate: event.candidate.candidate
-        });
+        };
+        sendMessage(JSON.stringify(message));
     } else {
         console.log('End of candidates.');
     }

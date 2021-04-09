@@ -1,5 +1,6 @@
 package com.myim.server.api.service.impl;
 
+import com.google.gson.Gson;
 import com.myim.common.basepojo.BaseResponse;
 import com.myim.common.constant.Constant;
 import com.myim.server.api.service.ChatService;
@@ -167,11 +168,23 @@ public class ChatServiceImpl implements ChatService {
     public SingleWebrtcMessageRespBo webrtcMessage(SingleWebrtcMessageReqBo singleWebrtcMessageReqBo) {
         SingleWebrtcMessageRespBo singleWebrtcMessageRespBo = new SingleWebrtcMessageRespBo();
 
+        String message = singleWebrtcMessageReqBo.getMessage();
+
+//        Map map = null;
+//        try {
+//            map = new Gson().fromJson(message, Map.class);
+//        } catch (Exception ignored) {}
+//
+//        if (map != null) {
+//
+//        } else {
+//
+//        }
 
         CIMSession cimSession = cimSessionService.get(singleWebrtcMessageReqBo.getToImUserName());
         Message msg = new Message();
-        msg.setExtra();
-        cimSession.write();
+        msg.setContent(message);
+        cimSession.write(msg);
 
         return BaseResponse.success(singleWebrtcMessageRespBo);
     }

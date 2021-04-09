@@ -137,43 +137,42 @@
                     if (parse.act === 'created') {
                         isInitiator = true;
                     }
-//                    else if(parse.act === 'join') {
-//                        isChannelReady = true;
-//                        maybeStart();
-//                    }
 
                 }else if (parse.serviceType === "webrtcMessage") {
                     var message = parse.message;
-                    if (message === 'got user media') {
-                        maybeStart();
-                    }
 
-                    if (message.type === 'offer') {
-                        if (!isInitiator && !isStarted) {
+                    if (typeof message === "string") {
+                        if (message === 'got user media') {
                             maybeStart();
                         }
-                        pc.setRemoteDescription(new RTCSessionDescription(message));
-                        doAnswer();
+
+                        if (message === 'bye' && isStarted) {
+                            handleRemoteHangup();
+                        }
+                    } else {
+                        var messageObject = JSON.parse(message);
+
+                        if (messageObject.type === 'offer') {
+                            if (!isInitiator && !isStarted) {
+                                maybeStart();
+                            }
+                            pc.setRemoteDescription(new RTCSessionDescription(messageObject));
+                            doAnswer();
+                        }
+
+                        if (messageObject.type === 'answer' && isStarted) {
+                            //触发handleRemoteStreamAdded事件
+                            pc.setRemoteDescription(new RTCSessionDescription(messageObject));
+                        }
+
+                        if (messageObject.type === 'candidate' && isStarted) {
+                            var candidate = new RTCIceCandidate({
+                                sdpMLineIndex: messageObject.label,
+                                candidate: messageObject.candidate
+                            });
+                            pc.addIceCandidate(candidate);
+                        }
                     }
-
-                    if (message.type === 'answer' && isStarted) {
-                        //触发handleRemoteStreamAdded事件
-                        pc.setRemoteDescription(new RTCSessionDescription(message));
-                    }
-
-                    if (message.type === 'candidate' && isStarted) {
-                        var candidate = new RTCIceCandidate({
-                            sdpMLineIndex: message.label,
-                            candidate: message.candidate
-                        });
-                        pc.addIceCandidate(candidate);
-                    }
-
-
-                    if (message === 'bye' && isStarted) {
-                        handleRemoteHangup();
-                    }
-
                 }  else {
                     console.log("send ok")
                 }
