@@ -148,6 +148,11 @@
             <artifactId>fluent-hc</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+        </dependency>
+
         <!--========================tess=======================-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -401,37 +401,46 @@
         }
     }
 
+    function trim(str){
+        return str.replace(/(^\s*)|(\s*$)/g, "");
+    }
+
     function sendMyMessage() {
         var text = $("#inputList").eq(0).val();
+        var file = $("#avatarSlect")[0].files[0];
 
-        let deviceId = window.localStorage.deviceIddeviceId;
-        if (deviceId == '' || deviceId == undefined) {
-            deviceId = generateUUID();
-            window.localStorage.deviceId = deviceId;
+        if ((text == null || text == '' || trim(text) == '') && (file == null || file == undefined))
+            alert("无法传输空的内容")
+
+        if (!(text == null || text == '' || trim(text) == '')) {
+            let deviceId = window.localStorage.deviceIddeviceId;
+            if (deviceId == '' || deviceId == undefined) {
+                deviceId = generateUUID();
+                window.localStorage.deviceId = deviceId;
+            }
+            console.log("+++++" + text);
+            let browser = getBrowser();
+            let body = new proto.com.myim.web.model.SentBody();
+
+            if (singleChatToName == null) {
+                broadcastMsg(body, browser, deviceId, text);
+            }else {
+                singleMsg(body, browser, deviceId, text)
+            }
         }
-        console.log("+++++" + text);
-        let browser = getBrowser();
-        let body = new proto.com.myim.web.model.SentBody();
 
-        if (singleChatToName == null) {
-            broadcastMsg(body, browser, deviceId, text);
-        }else {
-            singleMsg(body, browser, deviceId, text)
+        if (!(file == null || file == undefined)) {
+            uploadFile();
         }
     }
 
     function openCamera() {
-//        let body = new proto.com.myim.web.model.SentBody();
-//        body.setKey(guid());
-//        body.setTimestamp(new Date().getTime());
-//        body.getDataMap().set("action", "webrtc:SingleChatWebrtcServiceImpl:webrtcCreate");
-//        body.getDataMap().set("type", CLIENT_PUSH);
-//        CIMPushManager.sendRequest(body);
-
+        if (singleChatToName == undefined || singleChatToName == null || singleChatToName == '')
+            alert("请选中一个好友进行视频！！！")
         var room = "foo";
 
         navigator.mediaDevices.getUserMedia({
-            audio: false,
+            audio: true,
             video: true
         }).then(gotStream)
             .catch(function(e) {
@@ -448,6 +457,7 @@
         body.getDataMap().set("type", CLIENT_PUSH);
         CIMPushManager.sendRequest(body);
     }
+
 
     //single:SingleChatServiceImpl:sendSingleMessage&&fromLoginName=10000&&toLoginName=20000&&content={"ni":"hao"}&&key=u1000
     function singleMsg(body, browser, deviceId, text) {
@@ -621,12 +631,19 @@
                  <!--style="height: 600px;width:200px;float:left;border:2px solid #000;overflow-y:auto"></div>-->
             <div class="modal-body" id="messageList"
                  style="height: 400px;width:600px;float:left;border:2px solid #000;overflow-y:auto"></div>
+            <!--<input id="avatar" type="text" value="" name="avatar" style="width: 400px; display: none">-->
             <div class="" style="height: 200px;width:600px;float:left;">
                 <textarea id="inputList" cols="25" rows="4" placeholder="input..."></textarea>
                 <button onclick="sendMyMessage()">send</button>
+                <!--<button onclick="uploadFile()"></button>-->
                 <button onclick="openCamera()">opencamera</button>
-                <button onclick="connecitonCamera()">connection_camera</button>
             </div>
+
+            <div>=======================================================================</div>
+            点击上传图片:<input id="avatarSlect" type="file" style="position: absolute;float: left; z-index: 10; opacity: 0;width: 100px; height: 100px;">
+                <!--<img id="avatarPreview" title="点击更换图片" style="position: absolute; z-index: 9; float: left; width: 100px; height: 100px;" >-->
+            </div>
+        <div id="appendFile">待上传图片</div>
 
             <div>=======================================================================</div>
 
@@ -642,5 +659,6 @@
     </div>
 </div>
 </body>
+<script type="text/javascript" src="/js/cim/uploadFile.js"></script>
 <script type="text/javascript" src="/js/cim/cim.web.sdk.js"></script>
 </html>
